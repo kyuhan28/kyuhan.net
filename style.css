@@ -1,0 +1,150 @@
+:root {
+	color: #f5f8f7;
+	background: #0f0f0f;
+	font-family: "Ubuntu Mono", monospace;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2rem;
+	min-height: 4.5rem;
+	padding: 0.75rem clamp(1rem, 5vw, 4rem);
+	background: #000000;
+}
+
+.site-name {
+	color: #e8eceb;
+	font-size: 2rem;
+	font-weight: 500;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.site-header nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: 0.75rem 3rem;
+}
+
+.site-header nav a {
+	color: #f0f3f1;
+	font-family: "Ubuntu Mono", monospace;
+	font-size: 1.1rem;
+    font-weight: 500;
+	text-decoration: none;
+}
+
+main {
+	max-width: 100rem;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+.header-section {
+	min-height: 90vh;
+	padding: 2rem 0;
+	scroll-margin-top: 5rem;
+}
+
+.about-section {
+	min-height: 90vh;
+	padding: 2rem 0;
+	scroll-margin-top: 5rem;
+}
+
+.projects-section {
+	min-height: 90vh;
+	padding: 2rem 0;
+	scroll-margin-top: 5rem;
+}
+
+.header-section h1 {
+	font-size: clamp(5rem, 5vw, 3rem);
+	font-weight: 400;
+}
+
+.about-section h1 {
+	font-size: clamp(5rem, 5vw, 3rem);
+	font-weight: 400;
+}
+
+.about-section h2 {
+	font-size: clamp(2rem, 2vw, 2rem);
+	font-weight: 100;
+}
+
+.projects-section h1 {
+	font-size: clamp(5rem, 5vw, 3rem);
+	font-weight: 400;
+}
+
+.contact-section {
+    min-height: 90vh;
+	padding: 2rem 0;
+	scroll-margin-top: 5rem;
+}
+
+.contact-section h1 {
+    text-decoration: bold;
+    font-family: sans-serif;
+    font-size: clamp(7rem, 5vw, 3rem);
+    font-weight: 700;
+}
+
+.contact-section h2 {
+    font-family: sans-serif;
+    font-size: clamp(2rem, 2vw, 2rem);
+    font-weight: 100;
+}
+
+.contact-section-link {
+    color: #ffffff;
+    text-decoration: underline;
+    font-family: sans-serif;
+    font-size: clamp(2rem, 2vw, 2rem);
+    font-weight: 100;
+}
+
+@media (max-width: 520px) {
+	.site-header {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding-block: 1rem;
+	}
+
+	.site-header nav {
+		justify-content: flex-start;
+		gap: 0.75rem 1.75rem;
+	}
+
+	.header-section {
+		scroll-margin-top: 7rem;
+	}
+
+    .about-section {
+		scroll-margin-top: 7rem;
+	}
+
+    .projects-section {
+		scroll-margin-top: 7rem;
+	}
+
+    .contact-section {
+		scroll-margin-top: 7rem;
+	}
+}
