@@ -8,7 +8,7 @@
 </head>
 <body>
     <header class="site-header">
-        <a class="site-name" href="#home">Kyu Han</a>
+        <a class="site-name" href="#home"><img class="site-avatar" src="pngs/smallerpfp.png" alt="">Kyu Han</a>
         <nav aria-label="Main navigation">
             <a href="#home">Home</a>
             <a href="#experiences">Experiences</a>
@@ -28,24 +28,37 @@
             </div>
 
             <div class="hero-copy">
-                <h4><br><br>Tools that I am familiar with</h4>
+                <h4><br><br>Tools & Frameworks I am familiar with</h4>
             </div>
             
             <div class="hero-marquee" aria-label="Image slideshow">
-                <div class="marquee-track">
+                <div class="marquee-track" tabindex="0" aria-describedby="tools-marquee-popup">
                     <div class="marquee-item"><img src="logos/github.svg" alt="GitHub logo"></div>
                     <div class="marquee-item"><img src="logos/git.svg" alt="Git logo"></div>
                     <div class="marquee-item"><img src="logos/googlecolab.svg" alt="Google Colab logo"></div>
                     <div class="marquee-item"><img src="logos/huggingface.svg" alt="Hugging Face logo"></div>
                     <div class="marquee-item"><img src="logos/jupyter.svg" alt="Jupyter logo"></div>
-                    <div class="marquee-item"><img src="logos/openapiinitiative.svg" alt="OpenAPI Initiative logo"></div>
+                    <div class="marquee-item"><img src="logos/pandas.svg" alt="Pandas logo"></div>
+                    <div class="marquee-item"><img src="logos/openrouter.svg" alt="OpenRouter logo"></div>
+                    <div class="marquee-item"><img src="logos/anaconda.svg" alt="Anaconda logo"></div>
+                    <div class="marquee-item"><img src="logos/react.svg" alt="React logo"></div>
+                    <div class="marquee-item"><img src="logos/vite.svg" alt="Vite logo"></div>
+                    <div class="marquee-item"><img src="logos/nextdotjs.svg" alt="Next.js logo"></div>
 
                     <div class="marquee-item"><img src="logos/github.svg" alt="GitHub logo"></div>
                     <div class="marquee-item"><img src="logos/git.svg" alt="Git logo"></div>
                     <div class="marquee-item"><img src="logos/googlecolab.svg" alt="Google Colab logo"></div>
                     <div class="marquee-item"><img src="logos/huggingface.svg" alt="Hugging Face logo"></div>
                     <div class="marquee-item"><img src="logos/jupyter.svg" alt="Jupyter logo"></div>
-                    <div class="marquee-item"><img src="logos/openapiinitiative.svg" alt="OpenAPI Initiative logo"></div>
+                    <div class="marquee-item"><img src="logos/pandas.svg" alt="Pandas logo"></div>
+                    <div class="marquee-item"><img src="logos/openrouter.svg" alt="OpenRouter logo"></div>
+                    <div class="marquee-item"><img src="logos/anaconda.svg" alt="Anaconda logo"></div>
+                    <div class="marquee-item"><img src="logos/react.svg" alt="React logo"></div>
+                    <div class="marquee-item"><img src="logos/vite.svg" alt="Vite logo"></div>
+                    <div class="marquee-item"><img src="logos/nextdotjs.svg" alt="Next.js logo"></div>
+                </div>
+                <div class="marquee-popup" id="tools-marquee-popup" role="tooltip">Including but not limited to:<br>
+                    GitHub, Git, Google Colab, Hugging Face, Jupyter, Pandas, OpenRouter, Anaconda, React.js, Vite.js, Next.js
                 </div>
             </div>
 
@@ -54,22 +67,25 @@
             </div>
             
             <div class="hero-marquee" aria-label="Image slideshow">
-                <div class="marquee-track">
+                <div class="marquee-track" tabindex="0" aria-describedby="languages-marquee-popup">
                     <div class="marquee-item"><img src="logos/java.png" alt="java logo"></div>
-                    <div class="marquee-item"><img src="logos/javascript.svg" alt="JavaScript logo"></div>
                     <div class="marquee-item"><img src="logos/python.svg" alt="Python logo"></div>
-                    <div class="marquee-item"><img src="logos/nextdotjs.svg" alt="Next.js logo"></div>
                     <div class="marquee-item"><img src="logos/c.svg" alt="C logo"></div>
                     <div class="marquee-item"><img src="logos/cplusplus.svg" alt="C++ logo"></div>
+                    <div class="marquee-item"><img src="logos/javascript.svg" alt="JavaScript logo"></div>
+                    <div class="marquee-item"><img src="logos/css.svg" alt="CSS logo"></div>
                     <div class="marquee-item"><img src="logos/html5.svg" alt="HTML5 logo"></div>
 
                     <div class="marquee-item"><img src="logos/java.png" alt="java logo"></div>
-                    <div class="marquee-item"><img src="logos/javascript.svg" alt="JavaScript logo"></div>
                     <div class="marquee-item"><img src="logos/python.svg" alt="Python logo"></div>
-                    <div class="marquee-item"><img src="logos/nextdotjs.svg" alt="Next.js logo"></div>
                     <div class="marquee-item"><img src="logos/c.svg" alt="C logo"></div>
                     <div class="marquee-item"><img src="logos/cplusplus.svg" alt="C++ logo"></div>
+                    <div class="marquee-item"><img src="logos/javascript.svg" alt="JavaScript logo"></div>
+                    <div class="marquee-item"><img src="logos/css.svg" alt="CSS logo"></div>
                     <div class="marquee-item"><img src="logos/html5.svg" alt="HTML5 logo"></div>
+                </div>
+                <div class="marquee-popup" id="languages-marquee-popup" role="tooltip">Including but not limited to:<br>
+                    Java, Python, C, C++, JavaScript, CSS, HTML
                 </div>
             </div>
         </section>
@@ -81,12 +97,23 @@
                     <h3>Database Analyst</h3>
                     <div class="experiences-image-wrap">
                         <img src="experiencejpgs/jfcs.jpg" alt="jfcs preview">
-                        <div class="experiences-hover-label">- Squirrel Hill Food Pantry <br><br>
-                                                            Nothing yet! I am still in progress of this project.</div>
+                        <div class="experience-current">CURRENTLY WORKING</div>
+                        <div class="experiences-hover-label"><br>- Squirrel Hill Food Pantry <br><br>
+                                                            Nothing yet! I am still in progress of the experience.</div>
                     </div>
                 </article>
 
-
+                <article class="experiences-card">
+                    <h3>Teaching Assistant (UTA)</h3>
+                    <div class="experiences-image-wrap">
+                        <img src="experiencejpgs/pittsci.jpg" alt="UTA preview">
+                        <div class="experience-current">CURRENTLY WORKING</div>
+                        <div class="experiences-hover-label"><br>- Hosting weekly lab sessions and taught core programming concepts.<br><br>
+                                                             - Holding weekly office hours and provided one-on-one assistance to students.<br><br>
+                                                             - Demonstrating leadership by teaching many students about various topics in programming, data structures, and algorithms. <br><br>
+                                                             - Boosted lab completion rates by 30%<br><br></div>
+                    </div>
+                </article>
 
                 <article class="experiences-card">
                     <h3>Research Assistant</h3>
@@ -100,16 +127,6 @@
                     </div>
                 </article>
 
-                <article class="experiences-card">
-                    <h3>Teaching Assistant (UTA)</h3>
-                    <div class="experiences-image-wrap">
-                        <img src="experiencejpgs/pittsci.jpg" alt="UTA preview">
-                        <div class="experiences-hover-label">- Hosted weekly lab sessions and taught core programming concepts.<br><br>
-                                                             - Held weekly office hours and provided one-on-one assistance to students.<br><br>
-                                                             - Demonstrating leadership by teaching many students about various topics in programming, data structures, and algorithms. <br><br>
-                                                             - Boosted lab completion rates by 30%<br><br></div>
-                    </div>
-                </article>
             </div>
         </section>
 
@@ -117,42 +134,82 @@
         <section class="projects-section" id="projects">
             <h1>PROJECTS</h1>
             <div class="project-strip" aria-label="Project list">
-                <article class="project-card">
-                    <h3>NVIDIA (Nemotron) Auditor</h3>
-                    <div class="project-image-wrap">
-                        <div class="project-hover-label">SteelHacks XIII Contestant<br><br>
-                                                         - Built a safety gate that audits LLM-generated medical advice. An LLM extracts findings, then a deterministic Python policy layer converts findings into a show/withhold decision, so every withheld answer names the rule that blocked it.<br><br>
-                                                         - Evaluated on a 41-case labeled set built by injecting known flaws into correct drafts, making ground truth free. The gate caught 26/31 unsafe drafts while shipping 10/10 safe ones. The model’s own risk score alone caught only 17/31 at identical coverage.<br><br>
-                                                         - A same-prompt GPT-4o-mini judge caught 30/31 but shipped only 2/10 safe answers - so recall alone can’t distinguish a usable gate from one that blocks the product.
-                                                        </div>
-                    </div>
-                    <div class="project-skill-row">
-                        <img class="project-skill-logo" src="logos/python.svg" alt="Python logo">
-                        <img class="project-skill-logo" src="logos/git.svg" alt="Git logo">
-                        <img class="project-skill-logo" src="logos/github.svg" alt="GitHub logo">
-                        <img class="project-skill-logo" src="logos/googlecolab.svg" alt="Google Colab logo">
-                        <img class="project-skill-logo" src="logos/nvidia.svg" alt="NVIDIA logo">
-                        <img class="project-skill-logo" src="logos/openapiinitiative.svg" alt="OpenAPI Initiative logo">
-                    </div>
-                </article>
-                <article class="project-card">
-                    <h3>LLM Triage Classification for South Asian languages</h3>
-                    <div class="project-image-wrap">
-                        <div class="project-hover-label">Model Agnostic Uncertainty Estimation for LLM Triage Classification for South Asian languages<br><br>
-                                                             - Engineered a 2S (semantic similarity) confidence score to quantify model certainty on critical emergency predictions across datasets. Wanted to clarify if the model was confident in its answers before proceeding.<br><br>
-                                                             - Evaluated cross-lingual consistency using BERTScore precision and recall metrics across identical prompts in multiple languages. Knowing how precise the model is allows me to factor out language barriers.<br><br>
-                                                             - Found systemic model overconfidence, identifying the LLM produced a >75% confidence score on nearly all 5,000 cases, regardless of input language.
+
+                    <article class="project-card project-favorite-card">
+                        <div class="personal-favorite"><span aria-hidden="true">★</span> Personal Favorite</div>
+                        <h3>LLM TRIAGE CLASSIFICATION FOR SOUTH ASIAN LANGUAGES</h3>
+                        <div class="project-image-wrap">
+                            <div class="project-hover-label">Model Agnostic Uncertainty Estimation for LLM Triage Classification for South Asian languages<br><br>
+                                                                - Engineered a 2S (semantic similarity) confidence score to quantify model certainty on critical emergency predictions across datasets. Wanted to clarify if the model was confident in its answers before proceeding.<br><br>
+                                                                - Evaluated cross-lingual consistency using BERTScore precision and recall metrics across identical prompts in multiple languages. Knowing how precise the model is allows me to factor out language barriers.<br><br>
+                                                                - Found systemic model overconfidence, identifying the LLM produced a >75% confidence score on nearly all 5,000 cases, regardless of input language.<br><br>
+                                                                </div>
+                        </div>
+                        <div class="project-skill-row">
+                            <img class="project-skill-logo" src="logos/anthropic.svg" alt="Anthropic logo">
+                            <img class="project-skill-logo" src="logos/python.svg" alt="Python logo">
+                            <img class="project-skill-logo" src="logos/git.svg" alt="Git logo">
+                            <img class="project-skill-logo" src="logos/github.svg" alt="GitHub logo">
+                            <img class="project-skill-logo" src="logos/googlecolab.svg" alt="Google Colab logo">
+                            <img class="project-skill-logo" src="logos/huggingface.svg" alt="Hugging Face logo">
+                            <img class="project-skill-logo" src="logos/qwen.svg" alt="Qwen logo">
+                        </div>
+                    </article>
+
+
+
+                    <article class="project-card">
+                        <h3>NEMOTRON AUDITOR</h3>
+                        <div class="project-image-wrap">
+                            <div class="project-hover-label">SteelHacks XIII Contestant<br><br>
+                                                            - Built a safety gate that audits LLM-generated medical advice. An LLM extracts findings, then a deterministic Python policy layer converts findings into a show/withhold decision, so every withheld answer names the rule that blocked it.<br><br>
+                                                            - Evaluated on a 41-case labeled set built by injecting known flaws into correct drafts, making ground truth free. The gate caught 26/31 unsafe drafts while shipping 10/10 safe ones. The model’s own risk score alone caught only 17/31 at identical coverage.<br><br>
+                                                            - A same-prompt GPT-4o-mini judge caught 30/31 but shipped only 2/10 safe answers - so recall alone can’t distinguish a usable gate from one that blocks the product.
                                                             </div>
-                    </div>
-                    <div class="project-skill-row">
-                        <img class="project-skill-logo" src="logos/python.svg" alt="Python logo">
-                        <img class="project-skill-logo" src="logos/git.svg" alt="Git logo">
-                        <img class="project-skill-logo" src="logos/github.svg" alt="GitHub logo">
-                        <img class="project-skill-logo" src="logos/googlecolab.svg" alt="Google Colab logo">
-                        <img class="project-skill-logo" src="logos/huggingface.svg" alt="Hugging Face logo">
-                        <img class="project-skill-logo" src="logos/qwen.svg" alt="Qwen logo">
-                    </div>
-                </article>
+                        </div>
+                        <div class="project-skill-row">
+                            <img class="project-skill-logo" src="logos/nvidia.svg" alt="NVIDIA logo">
+                            <img class="project-skill-logo" src="logos/anthropic.svg" alt="Anthropic logo">
+                            <img class="project-skill-logo" src="logos/ollama.svg" alt="Ollama logo">
+                            <img class="project-skill-logo" src="logos/openai.svg" alt="OpenAI logo">
+                            <img class="project-skill-logo" src="logos/python.svg" alt="Python logo">
+                            <img class="project-skill-logo" src="logos/git.svg" alt="Git logo">
+                            <img class="project-skill-logo" src="logos/github.svg" alt="GitHub logo">
+                            <img class="project-skill-logo" src="logos/googlecolab.svg" alt="Google Colab logo">
+                            <img class="project-skill-logo" src="logos/openrouter.svg" alt="OpenRouter logo">
+                        </div>
+                    </article>
+
+
+                    <article class="project-card project-building-card">
+                        <div class="project-building">BUILDING</div>
+                        <h3>"@me", A PERSONAL DESKTOP ASSISTANT</h3>
+                        <div class="project-image-wrap">
+                            <div class="project-hover-label">HackRU 26 Contestant<br><br>
+                                                             - To build a personal desktop assistant that can help with various tasks such as scheduling, reminders, and information retrieval.<br><br>
+                                                             - The assistant will be able to understand natural language commands and respond accordingly.<br><br>
+                                                             - Integrate with various APIs and services to provide a seamless user experience.<br><br>
+                                                             - The assistant will be able to learn from user interactions and improve its performance over time.<br><br>
+                                                             The project is currently being researched and will be put together once the HackRU 26 event starts.
+                                                            </div>
+                        </div>
+                        <div class="project-skill-row">
+                            <img class="project-skill-logo" src="logos/anthropic.svg" alt="Anthropic logo">
+                        </div>
+                    </article>
+
+                    <article class="project-card project-building-card">
+                        <div class="project-building">BUILDING</div>
+                        <h3>HackPSU 26</h3>
+                        <div class="project-image-wrap">
+                            <div class="project-hover-label">HackPSU 26 Contestant<br><br>
+                                                             No idea what to build for this one, will put updates once I figure out anything to build :)<br><br>
+                                                            </div>
+                        </div>
+                        <div class="project-skill-row">
+                            <img class="project-skill-logo" src="logos/anthropic.svg" alt="Anthropic logo">
+                        </div>
+                    </article>
             </div>
         </section>
 

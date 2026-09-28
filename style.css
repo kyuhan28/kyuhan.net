@@ -26,11 +26,23 @@ body {
 	background: #000000;
 }
 .site-name {
+	display: inline-flex;
+	align-items: center;
+	gap: 1rem;
 	color: #e8eceb;
 	font-size: 2rem;
 	font-weight: 500;
 	text-decoration: none;
 	white-space: nowrap;
+}
+.site-avatar {
+	width: 2.5rem;
+	height: 2.5rem;
+	background-color: #ffffff;
+	border: 1px solid #f5f8f7;
+	border-radius: 50%;
+	object-fit: cover;
+	flex-shrink: 0;
 }
 .site-header nav {
 	display: flex;
@@ -40,7 +52,6 @@ body {
 }
 .site-header nav a {
 	color: #f0f3f1;
-	font-family: "Ubuntu Mono", monospace;
 	font-size: 1.1rem;
     font-weight: 500;
 	text-decoration: none;
@@ -57,7 +68,7 @@ main {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	min-height: 110vh;
+	min-height: 120vh;
 	padding: 4.5rem clamp(1.5rem, 4vw, 4rem) 2rem;
 	scroll-margin-top: 5rem;
 	overflow: hidden;
@@ -73,9 +84,9 @@ main {
 }
 .header-section h1 {
 	margin: 0;
-	font-size: 90px;
-	font-weight: 400;
-	text-shadow: 4px 4px 4px rgba(0, 0, 0, 1);
+	font-size: 130px;
+	font-weight: 800;
+	text-shadow: 6px 6px 6px #003f7a;
 }
 .header-section h2,
 .header-section h3 {
@@ -124,6 +135,33 @@ main {
 	animation: marquee-left 48s linear infinite;
 	will-change: transform;
 }
+.marquee-popup {
+	position: absolute;
+	top: 0.25rem;
+	left: 50%;
+	z-index: 2;
+	width: max-content;
+	max-width: min(90vw, 32rem);
+	padding: 0.45rem 0.8rem;
+	border-radius: 4px;
+	background: #f5f8f7;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+	color: #0f0f0f;
+	font-size: 0.9rem;
+	text-align: center;
+	white-space: normal;
+	transform: translate(-50%, -0.35rem);
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+	pointer-events: none;
+}
+.marquee-track:hover + .marquee-popup,
+.marquee-track:focus-visible + .marquee-popup {
+	transform: translate(-50%, 0);
+	opacity: 1;
+	visibility: visible;
+}
 .marquee-item {
 	flex: 0 0 auto;
 	display: flex;
@@ -162,7 +200,6 @@ main {
 	padding: 2rem clamp(1.5rem, 5vw, 4rem);
 	scroll-margin-top: 5rem;
 	background: #001527;
-	text-shadow: 10px -10px 10px rgba(0, 0, 0, 1);
 	container-type: inline-size;
 }
 .experiences-section h1 {
@@ -171,6 +208,7 @@ main {
 	letter-spacing: 0.07em;
 	line-height: 1;
 	margin: 0 0 2rem;
+	text-shadow: 10px -10px 10px rgba(0, 0, 0, 1);
 }
 .experiences-strip {
 	display: flex;
@@ -206,7 +244,6 @@ main {
 	font-size: 2rem;
 	font-weight: 500;
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
 }
 .experiences-image-wrap {
 	position: relative;
@@ -220,6 +257,19 @@ main {
 	height: 390px;
 	object-fit: cover;
 	transition: transform 0.25s ease, filter 0.25s ease;
+}
+.experience-current {
+	position: absolute;
+	top: 0.8rem;
+	left: 0.8rem;
+	z-index: 2;
+	padding: 0.5rem 0.7rem;
+	border: 1px solid #8de3b0;
+	border-radius: 4px;
+	background: rgba(8, 12, 18, 0.9);
+	color: #ffffff;
+	font-size: 0.8rem;
+	font-weight: 700;
 }
 .experiences-hover-label {
 	position: absolute;
@@ -270,13 +320,14 @@ main {
 	white-space: nowrap;
 	line-height: 1;
 	margin: 0 0 2rem;
+	text-shadow: 10px -10px 10px rgba(0, 0, 0, 1);
 }
 .project-strip {
 	display: flex;
 	overflow-x: auto;
 	overflow-y: hidden;
 	gap: 1.5rem;
-	padding-bottom: 0.75rem;
+	padding: 1.5rem 0 0.75rem;
 	scroll-snap-type: x proximity;
 	max-width: 100%;
 	-webkit-overflow-scrolling: touch;
@@ -300,12 +351,53 @@ main {
 	scroll-snap-align: start;
 	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
+.project-favorite-card {
+	position: relative;
+}
+.project-favorite-card .personal-favorite {
+	top: -1.4rem;
+}
+.project-building-card {
+	position: relative;
+}
+.project-building {
+	position: absolute;
+	top: -1.4rem;
+	left: 0.8rem;
+	z-index: 2;
+	padding: 0.5rem 0.7rem;
+	border: 1px solid #8de3b0;
+	border-radius: 4px;
+	background: rgba(8, 12, 18, 0.9);
+	color: #ffffff;
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+.personal-favorite {
+	position: absolute;
+	top: 0.8rem;
+	right: 0.8rem;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.5rem 0.7rem;
+	border: 1px solid #ffd75e;
+	border-radius: 4px;
+	background: rgba(8, 12, 18, 0.9);
+	color: #ffffff;
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+.personal-favorite span {
+	color: #ffd75e;
+	font-size: 1rem;
+}
 .project-card h3 {
 	margin: 0;
 	font-size: 2rem;
 	font-weight: 500;
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
 	padding-bottom: 0.45rem;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.9);
 }
@@ -314,7 +406,6 @@ main {
 	font-size: 1rem;
 	font-weight: 500;
 	letter-spacing: 0.08em;
-	text-transform: uppercase;
 }
 .project-info-box {
 	display: flex;
@@ -357,6 +448,7 @@ main {
 	align-items: center;
 	gap: 0.75rem;
 	flex-wrap: wrap;
+	margin-top: auto;
 }
 .project-skill-logo {
 	display: block;
