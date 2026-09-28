@@ -461,7 +461,7 @@ main {
 
 .contact-section {
     min-height: 93vh;
-	padding: 4rem 0;
+	padding: 4rem 4rem;
 	scroll-margin-top: 4rem;
 }
 .contact-content {
