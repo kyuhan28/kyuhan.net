@@ -9,8 +9,21 @@
 }
 
 body {
+	position: relative;
 	margin: 0;
 	overflow-x: hidden;
+	background:
+		radial-gradient(circle at 82% 15%, rgba(168, 85, 247, 0.12), transparent 22%),
+		radial-gradient(circle at 68% 26%, rgba(96, 165, 250, 0.1), transparent 30%),
+		#050914;
+}
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	background: linear-gradient(120deg, rgba(76, 29, 149, 0.08) 0%, rgba(15, 23, 42, 0.08) 40%, rgba(2, 6, 23, 0.9) 100%);
+	pointer-events: none;
+	z-index: -3;
 }
 .site-header {
 	position: sticky;
@@ -85,8 +98,20 @@ main {
 .header-section h1 {
 	margin: 0;
 	font-size: 130px;
+	font-weight: 300;
+	text-shadow: 6px 6px 6px #000000;
+}
+.welcome-letter {
+	display: inline-block;
+	transform-origin: center bottom;
+	transition: transform 450ms ease;
+}
+.welcome-letter:hover,
+.welcome-letter:focus-visible {
+	position: relative;
+	z-index: 1;
 	font-weight: 800;
-	text-shadow: 6px 6px 6px #003f7a;
+	transform: scale(1.14);
 }
 .header-section h2,
 .header-section h3 {
