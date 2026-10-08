@@ -348,24 +348,14 @@ main {
 	text-align: center;
 }
 .project-strip {
-	display: flex;
-	overflow-x: auto;
-	overflow-y: hidden;
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
 	gap: 1.5rem;
 	padding: 1.5rem 0 0.75rem;
-	scroll-snap-type: x proximity;
 	max-width: 100%;
-	-webkit-overflow-scrolling: touch;
-}
-.project-strip::-webkit-scrollbar {
-	height: 8px;
-}
-.project-strip::-webkit-scrollbar-thumb {
-	background: rgba(255, 255, 255, 0.35);
-	border-radius: 999px;
 }
 .project-card {
-	flex: 0 0 520px;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
@@ -373,18 +363,17 @@ main {
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 18px;
 	padding: 1.3rem;
-	scroll-snap-align: start;
 	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
 }
 .project-image-nemo {
     width: 100%;
-    height: 40%;
+    height: 45%;
     object-fit: fill;
     display: block;
 }
 .project-image-atme {
     width: 100%;
-    height: 32%;
+    height: 36%;
     object-fit: fill;
     display: block;
 }
@@ -627,6 +616,12 @@ main {
 	filter: brightness(0) invert(1);
 }
 
+@media (max-width: 900px) {
+	.project-strip {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
 @media (max-width: 520px) {
 	.site-header {
 		align-items: flex-start;
@@ -638,6 +633,10 @@ main {
 	.site-header nav {
 		justify-content: flex-start;
 		gap: 0.75rem 1.75rem;
+	}
+
+	.project-strip {
+		grid-template-columns: 1fr;
 	}
 
 	.header-section {
