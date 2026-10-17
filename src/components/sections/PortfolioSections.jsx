@@ -7,7 +7,6 @@ import SplitText from '../type/SplitText'
 import ScrollWords from '../type/ScrollWords'
 import SectionLabel from '../type/SectionLabel'
 import Magnetic from '../cursor/Magnetic'
-import ProjectArt from '../art/ProjectArt'
 import './portfolio.css'
 
 const rise = (delay = 0) => ({
@@ -133,7 +132,6 @@ export function ProjectsSection() {
               onPointerEnter={() => follow && setActive(p)}>
               <article className="pf-project__row" aria-labelledby={`project-${p.id}`}>
                 <span className="pf-project__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                {!follow && <div className="pf-project__art"><ProjectArt kind={p.art} image={p.image} alt={`${p.title} screenshot`} /></div>}
                 <div className="pf-project__head">
                   <h3 id={`project-${p.id}`} className="pf-project__title">{p.title}</h3>
                   <p className="pf-project__meta">{[p.year, p.role].filter(Boolean).join(' · ')}</p>
