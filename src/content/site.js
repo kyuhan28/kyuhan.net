@@ -13,7 +13,7 @@ export const site = {
 
   // PLACEHOLDER: a square profile photo in /public (at least 128x128), e.g. '/avatar.jpg'.
   // Until then, your initials are shown in the header.
-  avatar: '/work/pfp.jpeg',
+  avatar: '/work/pfp.jpeg', // files in public/ are served from the site root: no 'public/' in the path
 
   // From your own description of yourself.
   role: '3rd-year Computer Science student at the University of Pittsburgh',
