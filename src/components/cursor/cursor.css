@@ -1,0 +1,28 @@
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 950;
+  pointer-events: none;
+}
+.cursor__lens {
+  position: absolute;
+  width: 16px; height: 16px;
+  margin: -8px 0 0 -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  mix-blend-mode: difference;
+}
+.cursor__label {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 84px; height: 84px;
+  margin: -42px 0 0 -42px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #000;
+  font-size: var(--text-xs);
+  font-weight: 620;
+  box-shadow: 0 0 40px rgba(111, 240, 224, 0.25);
+}
+.magnetic { display: inline-flex; }

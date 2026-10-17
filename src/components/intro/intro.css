@@ -1,0 +1,102 @@
+/* Loading screen: the chateau's warm palette and serif, a balanced centered composition. */
+.intro { position: fixed; inset: 0; z-index: 900; }
+.intro__shutter {
+  position: absolute;
+  left: 0; right: 0;
+  height: 50.5%;
+  background: #07060f;
+  will-change: transform;
+}
+.intro__shutter--top { top: 0; }
+.intro__shutter--bottom { bottom: 0; }
+
+.intro__frame {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  padding: clamp(1.6rem, 4.5vh, 2.75rem) var(--margin) calc(clamp(1.6rem, 4.5vh, 2.75rem) + env(safe-area-inset-bottom));
+  color: var(--hero-ink);
+  font-family: var(--serif);
+  text-align: center;
+}
+/* A faint warm light behind the counter, like the glow through the gate. */
+.intro__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(38% 30% at 50% 50%, rgba(150, 120, 255, 0.11), rgba(150, 120, 255, 0) 70%);
+}
+
+.intro__name {
+  position: relative;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--hero-ink-2);
+  margin-right: -0.3em; /* the last letter's tracking would push the centered word off center */
+}
+
+.intro__center {
+  position: relative;
+  align-self: center;
+  display: grid;
+  justify-items: center;
+  gap: clamp(0.9rem, 2.2vh, 1.3rem);
+}
+.intro__count {
+  display: flex;
+  align-items: baseline;
+  font-size: clamp(4rem, 8vw + 1.5rem, 6.25rem); /* phones get a touch more presence; desktop unchanged */
+  font-weight: 300;
+  line-height: 1.1; /* roomy line box: no figure touches an edge */
+  letter-spacing: 0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+/* Equal-width figures: the number only re-centers when it gains a digit (at 10 and 100). */
+.intro__num { display: inline-block; }
+.intro__pct {
+  font-size: 0.4em;
+  margin-left: 0.18em;
+  color: var(--hero-ink-2);
+}
+/* Balance the % with equal space on the left, so the number itself sits on the center line. */
+.intro__count { padding-left: 0.39em; }
+
+.intro__bar-track {
+  width: min(300px, 62vw);
+  height: 1px;
+  background: rgba(246, 238, 226, 0.16);
+  overflow: hidden;
+}
+.intro__bar {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(47, 216, 255, 0.6), #f1f2ff 55%, rgba(162, 77, 255, 0.75));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.intro__status {
+  min-height: 1.5em; /* keeps the layout still as the message changes */
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+  letter-spacing: 0.04em;
+  color: var(--hero-ink-2);
+}
+
+.intro__skip {
+  position: relative;
+  min-height: 46px;
+  padding: 0 1.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 203, 234, 0.4);
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hero-ink);
+  transition: border-color 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
+}
+.intro__skip:hover, .intro__skip:focus-visible { border-color: rgba(241, 242, 255, 0.85); background: rgba(241, 242, 255, 0.06); }

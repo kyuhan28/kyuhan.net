@@ -1,0 +1,67 @@
+/* Design tokens: the only place colors, type, spacing and easing are defined. */
+:root {
+  /* Surfaces */
+  --void: #000000;          /* cinematic scenes: hero, case study, lab */
+  --graphite: #17181b;      /* reading sections */
+  --panel: #0e0f11;         /* project panels */
+  --paper: #e4e6ea;         /* the one quiet, light section */
+
+  /* Ink on dark */
+  --ink: #f4f4f6;
+  --ink-2: #a2a5ad;         /* 8.4:1 on black */
+  --ink-3: #7d8089;         /* 5.3:1 on black */
+  --rule: rgba(255, 255, 255, 0.12);
+  --rule-strong: rgba(255, 255, 255, 0.24);
+
+  /* Ink on paper */
+  --paper-ink: #141519;
+  --paper-ink-2: #4a4d56;
+  --paper-rule: rgba(20, 21, 25, 0.16);
+
+  /* Light: the only color in the system. Used where light lands, never as decoration. */
+  --light-a: #6ff0e0;
+  --light-b: #a98bff;
+
+  /* Type: one family, three axes (opsz, wdth, wght) */
+  --font: 'Bricolage Grotesque', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: var(--font); /* Infinite Space uses one modern sans throughout */
+  --hero-ink: #f1f2ff; /* cool white for the space */
+  --hero-ink-2: #c9cbea;
+  --text-xs: 0.8125rem;
+  --text-s: 0.9375rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.375rem;
+  --text-xl: clamp(1.5rem, 2.3vw, 2.05rem);
+  --display-s: clamp(1.95rem, 5vw, 4.25rem);
+  --display-m: clamp(3.1rem, 8vw, 7.75rem);
+  --display-l: clamp(3.4rem, 16vw, 16.5rem);
+
+  /* Space */
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --section: clamp(6rem, 14vw, 12rem);
+  --margin: clamp(1.25rem, 5vw, 5rem);
+  --gutter: clamp(1rem, 2.2vw, 2rem);
+  --max: 1440px;
+
+  /* Shape */
+  --radius-s: 10px;
+  --radius-m: 20px;
+  --radius-l: 36px;
+
+  /* Motion (mirrors src/motion/tokens.js) */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --nav-h: 72px;
+}
+
+/* The narrowest phones (iPhone SE and similar): step section headings down so long words fit. */
+@media (max-width: 360px) {
+  :root { --display-m: 2.55rem; }
+}
