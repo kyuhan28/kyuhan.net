@@ -52,7 +52,7 @@ export const site = {
       year: 'Oct 2026 - Present',
       summary: 'Built a chrome extension that can help with various tasks such as scheduling, reminders, and information retrieval.',
       stack: ['JavaScript', 'HTML', 'CSS'],
-      links: [{ label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
+      links: [{ label: 'Website', href: 'https://atme.tech/' },  { label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
     },
     {
       id: 'triaging-model',
