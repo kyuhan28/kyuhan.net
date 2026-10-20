@@ -36,8 +36,8 @@ export const site = {
       title: 'CodeViz, AI-assisted Visualizer, Debugger, and Writer',
       year: 'Sept 2026 - Present',
       summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
-      stack: ['Docker', 'React', 'TypeScript','Java', 'Python', 'TailWind CSS', 'Three.js', 'Next.js'],
-      links: [{ label: 'GitHub', href: '' }],
+      stack: ['Docker', 'TypeScript', 'React', 'TailWind CSS', 'Three.js', 'Next.js', 'Java', 'Python', 'C', 'C++'],
+      links: [{ label: 'Demo', href: '' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
     },
     {
       id: 'research-LLM',
