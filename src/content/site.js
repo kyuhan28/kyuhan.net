@@ -85,7 +85,7 @@ export const site = {
   skills: [
     { area: 'Languages', detail: 'Java, Python, C, JavaScript, TypeScript, HTML, CSS' },
     { area: 'Frameworks & Platforms', detail: 'Pandas, AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
-    { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Jupyter Notebook' },
+    { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Jupyter Notebook, Docker' },
     { area: 'Libraries', detail: 'Pandas, NumPy, React, JSON' },
   ],
 
