@@ -59,7 +59,7 @@ export const site = {
       title: 'CodeViz, AI-assisted Visualizer, Debugger, and Writer',
       year: 'Sept 2026 - Present',
       summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
-      stack: ['Docker', 'React.js', 'Next', 'TypeScript','Java', 'Python'],
+      stack: ['Docker', 'React', 'Next.js', 'TypeScript','Java', 'Python'],
       links: [{ label: 'GitHub', href: '' }],
     },
     {
