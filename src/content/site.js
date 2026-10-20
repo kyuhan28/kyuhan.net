@@ -27,8 +27,8 @@ export const site = {
       'I am very passionate about technology and its application in solving real-world problems. I am most intereted in software development, engineering, and machine learning.',
     // PLACEHOLDER: short biography paragraphs.
     bio: [
-      'I am currently working on several personal projects focused on building tools that can help students manage their own lives and improve their productivity.',
       'I also enjoy creating these websites and web applications with fun and interactive user interfaces.',
+      'I’m also passionate about frontend development, with a focus on building engaging, interactive, and visually polished web experiences. I enjoy experimenting with modern web technologies, animations, and UI design to create interfaces that are intuitive, functional, and enjoyable to use.',
     ],
     // PLACEHOLDER: quick facts. Delete any row you do not want.
     facts: [
@@ -55,12 +55,12 @@ export const site = {
       links: [{ label: 'Website', href: 'https://atme.tech/' },  { label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
     },
     {
-      id: 'triaging-model',
-      title: 'Nemotron Triaging Model',
-      year: 'Sept 2026',
-      summary: 'Audits, judges, and evaluates the response of another model.',
-      stack: ['Python', 'Nemotron', 'OpenAI API'],
-      links: [{ label: 'GitHub', href: 'https://github.com/kyuhan28/nemotrontriagemodel' }],
+      id: 'code-viz',
+      title: 'CodeViz, AI-assisted Visualizer, Debugger, and Writer',
+      year: 'Sept 2026 - Present',
+      summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
+      stack: ['Docker', 'React.js', 'Next', 'TypeScript','Java', 'Python'],
+      links: [{ label: 'GitHub', href: '' }],
     },
     {
       id: 'research-LLM',
@@ -76,17 +76,16 @@ export const site = {
   // PLACEHOLDER: your experience: jobs, internships, research, teaching, leadership. Newest first.
   // (portfolio.zip had no experience section, so these are new, empty stand-ins.)
   experience: [
-    { period: '2026 – Present', title: 'Data Analytics Intern', org: 'JFCS Food Pantry', summary: 'Lead a price-benchmarking project comparing pantry item values to local supermarket prices to keep the database accurate.' },
     { period: '2025 – Present', title: 'Undergraduate Teaching Assistant', org: 'University of Pittsburgh', summary: 'Assisted in teaching/mentoring/explaining multiple courses for students.' },
     { period: '2025', title: 'Undergraduate Student Researcher', org: 'University of Pittsburgh', summary: 'Collaborated with PhD Students and a team in the medical field regarding Large Language Models on datasets.' },
   ],
 
   // PLACEHOLDER: organize these around your real strengths (from portfolio.zip's capabilities).
   skills: [
-    { area: 'Languages', detail: 'Java, Python, C, JavaScript, TypeScript, HTML, CSS' },
-    { area: 'Frameworks & Platforms', detail: 'Pandas, AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
+    { area: 'Languages', detail: 'Java, Python, C, C++, JavaScript, TypeScript, HTML, CSS, SQL' },
+    { area: 'Frameworks & Platforms', detail: 'AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch, Next.js', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
     { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Jupyter Notebook, Docker' },
-    { area: 'Libraries', detail: 'Pandas, NumPy, React, JSON' },
+    { area: 'Libraries', detail: 'Pandas, NumPy, React, Three.js' },
   ],
 
   contact: {
