@@ -1,36 +1,20 @@
-/**
- * Everything personal on the site lives in this file.
- *
- * Carried over from portfolio.zip, where every value was a PLACEHOLDER: a stand-in until you write
- * your own. Nothing here describes real work, employers, results or links until you replace it.
- * The one real detail so far is your role, from your own description.
- */
-
 export const site = {
-  // PLACEHOLDER: your name. `nameLines` controls the line break in the hero headline.
   name: 'Kyu Han',
   nameLines: ['Kyu Han'],
 
-  // PLACEHOLDER: a square profile photo in /public (at least 128x128), e.g. '/avatar.jpg'.
-  // Until then, your initials are shown in the header.
-  avatar: '/work/pfp.jpeg', // files in public/ are served from the site root: no 'public/' in the path
+  avatar: '/work/pfp.jpeg',
 
-  // From your own description of yourself.
   role: '3rd-year Computer Science student at the University of Pittsburgh',
 
-  // PLACEHOLDER: one sentence about what you build and why.
   tagline: 'Welcome! Here is a showcase of my work and interests in the tech space.',
 
   about: {
-    // PLACEHOLDER: this sentence lights up word by word as visitors scroll.
     statement:
       'I am very passionate about technology and its application in solving real-world problems. I am most intereted in software development, engineering, and machine learning.',
-    // PLACEHOLDER: short biography paragraphs.
     bio: [
+      'I’m passionate about frontend development, with a focus on building engaging, interactive, and visually polished web experiences. I enjoy experimenting with modern web technologies, animations, and UI design to create interfaces that are intuitive, functional, and enjoyable to use.',
       'I also enjoy creating these websites and web applications with fun and interactive user interfaces.',
-      'I’m also passionate about frontend development, with a focus on building engaging, interactive, and visually polished web experiences. I enjoy experimenting with modern web technologies, animations, and UI design to create interfaces that are intuitive, functional, and enjoyable to use.',
     ],
-    // PLACEHOLDER: quick facts. Delete any row you do not want.
     facts: [
       { term: 'Based in', detail: 'Pittsburgh, PA' },
       { term: 'Studying', detail: 'Computer science at University of Pittsburgh' },
@@ -38,13 +22,6 @@ export const site = {
     ],
   },
 
-  /**
-   * PLACEHOLDER projects (the four from portfolio.zip).
-   * - `image`: a screenshot in /public, e.g. '/work/project-one.webp' (16:10 works best).
-   *   Until then, `art` picks a generated visual: 'contour', 'orbit', 'lattice' or 'signal'.
-   * - `links`: add { label: 'Live demo', href: 'https://…' } and/or { label: 'Source', href: 'https://github.com/…' }.
-   *   Links with an empty href are shown as clearly marked placeholders, never as broken links.
-   */
   projects: [
     {
       id: 'study-planner',
@@ -59,7 +36,7 @@ export const site = {
       title: 'CodeViz, AI-assisted Visualizer, Debugger, and Writer',
       year: 'Sept 2026 - Present',
       summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
-      stack: ['Docker', 'React', 'Next.js', 'TypeScript','Java', 'Python'],
+      stack: ['Docker', 'React', 'TypeScript','Java', 'Python', 'TailWind CSS', 'Three.js', 'Next.js'],
       links: [{ label: 'GitHub', href: '' }],
     },
     {
@@ -73,27 +50,21 @@ export const site = {
     },
   ],
 
-  // PLACEHOLDER: your experience: jobs, internships, research, teaching, leadership. Newest first.
-  // (portfolio.zip had no experience section, so these are new, empty stand-ins.)
   experience: [
     { period: '2025 – Present', title: 'Undergraduate Teaching Assistant', org: 'University of Pittsburgh', summary: 'Assisted in teaching/mentoring/explaining multiple courses for students.' },
     { period: '2025', title: 'Undergraduate Student Researcher', org: 'University of Pittsburgh', summary: 'Collaborated with PhD Students and a team in the medical field regarding Large Language Models on datasets.' },
   ],
 
-  // PLACEHOLDER: organize these around your real strengths (from portfolio.zip's capabilities).
   skills: [
     { area: 'Languages', detail: 'Java, Python, C, C++, JavaScript, TypeScript, HTML, CSS, SQL' },
-    { area: 'Frameworks & Platforms', detail: 'AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch, Next.js', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
+    { area: 'Frameworks & Platforms', detail: 'AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch, Next.js, TailWind', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
     { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Jupyter Notebook, Docker' },
     { area: 'Libraries', detail: 'Pandas, NumPy, React, Three.js' },
   ],
 
   contact: {
-    // PLACEHOLDER: your email. Leave empty to show a clearly marked placeholder instead of a link.
     email: 'hankyumin05@gmail.com',
-    // PLACEHOLDER: what you are open to.
     availability: 'I am open to full-time roles such as internships, research opportunities, and other positions.',
-    // PLACEHOLDER: add URLs. Entries with an empty href render as labeled placeholders, not links.
     links: [
       { label: 'GitHub', href: 'https://github.com/kyuhan28' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kyu-han-pitt2028/' },
@@ -101,6 +72,5 @@ export const site = {
     ],
   },
 
-  // Time zone for the footer clock. 'America/New_York' follows daylight saving automatically.
   timezone: 'America/New_York',
 }
