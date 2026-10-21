@@ -11,14 +11,14 @@ const unitVariants = {
   }),
 }
 
-/**
- * Masked typographic reveal. Screen readers get the plain sentence; the split
- * spans are aria-hidden so the reading order stays intact.
- *
- * lines:    string (use \n for breaks) or array of lines
- * mode:     'chars' for display headlines, 'words' for longer headings
- * trigger:  'inView' (default) or 'mount' (then pass `play`)
- */
+
+
+
+
+
+
+
+
 export default function SplitText({
   as = 'h2',
   text,

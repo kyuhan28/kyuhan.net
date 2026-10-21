@@ -8,14 +8,14 @@ import SceneFallback from '../../three/SceneFallback'
 import { STATION_IDS } from '../../three/space/camera'
 import './world.css'
 
-// three.js loads in its own chunk, so the page's text never waits on it.
+
 const SpaceScene = lazy(() => import('../../three/SpaceScene'))
 
-/*
- * The world behind the whole page: a fixed full-screen scene that the page scrolls over.
- * Each section's arrival is a camera station; the label follows the cursor (or the tap) when it's
- * over a sculpture.
- */
+
+
+
+
+
 export default function World({ ready }) {
   const reduce = usePrefersReducedMotion()
   const fine = useFinePointer()
@@ -28,8 +28,8 @@ export default function World({ ready }) {
 
   useEffect(() => { if (!webgl) complete('scene') }, [webgl])
 
-  // The stations, as scroll positions: where each section's top arrives under the header, which is
-  // exactly where the header's links land. Reading on glides the camera toward the next station.
+
+
   const getAnchors = useCallback(() => {
     const max = document.documentElement.scrollHeight - window.innerHeight
     const header = document.querySelector('.nav')?.offsetHeight ?? 72
@@ -40,8 +40,8 @@ export default function World({ ready }) {
     })
   }, [])
 
-  // The label follows the pointer without re-rendering React on every move, and flips to the other
-  // side of the pointer near the screen's edges so it's never cut off.
+
+
   const pointer = useRef({ x: 0, y: 0 })
   const place = useCallback(() => {
     const el = tip.current
@@ -52,7 +52,7 @@ export default function World({ ready }) {
     const y = py + gap + h > window.innerHeight - 8 ? py - gap - h : py + gap
     el.style.transform = `translate3d(${Math.max(8, x)}px, ${Math.max(8, y)}px, 0)`
   }, [])
-  // When the label's text changes its size changes too: measure and place it again before paint.
+
   useLayoutEffect(place, [label, place])
   useEffect(() => {
     const move = (e) => { pointer.current = { x: e.clientX, y: e.clientY }; place() }

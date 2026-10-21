@@ -1,6 +1,6 @@
-// Tracks real loading work so the loader can show honest progress.
-// Each task is something we can actually observe finishing; progress is the
-// share of tasks complete, never a guess about bytes or time.
+
+
+
 
 export const TASK_LABELS = {
   fonts: 'typography',
@@ -32,7 +32,7 @@ export function subscribe(fn) {
   return () => listeners.delete(fn)
 }
 
-// Tasks this module can observe on its own. The 3D scene reports itself from the hero.
+
 if (typeof window !== 'undefined') {
   ;(document.fonts?.ready ?? Promise.resolve()).then(() => complete('fonts'), () => complete('fonts'))
   if (document.readyState === 'complete') complete('page')

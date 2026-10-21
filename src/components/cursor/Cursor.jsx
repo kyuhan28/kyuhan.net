@@ -6,11 +6,11 @@ import './cursor.css'
 
 const INTERACTIVE = 'a, button, [role="button"], summary, label, [data-cursor]'
 
-/*
- * A small lens that trails the native cursor (which stays visible).
- * It widens over interactive elements, and shows a label where an element
- * declares one with data-cursor="View".
- */
+
+
+
+
+
 export default function Cursor() {
   const fine = useFinePointer()
   if (!fine) return null
@@ -45,7 +45,7 @@ function CursorLens() {
       update({ kind: label ? 'label' : 'link', label })
     }
     const onLeave = () => setVisible(false)
-    const onWorld = (e) => update(e.detail ? { kind: 'link', label: '' } : { kind: 'idle', label: '' }) // objects in the 3D world
+    const onWorld = (e) => update(e.detail ? { kind: 'link', label: '' } : { kind: 'idle', label: '' })
     window.addEventListener('pointermove', onMove, { passive: true })
     document.addEventListener('pointerover', onOver, { passive: true })
     document.documentElement.addEventListener('pointerleave', onLeave)

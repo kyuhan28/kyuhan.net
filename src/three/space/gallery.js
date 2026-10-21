@@ -2,16 +2,16 @@ import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { GALLERY_Z } from './camera'
 
-/*
- * "Shapes in Motion": five sculptures, each with a name, a line of description (shown on hover),
- * and a signature reaction when clicked. Reactions are springs and decays, frame-rate independent.
- */
+
+
+
+
 
 const glossy = (color, opts = {}) =>
   new THREE.MeshPhysicalMaterial({ color, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.18, emissive: color, emissiveIntensity: 0, ...opts })
 const glowing = (color, strength = 3) => new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(strength), toneMapped: false })
 
-// A spring that settles toward 0: kick() it, read .x.
+
 const spring = (stiff = 30, damp = 5) => ({ x: 0, v: 0, step(dt) { this.v += (-stiff * this.x - damp * this.v) * dt; this.x += this.v * dt }, kick(v) { this.v += v } })
 
 function monolith() {
@@ -20,12 +20,12 @@ function monolith() {
   const seam = new THREE.Mesh(new THREE.BoxGeometry(0.035, 2.7, 0.52), glowing('#a78bff', 2.2))
   g.add(slab, seam)
   let turns = 0
-  let settled = 0 // the resting angle, tracked apart from the wobble so it never drifts
+  let settled = 0
   const turn = spring(16, 4.5)
   return {
     group: g, glow: [slab.material],
     name: 'Monolith', description: 'Still, until you ask it to turn.',
-    click() { turns += 1; turn.kick(-6) }, // the spring overshoots, then settles on the next quarter turn
+    click() { turns += 1; turn.kick(-6) },
     update(t, dt) {
       turn.step(dt)
       settled = THREE.MathUtils.damp(settled, turns * Math.PI * 0.5, 4, dt)
@@ -54,7 +54,7 @@ function halo() {
       inner.rotation.x = Math.sin(t * 0.6) * 0.6
       inner.rotation.y -= (0.4 + spin * 0.6) * dt
       inner.scale.setScalar(1 + pulse * 0.25)
-      inner.material.color.copy(innerColor).multiplyScalar(1.35 + pulse * 3) // no allocation per frame
+      inner.material.color.copy(innerColor).multiplyScalar(1.35 + pulse * 3)
       g.rotation.z = Math.sin(t * 0.3) * 0.15
     },
   }
@@ -143,7 +143,7 @@ export function createGallery({ compact }) {
   const group = new THREE.Group()
   const layout = compact
     ? [[-2.3, 4.6, GALLERY_Z - 1], [2.3, 4.2, GALLERY_Z - 2], [0, 2.7, GALLERY_Z], [-2.1, 1.6, GALLERY_Z + 1], [2.2, 1.7, GALLERY_Z + 0.5]]
-    // Desktop: a loose cluster in the open space to the right of the project list.
+
     : [[7.8, 3.3, GALLERY_Z - 1.2], [5.4, 4.4, GALLERY_Z - 0.6], [4.1, 2.3, GALLERY_Z + 0.4], [6.5, 1.9, GALLERY_Z + 0.2], [4.0, 5.5, GALLERY_Z - 1.6]]
   const pieces = [monolith(), halo(), prismStack(), orbit(), bloom()]
   pieces.forEach((piece, i) => {
@@ -167,7 +167,7 @@ export function createGallery({ compact }) {
         p.hover = Math.max(0, p.hover - dt * 3)
         const lift = p.hover * 0.12
         p.holder.scale.setScalar((compact ? 0.8 : 0.78) * emerge * (1 + p.hover * 0.05))
-        p.group.position.z = lift // eases toward the viewer when hovered
+        p.group.position.z = lift
         for (const m of p.glow) m.emissiveIntensity = p.hover * 0.25
       }
     },

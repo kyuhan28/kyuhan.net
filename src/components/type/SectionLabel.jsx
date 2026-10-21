@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { ease } from '../../motion/tokens'
 
-/** "01 / The playground": a small uppercase label with a fine leading rule. */
+
 export default function SectionLabel({ children }) {
   return (
     <motion.p

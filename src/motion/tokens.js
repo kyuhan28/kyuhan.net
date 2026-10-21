@@ -1,10 +1,10 @@
-// Shared motion vocabulary. Motion for React uses the cubic-bezier arrays,
-// Anime.js uses its named eases. Keep both in step with styles/tokens.css.
+
+
 
 export const ease = {
-  out: [0.16, 1, 0.3, 1],    // arrivals: fast start, long settle
-  inOut: [0.65, 0, 0.35, 1], // transitions between states
-  soft: [0.33, 1, 0.68, 1],  // small UI responses
+  out: [0.16, 1, 0.3, 1],
+  inOut: [0.65, 0, 0.35, 1],
+  soft: [0.33, 1, 0.68, 1],
 }
 
 export const duration = { fast: 0.35, base: 0.7, slow: 1.1 }

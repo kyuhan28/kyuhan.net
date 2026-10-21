@@ -13,15 +13,15 @@ export const SECTIONS = [
   { id: 'contact', label: 'Contact' },
 ]
 
-/**
- * Which section the reader is in: the last section whose top has passed a line
- * 35% down the viewport. At the very bottom of the page the last section wins,
- * so a short final section (Contact) is always reachable.
- *
- * Section positions are measured once and again whenever the page changes size,
- * never during scrolling. offsetTop is used because it ignores CSS transforms
- * (the Capabilities sheet is scaled and shifted while it rises).
- */
+
+
+
+
+
+
+
+
+
 function useScrollState() {
   const [active, setActive] = useState(null)
   const [scrolled, setScrolled] = useState(false)
@@ -74,7 +74,7 @@ export default function Nav({ ready }) {
   const firstLink = useRef(null)
   const activeLabel = SECTIONS.find((s) => s.id === active)?.label
 
-  // Mobile menu: lock scroll, move focus in, close on Escape, return focus on close.
+
   useEffect(() => {
     if (!open) return
     const html = document.documentElement
@@ -124,7 +124,7 @@ export default function Nav({ ready }) {
             </ul>
           </nav>
 
-          {/* Phones: the current section, since the full link list lives in the menu. */}
+          {}
           <span className="nav__current" aria-hidden="true">
             <AnimatePresence mode="wait" initial={false}>
               {activeLabel && (

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-// Catches failures from the lazy 3D chunk or WebGL context creation and shows the fallback instead.
+
 export default class SceneBoundary extends Component {
   state = { failed: false }
 

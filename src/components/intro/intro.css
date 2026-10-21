@@ -1,4 +1,4 @@
-/* Loading screen: the chateau's warm palette and serif, a balanced centered composition. */
+
 .intro { position: fixed; inset: 0; z-index: 900; }
 .intro__shutter {
   position: absolute;
@@ -21,7 +21,7 @@
   font-family: var(--serif);
   text-align: center;
 }
-/* A faint warm light behind the counter, like the glow through the gate. */
+
 .intro__glow {
   position: absolute;
   inset: 0;
@@ -36,7 +36,7 @@
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--hero-ink-2);
-  margin-right: -0.3em; /* the last letter's tracking would push the centered word off center */
+  margin-right: -0.3em;
 }
 
 .intro__center {
@@ -49,20 +49,20 @@
 .intro__count {
   display: flex;
   align-items: baseline;
-  font-size: clamp(4rem, 8vw + 1.5rem, 6.25rem); /* phones get a touch more presence; desktop unchanged */
+  font-size: clamp(4rem, 8vw + 1.5rem, 6.25rem);
   font-weight: 300;
-  line-height: 1.1; /* roomy line box: no figure touches an edge */
+  line-height: 1.1;
   letter-spacing: 0.01em;
   font-variant-numeric: lining-nums tabular-nums;
 }
-/* Equal-width figures: the number only re-centers when it gains a digit (at 10 and 100). */
+
 .intro__num { display: inline-block; }
 .intro__pct {
   font-size: 0.4em;
   margin-left: 0.18em;
   color: var(--hero-ink-2);
 }
-/* Balance the % with equal space on the left, so the number itself sits on the center line. */
+
 .intro__count { padding-left: 0.39em; }
 
 .intro__bar-track {
@@ -79,7 +79,7 @@
   transform: scaleX(0);
 }
 .intro__status {
-  min-height: 1.5em; /* keeps the layout still as the message changes */
+  min-height: 1.5em;
   font-size: clamp(0.85rem, 1.1vw, 0.95rem);
   letter-spacing: 0.04em;
   color: var(--hero-ink-2);

@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 
-/*
- * Stardust: soft, round, twinkling motes drifting slowly through the air around the viewer. They
- * wrap around the camera as it travels, so the field is endless. Positions and twinkle are on the
- * GPU; the CPU only moves the field's center.
- */
+
+
+
+
+
 export function createDust({ count, colors, brightness = 1 }) {
   const span = new THREE.Vector3(70, 24, 120)
   const pos = new Float32Array(count * 3)
@@ -34,7 +34,7 @@ export function createDust({ count, colors, brightness = 1 }) {
       uPixelRatio: { value: 1 },
       uBrightness: { value: brightness },
     },
-    vertexShader: /* glsl */ `
+    vertexShader:  `
       attribute float seed;
       attribute vec3 color;
       uniform float uTime, uPixelRatio;
@@ -43,9 +43,9 @@ export function createDust({ count, colors, brightness = 1 }) {
       varying float vAlpha;
       void main() {
         vec3 p = position;
-        p.y += uTime * (0.08 + seed * 0.12);           // rising slowly
-        p.x += sin(uTime * 0.2 + seed * 30.0) * 0.6;   // and wandering
-        // wrap the field around the viewer, so it never runs out
+        p.y += uTime * (0.08 + seed * 0.12);
+        p.x += sin(uTime * 0.2 + seed * 30.0) * 0.6;
+
         vec3 rel = p - uCenter;
         rel.xz = mod(rel.xz + uSpan.xz * 0.5, uSpan.xz) - uSpan.xz * 0.5;
         rel.y = mod(p.y, uSpan.y);
@@ -53,13 +53,13 @@ export function createDust({ count, colors, brightness = 1 }) {
         vec4 mv = viewMatrix * vec4(world, 1.0);
         gl_Position = projectionMatrix * mv;
         float twinkle = 0.55 + 0.45 * sin(uTime * (1.0 + seed * 2.0) + seed * 50.0);
-        // Small, and capped: a mote drifting near the lens must never become a big blooming disc.
+
         gl_PointSize = min((2.0 + seed * 3.5) * uPixelRatio * (16.0 / -mv.z), 7.0 * uPixelRatio);
         vColor = color;
-        vAlpha = twinkle * smoothstep(80.0, 20.0, -mv.z) * smoothstep(3.0, 8.0, -mv.z); // gone well before the lens
+        vAlpha = twinkle * smoothstep(80.0, 20.0, -mv.z) * smoothstep(3.0, 8.0, -mv.z);
       }
     `,
-    fragmentShader: /* glsl */ `
+    fragmentShader:  `
       uniform float uBrightness;
       varying vec3 vColor;
       varying float vAlpha;

@@ -5,7 +5,7 @@ import { spring } from '../../motion/tokens'
 
 const clamp = (v, max) => Math.max(-max, Math.min(max, v))
 
-/** Pulls its child a few pixels toward the pointer. Bounded so click targets never drift away. */
+
 export default function Magnetic({ children, strength = 0.3, max = 10, className = '' }) {
   const fine = useFinePointer()
   const reduce = usePrefersReducedMotion()

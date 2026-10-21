@@ -1,10 +1,10 @@
-/* The world sits behind the page; the page scrolls over it. */
+
 .world { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 .world__scene { position: absolute; inset: 0; background: #07060f; }
 .world__scene .space-canvas { transition: opacity 1.2s var(--ease-out); }
 .world__scene:not(.is-loaded) .space-canvas { opacity: 0; }
 
-/* The label for sculptures and the cat: small, translucent, beside the cursor. */
+
 .world__tip {
   position: fixed;
   top: 0; left: 0;
@@ -27,5 +27,5 @@
 .world__tip strong { font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 650; }
 .world__tip span { color: var(--ink-2); }
 
-/* Over a clickable object in the world. */
+
 html.is-over-object, html.is-over-object body { cursor: pointer; }

@@ -1,8 +1,8 @@
 .split__inner { display: block; }
 .split__line { display: block; }
-.split--chars .split__word { white-space: nowrap; } /* words never break mid-character-split; lines wrap between words */
+.split--chars .split__word { white-space: nowrap; }
 .split__word { display: inline; }
-/* The mask is padded and pulled back so descenders and overshoot never clip. */
+
 .split__mask {
   display: inline-block;
   overflow: hidden;
@@ -10,8 +10,8 @@
   padding: 0.06em 0.04em 0.14em;
   margin: -0.06em -0.04em -0.14em;
 }
-.split__unit { display: inline-block; } /* no will-change: hundreds of letters on their own GPU layers cost memory for nothing */
+.split__unit { display: inline-block; }
 
 
-/* ScrollWords: each word's opacity is driven by scroll (Motion); no CSS transition to fight it. */
+
 .scroll-words__word { transition: none; }

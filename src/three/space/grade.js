@@ -1,7 +1,7 @@
-/*
- * The final finish, after tone mapping: a soft vignette, a touch of lens fringing toward the edges,
- * fine film grain on lit pixels only, and the fade up from black at the opening.
- */
+
+
+
+
 export const GradeShader = {
   name: 'SpaceGrade',
   uniforms: {
@@ -14,11 +14,11 @@ export const GradeShader = {
     uFade: { value: 0 },
     uFadeColor: { value: [0.93, 0.92, 1.0] },
   },
-  vertexShader: /* glsl */ `
+  vertexShader:  `
     varying vec2 vUv;
     void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
   `,
-  fragmentShader: /* glsl */ `
+  fragmentShader:  `
     uniform sampler2D tDiffuse;
     uniform float uTime, uVignette, uGrain, uFringe, uFade;
     uniform vec2 uResolution;
@@ -35,11 +35,11 @@ export const GradeShader = {
         texture2D(tDiffuse, clamp(vUv - shift, 0.001, 0.999)).b
       );
       col *= mix(1.0, smoothstep(0.95, 0.2, d), uVignette);
-      // Black point: the faintest wash of glow (under ~2.5/255) becomes true black, so empty space
-      // is exactly #000 while objects keep their glow.
+
+
       col = max(col - 0.01, 0.0) / (1.0 - 0.01);
       col = mix(col, uFadeColor, uFade);
-      // Grain only where there's light: the black of the world stays exactly #000.
+
       float lit = smoothstep(0.015, 0.12, dot(col, vec3(0.299, 0.587, 0.114)));
       col += (hash(vUv * uResolution + fract(uTime) * 100.0) - 0.5) * uGrain * lit;
       gl_FragColor = vec4(col, 1.0);

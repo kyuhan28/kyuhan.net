@@ -9,7 +9,7 @@ import Cursor from './components/cursor/Cursor'
 import Grain from './components/ambient/Grain'
 
 export default function App() {
-  // `ready` flips when the loader opens onto the world, and starts the opening shot.
+
   const [ready, setReady] = useState(false)
   const onReveal = useCallback(() => setReady(true), [])
 

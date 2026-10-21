@@ -8,11 +8,11 @@ function Word({ progress, start, end, children }) {
   return <motion.span className="scroll-words__word" style={{ opacity }}>{children}</motion.span>
 }
 
-/**
- * A paragraph whose words brighten as it scrolls through the reading zone,
- * like light moving across a line. The text is real text the whole time,
- * so it is selectable and read normally by assistive technology.
- */
+
+
+
+
+
 export default function ScrollWords({ as: Tag = 'p', text, className = '' }) {
   const ref = useRef(null)
   const reduce = usePrefersReducedMotion()

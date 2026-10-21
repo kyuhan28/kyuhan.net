@@ -24,7 +24,7 @@ function ExternalIcon() {
   )
 }
 
-// A link if it has an address; otherwise a clearly marked placeholder (never a broken link).
+
 function OutLink({ label, href, className = '' }) {
   if (!href) return <span className={`${className} is-empty`}>{label} link not added</span>
   return (
@@ -36,7 +36,7 @@ function OutLink({ label, href, className = '' }) {
   )
 }
 
-/* Hero: who you are, what you build, where to go next. */
+
 export function HeroSection({ ready }) {
   const shown = (delay) => ({ initial: { opacity: 0, y: 16 }, animate: ready ? { opacity: 1, y: 0 } : undefined, transition: { duration: 1.1, ease: ease.out, delay } })
   return (
@@ -57,7 +57,7 @@ export function HeroSection({ ready }) {
   )
 }
 
-/* About: the statement brightens word by word as you read; then the bio and quick facts. */
+
 export function AboutSection() {
   const { statement, bio, facts } = site.about
   return (
@@ -83,7 +83,7 @@ export function AboutSection() {
   )
 }
 
-/* The artwork that follows the cursor over the project list (desktop, fine pointer). */
+
 function ProjectPreview({ project, x, y }) {
   return (
     <motion.div className="pf-preview" style={{ x, y }} aria-hidden="true">
@@ -105,7 +105,7 @@ function ProjectPreview({ project, x, y }) {
   )
 }
 
-/* Projects: an editorial index. Hover a row (desktop) and its artwork follows the cursor. */
+
 export function ProjectsSection() {
   const fine = useFinePointer()
   const reduce = usePrefersReducedMotion()
@@ -154,7 +154,7 @@ export function ProjectsSection() {
   )
 }
 
-/* Experience and skills: a timeline beside the areas of strength. */
+
 export function SkillsSection() {
   return (
     <section id="skills" className="pf pf--skills pf--dim" aria-labelledby="skills-title">
@@ -196,7 +196,7 @@ export function SkillsSection() {
 }
 
 function CopyEmail({ email }) {
-  const [status, setStatus] = useState('idle') // idle | copied | failed
+  const [status, setStatus] = useState('idle')
   useEffect(() => {
     if (status === 'idle') return
     const t = setTimeout(() => setStatus('idle'), 2400)
@@ -223,7 +223,7 @@ function CopyEmail({ email }) {
   )
 }
 
-/* Contact: the objects gather into a ring overhead. */
+
 export function ContactSection() {
   const { email, availability, links } = site.contact
   return (

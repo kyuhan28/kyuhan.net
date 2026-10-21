@@ -6,8 +6,8 @@
   transition: background-color 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
 }
 .nav.is-scrolled {
-  /* A solid-enough bar instead of a frosted blur: blurring everything behind the header on every
-     scroll frame (over a live 3D scene) is one of the most expensive things a page can do. */
+
+
   background: rgba(8, 7, 6, 0.9);
   box-shadow: 0 1px 0 var(--rule);
 }
@@ -28,7 +28,7 @@
   font-weight: 620;
   letter-spacing: -0.015em;
 }
-/* Profile picture: a photo, or initials in the site's serif, inside a thin warm ring. */
+
 .nav__avatar {
   position: relative;
   flex: none;
@@ -46,9 +46,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.95); /* natural, with a touch of restraint */
+  filter: saturate(0.95);
 }
-.nav__avatar::after { /* the ring stays crisp over a photo too */
+.nav__avatar::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -171,13 +171,13 @@
   .nav__toggle { display: inline-flex; flex-shrink: 0; }
 }
 
-/* The narrowest phones: the logo mark alone, so the section name never gets cut off.
-   The brand link keeps its aria-label, so screen readers still hear the name. */
+
+
 @media (max-width: 380px) {
-  .nav__brand-name { display: none; } /* the picture alone; the link still says your name */
+  .nav__brand-name { display: none; }
 }
 
-/* Over the gate's bright sky (before scrolling), links are warm white with a soft shadow so they read. */
+
 .nav:not(.is-scrolled) .nav__link,
 .nav:not(.is-scrolled) .nav__brand,
 .nav:not(.is-scrolled) .nav__toggle {

@@ -8,19 +8,19 @@ import { getPending, getProgress, subscribe } from '../../lib/loading'
 import './intro.css'
 
 const SEEN_KEY = 'intro-seen'
-const MAX_WAIT_MS = 9000 // never hold the page longer than this, even if the 3D scene is slow
+const MAX_WAIT_MS = 9000
 
-/*
- * Loading screen and opening sequence.
- *
- * The counter shows measured progress: the share of real loading tasks that have
- * finished (see src/lib/loading.js). The displayed number eases toward the measured
- * value but never runs ahead of it. At 100 the counter lifts away and the frame opens
- * like a shutter onto the hero.
- *
- * Shown once per session. Reduced motion skips it. "Enter now", Escape, a click, a
- * scroll or a swipe all go straight to the page, which is fully rendered underneath.
- */
+
+
+
+
+
+
+
+
+
+
+
 export default function Intro({ onReveal }) {
   const reduce = usePrefersReducedMotion()
   const [visible, setVisible] = useState(() => !readSession(SEEN_KEY))
@@ -48,9 +48,9 @@ export default function Intro({ onReveal }) {
     setVisible(false)
   }, [reveal])
 
-  // Draw the counter. Each digit column rolls to its digit (CSS transitions the roll).
-  // Draw the counter: plain text (it can't be clipped, whatever font loads) with
-  // equal-width figures, so the number never shifts as it counts.
+
+
+
   const render = useCallback(() => {
     const v = Math.min(100, Math.floor(shown.current.value))
     if (number.current) number.current.textContent = String(v)
@@ -75,12 +75,12 @@ export default function Intro({ onReveal }) {
     }
   }, [finish, reveal])
 
-  // Skip straight to the page when the loader should not show.
+
   useEffect(() => {
     if (!visible || reduce) finish()
   }, [visible, reduce, finish])
 
-  // Follow the real loading tasks.
+
   useEffect(() => {
     if (!visible || reduce) return
     const update = () => { setProgress(getProgress()); setPending(getPending()) }
@@ -88,7 +88,7 @@ export default function Intro({ onReveal }) {
     return subscribe(update)
   }, [visible, reduce])
 
-  // Ease the shown number toward the measured value; leave at 100.
+
   useEffect(() => {
     if (!visible || reduce) return
     const target = progress * 100
@@ -110,14 +110,14 @@ export default function Intro({ onReveal }) {
     return () => anim?.pause?.()
   }, [progress, visible, reduce, render, exit])
 
-  // Safety valve: a slow network or GPU never keeps people out of the content.
+
   useEffect(() => {
     if (!visible || reduce) return
     const t = setTimeout(exit, MAX_WAIT_MS)
     return () => clearTimeout(t)
   }, [visible, reduce, exit])
 
-  // Lock scroll while showing; any intent to move on goes straight to the page.
+
   useEffect(() => {
     if (!visible || reduce) return
     const html = document.documentElement

@@ -1,8 +1,8 @@
-/* The portfolio, scrolled over the black world. */
+
 .pf { position: relative; z-index: 1; }
 .pf__inner { position: relative; display: grid; justify-items: start; gap: clamp(1rem, 2.2vh, 1.4rem); }
 
-/* Text-heavy sections: a soft scrim, darkest behind the words, feathered at every edge. */
+
 .pf--dim::before {
   content: '';
   position: absolute;
@@ -15,7 +15,7 @@
 }
 
 .pf--hero { min-height: 100svh; display: grid; align-items: end; padding-bottom: clamp(5rem, 14vh, 9rem); }
-.pf--hero .pf__inner::before, .pf--contact .pf__inner::before { /* a pool of dark behind the words, never a box */
+.pf--hero .pf__inner::before, .pf--contact .pf__inner::before {
   content: '';
   position: absolute;
   inset: -14% -10% -14% -16%;
@@ -30,11 +30,11 @@
 .pf--contact .pf__inner { justify-items: center; }
 .pf--contact .pf__inner::before { background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0) 72%); inset: -15% 0; }
 
-/* Type */
+
 .pf-eyebrow { display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-2); }
 .pf-eyebrow__rule, .section-label__rule { width: 2.4rem; height: 1px; background: linear-gradient(90deg, #3d7bff, #a24dff); }
 .pf-headline {
-  font-size: min(clamp(2.6rem, 6.4vw, 6.4rem), 12.4vw); /* the longest word always fits a 320px screen */
+  font-size: min(clamp(2.6rem, 6.4vw, 6.4rem), 12.4vw);
   font-weight: 760;
   line-height: 0.92;
   letter-spacing: -0.035em;
@@ -49,7 +49,7 @@
 .pf-subhead { font-size: 0.76rem; font-weight: 650; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-3); padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); width: 100%; }
 .section-label { display: inline-flex; align-items: center; gap: 0.8rem; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-2); }
 
-/* About */
+
 .pf-statement { max-width: 26ch; font-size: clamp(1.7rem, 3.4vw, 3.3rem); font-weight: 560; line-height: 1.16; letter-spacing: -0.02em; color: var(--ink); margin: 0.6rem 0 2.5rem; }
 .pf-about { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); width: 100%; max-width: 70rem; }
 .pf-about__bio { display: grid; gap: 1.1rem; }
@@ -59,8 +59,8 @@
 .pf-facts dt { font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .pf-facts dd { color: var(--ink); }
 
-/* Projects: an editorial index */
-.pf-projects { width: 100%; max-width: min(74rem, 60vw); margin-top: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); } /* the right of the screen belongs to the sculptures */
+
+.pf-projects { width: 100%; max-width: min(74rem, 60vw); margin-top: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
 .pf-project { border-top: 1px solid rgba(255, 255, 255, 0.1); transition: opacity 0.4s var(--ease-out); }
 .pf-projects:hover .pf-project:not(.is-active) { opacity: 0.42; }
 .pf-project__row {
@@ -78,8 +78,8 @@
 .pf-project__stack { font-size: var(--text-xs); letter-spacing: 0.06em; color: var(--ink-3); }
 .pf-project__links { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; }
 .pf-project__art { display: none; }
-/* No cursor-following preview (touch, or reduced motion): the artwork sits in the row itself,
-   with the title stacked above its description beside it, so no column gets too narrow. */
+
+
 .pf-projects--inline .pf-project__row { grid-template-columns: 4.5rem clamp(9rem, 14vw, 13rem) minmax(0, 1fr); row-gap: 0.9rem; }
 .pf-projects--inline .pf-project__index { grid-row: span 2; }
 .pf-projects--inline .pf-project__art { display: block; grid-row: span 2; aspect-ratio: 16 / 10; border-radius: 8px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1); align-self: start; }
@@ -91,11 +91,11 @@
 .pf-link--large { font-size: 1.05rem; }
 .pf-icon { width: 0.8em; height: 0.8em; }
 
-/* The artwork that follows the cursor over the list */
+
 .pf-preview { position: fixed; top: 0; left: 0; z-index: 5; pointer-events: none; width: clamp(240px, 24vw, 360px); }
 .pf-preview__frame { aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(98, 76, 255, 0.18); }
 
-/* Experience & skills */
+
 .pf-skills { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(2.5rem, 6vw, 6rem); width: 100%; max-width: 74rem; margin-top: 1.5rem; }
 .pf-skills__col { display: grid; align-content: start; }
 .pf-timeline__item { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1.2rem; padding: 1.3rem 0; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
@@ -107,10 +107,10 @@
 .pf-area__name { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); }
 .pf-area__summary { color: var(--ink); font-weight: 500; }
 
-/* Contact */
+
 .pf-elsewhere { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 2rem; margin-top: 0.4rem; }
 
-/* Buttons */
+
 .pf-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.6rem; }
 .pf--contact .pf-actions { justify-content: center; }
 .pf-btn { display: inline-flex; align-items: center; min-height: 50px; padding: 0 1.5rem; border-radius: 999px; font-size: 0.78rem; font-weight: 650; letter-spacing: 0.16em; text-transform: uppercase; transition: background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out), color 0.35s; }

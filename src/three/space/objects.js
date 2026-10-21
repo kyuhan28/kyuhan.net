@@ -2,30 +2,30 @@ import * as THREE from 'three'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { GALLERY_Z, QUIET } from './camera'
 
-/*
- * The floating objects: rounded and sharp cubes, prisms, spheres, rings, gems, chrome halos and a
- * few neon-edged hero blocks, spread along the whole journey.
- *
- * Each has its own idle rhythm (bob, sway, spin) and reacts to you:
- * - hover:  it brightens
- * - nearby: it drifts aside from the cursor and spins a little faster
- * - click:  a springy bounce, a spin and a flash of color
- * In the opening they emerge from the dark (nearest first); at the contact station they gather into a ring.
- * Each kind is one instanced draw. All motion is time-based (frame-rate independent), and nothing
- * is allocated per frame.
- */
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const PALETTE = ['#3d7bff', '#8b5cff', '#c4b5fd', '#ff6b6b', '#ff8a3d', '#ff5fa2', '#3dffb5', '#ffd23f']
 
-// The colored rim lights, shared with SpaceApp. Objects keep clear of them: a point light's
-// brightness climbs steeply up close, and an object within a meter or two blows out and blooms.
+
+
 export const RIM_LIGHTS = [
   { color: '#ff3d8b', position: [-16, 9, -30], power: 520 },
   { color: '#3d7bff', position: [17, 9, -34], power: 480 },
   { color: '#8f5bff', position: [0, 12, -52], power: 600 },
 ]
-// The contact station's glow: in front of the ring, between it and the camera, so it lights the
-// gathered objects' faces evenly from ~20m instead of blowing out the nearest ones.
+
+
 export const CONTACT_LIGHT = [0, 8, -66]
 const LIGHT_CLEARANCE = 7
 
@@ -35,13 +35,13 @@ function seeded(seed) {
 }
 
 
-// Is this spot kept clear? The rim lights, the camera's path, the gallery, and the quiet floor.
+
 function blocked(x, y, z) {
   for (const [lx, ly, lz] of [...RIM_LIGHTS.map((l) => l.position), CONTACT_LIGHT]) if (Math.hypot(x - lx, y - ly, z - lz) < LIGHT_CLEARANCE) return true
   const pathX = z > -6 ? 0 : z > -35 ? 1.2 : 0
   if (Math.abs(x - pathX) < 2.3 && y < 6 && z > -64) return true
-  if (z < GALLERY_Z + 8 && z > GALLERY_Z - 8 && x > -8 && x < 10) return true // the gallery and the project list's view
-  if (Math.abs(x - QUIET.x) < QUIET.halfWidth && z < QUIET.zNear && z > QUIET.zFar && y < QUIET.height) return true // the skills view stays minimal
+  if (z < GALLERY_Z + 8 && z > GALLERY_Z - 8 && x > -8 && x < 10) return true
+  if (Math.abs(x - QUIET.x) < QUIET.halfWidth && z < QUIET.zNear && z > QUIET.zFar && y < QUIET.height) return true
   return false
 }
 
@@ -57,13 +57,13 @@ export function createObjects({ compact }) {
       if (!blocked(x, y, z)) return new THREE.Vector3(x, y, z)
     }
   }
-  // Clearcoat a touch soft: sharp coats turn the colored lights into blooming pinpoints.
+
   const glossy = (opts = {}) => new THREE.MeshPhysicalMaterial({ roughness: 0.24, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.2, ...opts })
   const n = (desktop, phone) => (compact ? phone : desktop)
   const kinds = [
     { geo: new RoundedBoxGeometry(1, 1, 1, 4, 0.16), mat: glossy(), count: n(20, 10), size: [0.55, 1.3] },
-    { geo: new THREE.BoxGeometry(1, 1, 1), mat: glossy({ roughness: 0.3 }), count: n(10, 5), size: [0.5, 1.0] }, // sharp-edged
-    { geo: new RoundedBoxGeometry(0.6, 1.7, 0.6, 3, 0.1), mat: glossy(), count: n(9, 4), size: [0.7, 1.3] }, // prisms
+    { geo: new THREE.BoxGeometry(1, 1, 1), mat: glossy({ roughness: 0.3 }), count: n(10, 5), size: [0.5, 1.0] },
+    { geo: new RoundedBoxGeometry(0.6, 1.7, 0.6, 3, 0.1), mat: glossy(), count: n(9, 4), size: [0.7, 1.3] },
     { geo: new THREE.SphereGeometry(0.5, 40, 24), mat: glossy({ roughness: 0.16 }), count: n(10, 5), size: [0.35, 0.9] },
     { geo: new THREE.TorusGeometry(0.48, 0.17, 24, 64), mat: glossy(), count: n(8, 4), size: [0.6, 1.2] },
     { geo: new THREE.IcosahedronGeometry(0.62, 0), mat: glossy({ flatShading: true, roughness: 0.12 }), count: n(8, 4), size: [0.5, 1.1] },
@@ -106,7 +106,7 @@ export function createObjects({ compact }) {
     meshes.push(mesh)
   }
 
-  // Hero blocks: larger rounded cubes whose edges glow.
+
   const heroGeo = new RoundedBoxGeometry(1, 1, 1, 4, 0.1)
   const heroEdges = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.012, 1.012, 1.012))
   const heroSpots = compact
@@ -120,10 +120,10 @@ export function createObjects({ compact }) {
     group.add(mesh)
     meshes.push(mesh)
     const item = newItem(mesh, -1, new THREE.Vector3(x, y, z), 1.5 + rand() * 0.9, c)
-    item.m.spin.multiplyScalar(0.45) // big things turn slowly
+    item.m.spin.multiplyScalar(0.45)
   })
 
-  // Emergence order (nearest the opening view first), and each object's place in the finale's ring.
+
   const ringCenter = new THREE.Vector3(0, 5.5, -88)
   items.forEach((item, i) => {
     item.delay = THREE.MathUtils.clamp((8 - item.base.z) / 110, 0, 1) * 0.55
@@ -141,7 +141,7 @@ export function createObjects({ compact }) {
   return {
     group,
     items,
-    /** Advance every object. ctx: { ray, intro (0..1), finale (0..1), still } */
+
     update(t, dt, { ray, intro = 1, finale = 0, still = false }) {
       const gather = smoother(THREE.MathUtils.clamp(finale, 0, 1))
       const idle = still ? 0 : 1
@@ -152,9 +152,9 @@ export function createObjects({ compact }) {
           base.y + Math.sin(t * m.bobSpeed + m.phase) * m.bob * idle,
           base.z + Math.cos(t * m.swaySpeed * 0.8 + m.phase) * m.sway * idle,
         )
-        if (gather > 0) p.lerp(item.ring, gather) // the finale: gather into a ring
+        if (gather > 0) p.lerp(item.ring, gather)
 
-        // Cursor nearby: drift aside a little.
+
         target.set(0, 0, 0)
         if (ray && !still) {
           ray.closestPointToPoint(p, closest)
@@ -165,7 +165,7 @@ export function createObjects({ compact }) {
         item.push.lerp(target, 1 - Math.exp(-dt * 5))
         p.add(item.push)
 
-        // Click: a damped spring for the bounce, a decaying spin, a fading flash.
+
         item.bounceVel += (-38 * item.bounce - 5.5 * item.bounceVel) * dt
         item.bounce += item.bounceVel * dt
         item.spinVel *= Math.exp(-dt * 2.2)
@@ -173,18 +173,18 @@ export function createObjects({ compact }) {
         item.flash *= Math.exp(-dt * 3)
         p.y += item.bounce
 
-        const spinRate = 1 + item.push.length() * 1.5 // spins a little faster with the cursor near
+        const spinRate = 1 + item.push.length() * 1.5
         q.copy(item.quat)
           .multiply(spinQ.setFromEuler(e.set(m.spin.x * t * spinRate * idle, m.spin.y * t * spinRate * idle, m.spin.z * t * idle)))
           .multiply(clickQ.setFromAxisAngle(item.spinAxis, item.spinAngle))
 
-        const emerge = smoother(THREE.MathUtils.clamp((intro - item.delay) / 0.45, 0, 1)) // out of the dark
+        const emerge = smoother(THREE.MathUtils.clamp((intro - item.delay) / 0.45, 0, 1))
         const size = item.scale * emerge * (1 + item.bounce * 0.15)
         item.pos.copy(p)
         if (item.index >= 0) {
           item.mesh.setMatrixAt(item.index, m4.compose(p, q, s.setScalar(size)))
           const boost = item.hover * 0.5 + item.flash * 1.3
-          if (Math.abs(boost - item.boost) > 0.002) { // recolor only when it changes
+          if (Math.abs(boost - item.boost) > 0.002) {
             item.boost = boost
             item.mesh.setColorAt(item.index, color.copy(item.color).multiplyScalar(1 + boost).lerp(white, item.flash * 0.25))
             item.mesh.instanceColor.needsUpdate = true
@@ -195,12 +195,12 @@ export function createObjects({ compact }) {
           item.mesh.scale.setScalar(size)
           item.mesh.material.emissiveIntensity = item.hover * 0.35 + item.flash * 1.2
         }
-        item.hover = Math.max(0, item.hover - dt * 3) // pick() raises it again while hovered
+        item.hover = Math.max(0, item.hover - dt * 3)
       }
       for (const mesh of meshes) if (mesh.isInstancedMesh) mesh.instanceMatrix.needsUpdate = true
 
     },
-    /** The object under a ray, if any. Marks it hovered. */
+
     pick(raycaster, hover = true) {
       for (const mesh of meshes) if (mesh.isInstancedMesh) mesh.computeBoundingSphere()
       const hit = raycaster.intersectObjects(meshes, false)[0]

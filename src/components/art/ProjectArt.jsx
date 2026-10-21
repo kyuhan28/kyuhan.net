@@ -1,11 +1,11 @@
 import { useId, useMemo } from 'react'
 import './art.css'
 
-/*
- * Deterministic generative artwork, used until a project has a real image.
- * Four studies of light on a dark field. All static: movement comes from the
- * parallax wrapper around them, which keeps them free to render.
- */
+
+
+
+
+
 
 const W = 800
 const H = 500
@@ -16,7 +16,7 @@ function Contour({ id }) {
     for (let k = 0; k < 16; k++) {
       let d = ''
       for (let x = -20; x <= W + 20; x += 16) {
-        // Neighbouring lines share almost the same phase, so like real contours they never cross.
+
         const swell = 1 - Math.abs(k - 8) / 12
         const y =
           H / 2 + (k - 7.5) * 21 + Math.sin(x * 0.011 + k * 0.06) * 34 + Math.sin(x * 0.029 + k * 0.1) * 9 -
@@ -75,7 +75,7 @@ function Lattice() {
         const dx = x - cx
         const dy = y - cy
         const d = Math.hypot(dx, dy)
-        const pull = Math.exp(-(d * d) / 30000) * 46 // a lens bending the grid
+        const pull = Math.exp(-(d * d) / 30000) * 46
         x += (dx / (d || 1)) * pull
         y += (dy / (d || 1)) * pull
         out.push({ x, y, o: 0.12 + Math.exp(-(d * d) / 40000) * 0.8, r: 1.2 + Math.exp(-(d * d) / 20000) * 1.6 })
@@ -113,8 +113,8 @@ function Signal({ id }) {
 
 const STUDIES = { contour: Contour, orbit: Orbit, lattice: Lattice, signal: Signal }
 
-// '/work/x.webp' in site.js means "public/work/x.webp". Prefix the deploy base so the
-// path still works when the site lives under a subpath such as a GitHub Pages repo URL.
+
+
 const withBase = (src) => (src.startsWith('/') ? `${import.meta.env.BASE_URL}${src.slice(1)}` : src)
 
 export default function ProjectArt({ kind = 'contour', image, alt = '', className = '' }) {

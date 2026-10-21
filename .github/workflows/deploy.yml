@@ -1,11 +1,9 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
-# One-time setup: repo Settings > Pages > Build and deployment > Source: "GitHub Actions".
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
-  workflow_dispatch: # also lets you run it by hand from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,7 +28,6 @@ jobs:
         with:
           node-version: lts/*
       - name: Install dependencies
-        # Uses `npm ci` once a package-lock.json is committed, otherwise `npm install`.
         run: if [ -f package-lock.json ]; then npm ci; else npm install; fi
       - name: Build
         run: npm run build

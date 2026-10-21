@@ -12,24 +12,24 @@ import { createGallery } from './gallery'
 import { createCameraRig, scrollToStation } from './camera'
 import { GradeShader } from './grade'
 
-/*
- * Infinite Space: one continuous world behind the whole page.
- *
- * Scrolling moves the camera from station to station (hero, about, projects, skills, contact),
- * eased so it glides. The cursor leans the camera, lights the grid where it rests and nudges nearby
- * objects aside; clicks and taps play with the objects and sculptures. The opening flies in from
- * high above as the grid lights up and the objects emerge from the black.
- *
- * createSpaceApp(container, options) -> { update(opts), replay(), dispose(), stats(), bench() }
- * options: { ready, reduce, interactive, compact, getAnchors(), onHover(info|null) }
- */
+
+
+
+
+
+
+
+
+
+
+
 
 export const LOOK = {
-  background: '#000000', // pure black, everywhere, always
-  fogDensity: 0.013, // distant objects sink gently into the black
-  gridLine: '#2e2e30', // thin dark-gray lines...
-  gridMajor: '#3c3c40', // ...and the major lines, barely brighter
-  bloom: { strength: 0.6, radius: 0.3, threshold: 1.05 }, // restrained and tight: glows hug their objects
+  background: '#000000',
+  fogDensity: 0.013,
+  gridLine: '#2e2e30',
+  gridMajor: '#3c3c40',
+  bloom: { strength: 0.6, radius: 0.3, threshold: 1.05 },
   exposure: 1.0,
   introSeconds: 4.2,
 }
@@ -78,7 +78,7 @@ export async function createSpaceApp(container, options) {
   phase('world')
   await breathe()
 
-  // Light: a cool key, colored rims from behind, a glow over the contact station.
+
   scene.add(new THREE.HemisphereLight('#6d5cff', '#0b0614', 0.55))
   const key = new THREE.DirectionalLight('#e9eaff', 1.5)
   key.position.set(4, 10, 8)
@@ -92,24 +92,24 @@ export async function createSpaceApp(container, options) {
   finaleLight.position.set(...CONTACT_LIGHT)
   scene.add(finaleLight)
 
-  // Post: bloom on the bright lines and edges, tone mapping, the finish.
+
   const composer = new EffectComposer(renderer)
   composer.addPass(new RenderPass(scene, camera))
   const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), LOOK.bloom.strength, LOOK.bloom.radius, LOOK.bloom.threshold)
   composer.addPass(bloom)
   composer.addPass(new OutputPass())
   const grade = new ShaderPass(GradeShader)
-  grade.uniforms.uFadeColor.value = [0, 0, 0] // the opening rises out of pure black
+  grade.uniforms.uFadeColor.value = [0, 0, 0]
   composer.addPass(grade)
 
-  /* Scroll: which station the page is at, from the sections' positions. */
+
   let anchors = []
   const measure = () => { anchors = state.getAnchors?.() ?? [] }
   let s = 0
   let sTarget = 0
   const readScroll = () => { sTarget = scrollToStation(window.scrollY, anchors) }
 
-  /* Pointer: hover, proximity, clicks and taps. */
+
   const ndc = new THREE.Vector2(9, 9)
   const pointerPx = { x: -1, y: -1 }
   let pointerFresh = false
@@ -133,8 +133,8 @@ export async function createSpaceApp(container, options) {
     return hits[0] || null
   }
   const onClick = (e) => {
-    if (e.target.closest?.(INTERACTIVE)) return // buttons and links keep their jobs
-    if (window.getSelection?.()?.toString()) return // selecting text isn't a click on the world
+    if (e.target.closest?.(INTERACTIVE)) return
+    if (window.getSelection?.()?.toString()) return
     ndc.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1)
     const hit = pickAt()
     if (!hit) return
@@ -142,7 +142,7 @@ export async function createSpaceApp(container, options) {
     else if (hit.kind === 'sculpture') gallery.click(hit.piece)
     clicks += 1
     lastClick = hit.kind
-    if (!fine && hit.label) { // touch: show the label for a moment after a tap
+    if (!fine && hit.label) {
       state.onHover?.({ label: hit.label, description: hit.description })
       clearTimeout(tapLabel)
       tapLabel = setTimeout(() => state.onHover?.(null), 2600)
@@ -158,7 +158,7 @@ export async function createSpaceApp(container, options) {
   const onScroll = () => requestRender()
   window.addEventListener('scroll', onScroll, { passive: true })
 
-  /* Layout */
+
   const resize = () => {
     const w = Math.max(1, container.clientWidth), h = Math.max(1, container.clientHeight)
     renderer.setPixelRatio(pixelRatio)
@@ -173,7 +173,7 @@ export async function createSpaceApp(container, options) {
     requestRender()
   }
 
-  /* The opening, and the adaptive resolution. */
+
   let intro = state.reduce || state.ready ? 1 : 0
   let frameAvg = 1 / 60, lastAdjust = 0
   const adapt = (raw, now) => {
@@ -190,7 +190,7 @@ export async function createSpaceApp(container, options) {
   const pos = new THREE.Vector3(), aim = new THREE.Vector3(), floorHit = new THREE.Vector3()
   const floor = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
   const view = { x: 0, y: 0 }
-  const weights = [0, 0, 0, 0, 0] // how present each station is (1 at the station, fading to its neighbours)
+  const weights = [0, 0, 0, 0, 0]
   const timer = new THREE.Timer()
   let raf = 0
 
@@ -205,12 +205,12 @@ export async function createSpaceApp(container, options) {
     adapt(raw, timer.getElapsed())
     const still = !!state.reduce
 
-    // Opening
-    // The opening keeps wall-clock time even on a slow device (its own, looser step cap).
+
+
     if (state.ready && intro < 1) intro = still ? 1 : Math.min(1, intro + Math.min(raw, 0.25) / LOOK.introSeconds)
     const opening = smootherstep(intro, 0, 1)
 
-    // Station, eased: the camera glides between sections rather than snapping.
+
     readScroll()
     s = still ? sTarget : damp(s, sTarget, 3.2, dt)
     rig.sample(s, pos, aim)
@@ -218,8 +218,8 @@ export async function createSpaceApp(container, options) {
     pos.lerp(rig.introFrom.pos, intoFrom)
     aim.lerp(rig.introFrom.aim, intoFrom)
 
-    // Drift and cursor lean, a little calmer over the text-heavy skills view.
-    for (let i = 0; i < 5; i++) weights[i] = clamp(1 - Math.abs(s - i), 0, 1) // reused array: nothing allocated per frame
+
+    for (let i = 0; i < 5; i++) weights[i] = clamp(1 - Math.abs(s - i), 0, 1)
     const calm = 1 - weights[3] * 0.6
     const lean = state.interactive && fine && ndc.x < 2
     view.x = damp(view.x, lean ? ndc.x : 0, 2.4, dt)
@@ -233,7 +233,7 @@ export async function createSpaceApp(container, options) {
     camera.lookAt(aim)
     camera.updateMatrixWorld()
 
-    // What's under the cursor (desktop), and where the cursor rests on the floor.
+
     let ray = null
     if (fine && ndc.x < 2) {
       raycaster.setFromCamera(ndc, camera)
@@ -246,7 +246,7 @@ export async function createSpaceApp(container, options) {
         hoverKey = key
         state.onHover?.(hit && hit.label ? { label: hit.label, description: hit.description } : null)
         document.documentElement.classList.toggle('is-over-object', !!hit)
-        window.dispatchEvent(new CustomEvent('space-hover', { detail: !!hit })) // the cursor lens widens
+        window.dispatchEvent(new CustomEvent('space-hover', { detail: !!hit }))
       }
     }
     const cursorOnFloor = ray ? ray.intersectPlane(floor, floorHit) : null
@@ -261,12 +261,12 @@ export async function createSpaceApp(container, options) {
     })
     dust.update(t, camera, pixelRatio)
 
-    // A violet glow rises over the contact station as the objects gather.
-    // From ~20m in front of the ring: an even violet light on every gathered object.
+
+
     finaleLight.intensity = 520 * weights[4]
 
     grade.uniforms.uTime.value = t
-    grade.uniforms.uFade.value = 1 - smootherstep(intro, 0, 0.22) // the page begins in the dark
+    grade.uniforms.uFade.value = 1 - smootherstep(intro, 0, 0.22)
     composer.render(dt)
   }
 
@@ -276,12 +276,12 @@ export async function createSpaceApp(container, options) {
     if (!state.reduce && !document.hidden) raf = requestAnimationFrame(loop)
   }
   function requestRender() { if (!raf) raf = requestAnimationFrame(loop) }
-  const onVisible = () => { if (!document.hidden) requestRender() } // paused while the tab is hidden
+  const onVisible = () => { if (!document.hidden) requestRender() }
   document.addEventListener('visibilitychange', onVisible)
 
   const observer = new ResizeObserver(resize)
   observer.observe(container)
-  const bodyObserver = new ResizeObserver(measure) // sections moving (fonts, images) move the stations
+  const bodyObserver = new ResizeObserver(measure)
   bodyObserver.observe(document.body)
   resize()
   draw()
@@ -289,7 +289,7 @@ export async function createSpaceApp(container, options) {
   requestRender()
 
   return {
-    _debug: { scene, camera }, // for diagnosing the scene from the console
+    _debug: { scene, camera },
     stats: () => ({ ready: !!state.ready, frames, calls: renderer.info.render.calls, triangles: renderer.info.render.triangles, phases, station: +s.toFixed(2), intro: +intro.toFixed(2), clicks, lastClick, hover: hoverKey, pixelRatio }),
     bench(frames = 4) {
       const gl = renderer.getContext(), px = new Uint8Array(4)
@@ -299,7 +299,7 @@ export async function createSpaceApp(container, options) {
       for (let i = 0; i < frames; i++) { draw(); wait() }
       return Math.round((performance.now() - t0) / frames)
     },
-    /** Back to the opening shot (the caller scrolls the page to the top). */
+
     replay() {
       intro = state.reduce ? 1 : 0
       requestRender()

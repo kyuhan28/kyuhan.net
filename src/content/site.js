@@ -27,17 +27,19 @@ export const site = {
       id: 'study-planner',
       title: '"@me", Personal Study Planner',
       year: 'Oct 2026 - Present',
+      role: 'Fall26 Rutgers Hackathon',
       summary: 'Built a chrome extension that can help with various tasks such as scheduling, reminders, and information retrieval.',
-      stack: ['JavaScript', 'HTML', 'CSS'],
+      stack: ['JavaScript', 'HTML', 'CSS', 'Chrome Extensions API', 'Gemini API', 'Google Calendar API', 'Canvas LMS API', 'OAuth 2.0'],
       links: [{ label: 'Website', href: 'https://atme.tech/' },  { label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
     },
     {
       id: 'code-viz',
-      title: 'CodeViz, AI-assisted Visualizer, Debugger, and Writer',
-      year: 'Sept 2026 - Present',
+      title: 'CodeViz: AI-assisted Visualizer, Debugger, and Writer',
+      year: 'Aug 2026 - Oct 2026',
+      role: 'NebiusXNVIDIA Hackathon',
       summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
-      stack: ['Docker', 'TypeScript', 'React', 'TailWind CSS', 'Three.js', 'Next.js', 'Java', 'Python', 'C', 'C++'],
-      links: [{ label: 'Demo', href: '' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
+      stack: ['TypeScript', 'React', 'Next.js', 'Java', 'Python', 'C', 'C++', 'GCC/G++', 'Docker', 'Three.js', 'CodeMirror', 'Tailwind CSS', 'NVIDIA Nemotron API'],
+      links: [{ label: 'Live demo', href: 'https://www.youtube.com/watch?v=CKZsKpU3Ib4' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
     },
     {
       id: 'research-LLM',
@@ -48,6 +50,15 @@ export const site = {
       stack: ['Python', 'Hugging Face', 'PyTorch'],
       links: [ { label: 'GitHub', href: 'https://github.com/manuragkhullar/uqforindiclanguages' }],
     },
+    {
+      id: 'parking-app',
+      title: 'Campus Parking Finder',
+      year: 'Aug 2026 - Present',
+      role: 'Developer',
+      summary: 'Building a parking app that helps students, faculty, and visitors find parking spaces on and around campus. The app aims to make nearby parking options easier to discover and reduce the time users spend searching for a place to park.',
+      stack: ['In progress'],
+      links: [{ label: 'Live demo', href: '' }, { label: 'GitHub', href: '' }],
+    },
   ],
 
   experience: [
@@ -56,10 +67,10 @@ export const site = {
   ],
 
   skills: [
-    { area: 'Languages', detail: 'Java, Python, C, C++, JavaScript, TypeScript, HTML, CSS, SQL' },
-    { area: 'Frameworks & Platforms', detail: 'AWS, Anaconda, HuggingFace, OpenRouter, REST APIs, PyTorch, Next.js, TailWind', tools: ['AngularJS', 'ViteJS', 'VueJS'] },
-    { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Jupyter Notebook, Docker' },
-    { area: 'Libraries', detail: 'Pandas, NumPy, React, Three.js' },
+    { area: 'Languages', detail: 'Java, Python, TypeScript, JavaScript, C, C++, SQL, HTML, CSS' },
+    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, AWS, Hugging Face, OpenRouter, NVIDIA Nemotron API, REST APIs'},
+    { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Docker, Docker Compose, npm, ESLink, Jupyter Notebook, Anaconda' },
+    { area: 'Libraries', detail: ' React, Three.js, CodeMirror, Tailwind CSS, shadcn/ui, Radix UI, PyTorch, pandas, NumPy' },
   ],
 
   contact: {
