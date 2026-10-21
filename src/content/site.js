@@ -26,8 +26,8 @@ export const site = {
     {
       id: 'study-planner',
       title: '"@me", Personal Study Planner',
-      year: 'Oct 2026 - Present',
-      role: 'Fall26 Rutgers Hackathon',
+      year: 'Oct 2026',
+      role: 'Rutgers Hackathon',
       summary: 'Built a chrome extension that can help with various tasks such as scheduling, reminders, and information retrieval.',
       stack: ['JavaScript', 'HTML', 'CSS', 'Chrome Extensions API', 'Gemini API', 'Google Calendar API', 'Canvas LMS API', 'OAuth 2.0'],
       links: [{ label: 'Website', href: 'https://atme.tech/' },  { label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
@@ -52,7 +52,7 @@ export const site = {
     },
     {
       id: 'parking-app',
-      title: 'Campus Parking Finder',
+      title: 'Oakland Parking App',
       year: 'Aug 2026 - Present',
       role: 'Developer',
       summary: 'Building a parking app that helps students, faculty, and visitors find parking spaces on and around campus. The app aims to make nearby parking options easier to discover and reduce the time users spend searching for a place to park.',
