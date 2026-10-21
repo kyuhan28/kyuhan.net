@@ -17,8 +17,8 @@ export const site = {
     ],
     facts: [
       { term: 'Based in', detail: 'Pittsburgh, PA' },
-      { term: 'Studying', detail: 'Computer science at University of Pittsburgh' },
-      { term: 'Currently', detail: 'Working on student-focused projects related to productivity and time management' },
+      { term: 'Studying', detail: 'Computer Science and Business minor' },
+      { term: 'Currently', detail: 'Working on student-focused projects related to visualizations and productivity.' },
     ],
   },
 
