@@ -68,7 +68,7 @@ export const site = {
 
   skills: [
     { area: 'Languages', detail: 'Java, Python, TypeScript, JavaScript, C, C++, SQL, HTML, CSS' },
-    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, AWS, Hugging Face, OpenRouter, NVIDIA Nemotron API, REST APIs'},
+    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, Flask, AWS, Hugging Face, OpenRouter, NVIDIA Nemotron API, REST APIs'},
     { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Docker, Docker Compose, npm, ESLink, Jupyter Notebook, Anaconda' },
     { area: 'Libraries', detail: ' React, Three.js, CodeMirror, Tailwind CSS, shadcn/ui, Radix UI, PyTorch, pandas, NumPy' },
   ],
