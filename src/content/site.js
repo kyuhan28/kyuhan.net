@@ -12,7 +12,6 @@ export const site = {
     statement:
       'I am very passionate about technology and its application in solving real-world problems. I am most intereted in software development, engineering, and machine learning.',
     bio: [
-      'I’m passionate about frontend development, with a focus on building engaging, interactive, and visually polished web experiences. I enjoy experimenting with modern web technologies, animations, and UI design to create interfaces that are intuitive, functional, and enjoyable to use.',
       'I also enjoy creating these websites and web applications with fun and interactive user interfaces.',
     ],
     facts: [
