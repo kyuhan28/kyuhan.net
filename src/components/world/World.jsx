@@ -6,6 +6,7 @@ import { pageTop } from '../../lib/dom'
 import SceneBoundary from '../../three/SceneBoundary'
 import SceneFallback from '../../three/SceneFallback'
 import { STATION_IDS } from '../../three/space/camera'
+import { site } from '../../content/site'
 import './world.css'
 
 
@@ -75,6 +76,7 @@ export default function World({ ready }) {
                 interactive={fine && !reduce}
                 compact={compact}
                 getAnchors={getAnchors}
+                svg={site.floatingSvg}
                 onHover={setLabel}
                 onReady={() => { setLoaded(true); complete('scene') }}
               />

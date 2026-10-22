@@ -6,9 +6,11 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { createGrid } from './grid'
+import { createMountains } from './mountains'
 import { createDust } from './particles'
 import { createObjects, PALETTE, RIM_LIGHTS, CONTACT_LIGHT } from './objects'
 import { createGallery } from './gallery'
+import { createSvgObject } from './svgObject'
 import { createCameraRig, scrollToStation } from './camera'
 import { GradeShader } from './grade'
 
@@ -73,8 +75,10 @@ export async function createSpaceApp(container, options) {
   const dust = createDust({ count: compact ? 500 : 1200, colors: PALETTE, brightness: 0.55 })
   const objects = createObjects({ compact })
   const gallery = createGallery({ compact })
+  const svgObject = createSvgObject({ compact, src: state.svg })
   grid.mesh.name = 'grid'; dust.points.name = 'dust'; objects.group.name = 'objects'; gallery.group.name = 'gallery'
-  scene.add(grid.mesh, dust.points, objects.group, gallery.group)
+  const mountains = createMountains({ compact })
+  scene.add(grid.mesh, mountains.mesh, dust.points, objects.group, gallery.group, svgObject.group)
   phase('world')
   await breathe()
 
@@ -128,7 +132,7 @@ export async function createSpaceApp(container, options) {
   const onLeave = () => { ndc.set(9, 9); pointerFresh = true }
   const pickAt = () => {
     raycaster.setFromCamera(ndc, camera)
-    const hits = [objects.pick(raycaster), gallery.pick(raycaster)].filter(Boolean)
+    const hits = [objects.pick(raycaster), gallery.pick(raycaster), svgObject.pick(raycaster)].filter(Boolean)
     hits.sort((a, b) => a.distance - b.distance)
     return hits[0] || null
   }
@@ -140,6 +144,7 @@ export async function createSpaceApp(container, options) {
     if (!hit) return
     if (hit.kind === 'object') objects.click(hit.item)
     else if (hit.kind === 'sculpture') gallery.click(hit.piece)
+    else if (hit.kind === 'svg') svgObject.click()
     clicks += 1
     lastClick = hit.kind
     if (!fine && hit.label) {
@@ -254,6 +259,8 @@ export async function createSpaceApp(container, options) {
 
     objects.update(t, dt, { ray, intro: opening, finale: weights[4], still })
     gallery.update(t, dt, { intro: opening, still })
+    svgObject.update(t, dt, { intro: opening, still })
+    mountains.update(camera, { reveal: 8 + opening * opening * 420 })
     grid.update(camera, {
       reveal: 8 + opening * opening * 420,
       cursor: cursorOnFloor,
