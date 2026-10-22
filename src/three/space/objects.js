@@ -114,7 +114,7 @@ export function createObjects({ compact }) {
     : [[-6.5, 3.6, -5], [6.2, 2.6, -12], [-4.2, 5.6, -22], [9, 4.6, -27], [-11, 2.8, -16], [7.5, 6.5, -58]]
   heroSpots.forEach(([x, y, z], i) => {
     const c = PALETTE[(i * 3 + 1) % PALETTE.length]
-    const mat = glossy({ color: new THREE.Color(c).multiplyScalar(0.55), roughness: 0.35, clearcoat: 0.6, emissive: new THREE.Color(c), emissiveIntensity: 0 })
+    const mat = glossy({ color: new THREE.Color(c).multiplyScalar(0.55), roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.5, emissive: new THREE.Color(c), emissiveIntensity: 0 })
     const mesh = new THREE.Mesh(heroGeo, mat)
     mesh.add(new THREE.LineSegments(heroEdges, new THREE.LineBasicMaterial({ color: new THREE.Color(c).multiplyScalar(3.2), toneMapped: false })))
     group.add(mesh)

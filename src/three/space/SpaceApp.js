@@ -260,7 +260,7 @@ export async function createSpaceApp(container, options) {
     objects.update(t, dt, { ray, intro: opening, finale: weights[4], still })
     gallery.update(t, dt, { intro: opening, still })
     svgObject.update(t, dt, { intro: opening, still })
-    mountains.update(camera, { reveal: 8 + opening * opening * 420 })
+    mountains.update(camera, { reveal: 8 + opening * opening * 420, time: t }) // t is frozen with reduced motion: still mist
     grid.update(camera, {
       reveal: 8 + opening * opening * 420,
       cursor: cursorOnFloor,
