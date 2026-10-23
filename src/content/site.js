@@ -69,7 +69,7 @@ export const site = {
 
   skills: [
     { area: 'Languages', detail: 'Java, Python, TypeScript, JavaScript, C, C++, SQL, HTML, CSS' },
-    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, Angular, Vue.js, Flask, AWS, Hugging Face, OpenRouter, NVIDIA API, REST APIs, Supabase'},
+    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, Angular, Vue.js, Flask, AWS, Hugging Face, OpenRouter, NVIDIA API, REST APIs, Supabase, Firebase'},
     { area: 'Developer Tools', detail: 'Git, GitHub, Docker, Docker Compose, SQLite, PostgreSQL' },
     { area: 'Libraries', detail: 'React, Three.js, CodeMirror, Tailwind CSS, shadcn/ui, PyTorch, pandas, NumPy, SQLAlchemy' },
   ],

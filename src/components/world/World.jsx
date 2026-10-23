@@ -77,6 +77,7 @@ export default function World({ ready }) {
                 compact={compact}
                 getAnchors={getAnchors}
                 svg={site.floatingSvg}
+                skillsSvg={site.skillsSvg}
                 onHover={setLabel}
                 onReady={() => { setLoaded(true); complete('scene') }}
               />

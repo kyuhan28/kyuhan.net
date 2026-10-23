@@ -1,6 +1,19 @@
 import * as THREE from 'three'
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js'
 
+/*
+ * Turns an SVG file into a solid, glossy 3D object floating in the world.
+ *
+ * Filled shapes are extruded into thick pieces with rounded (beveled) edges; outlined shapes
+ * (strokes) become round tubes that follow the line. Each piece keeps its SVG color, except colors
+ * too dark to see against the black, which become a light lavender. The whole thing is centered and
+ * scaled to a fixed size, then floats, turns slowly to show its depth, brightens on hover, and spins
+ * when clicked.
+ *
+ * Set the file as `floatingSvg` in src/content/site.js (e.g. '/work/react.svg', from public/work/).
+ * Until then, a generic "</>" is shown.
+ */
+
 const FALLBACK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60">
   <g fill="#c4b5fd">
     <polygon points="30,8 36,14 16,30 36,46 30,52 4,30" />
@@ -18,7 +31,7 @@ function visible(color) {
 }
 
 // Build the solid pieces from SVG text. Returns a group sized `size` across, centered at 0.
-function build(text, size) {
+function build(text, size, override = null) {
   const { paths } = new SVGLoader().parse(text)
   const inner = new THREE.Group()
   const materials = new Map()
@@ -27,8 +40,11 @@ function build(text, size) {
     if (!materials.has(key)) {
       materials.set(key, new THREE.MeshPhysicalMaterial({
         // Gloss a little soft: broad flat faces mirror the key light into a blooming glare otherwise.
-        color, roughness: 0.32, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.3,
+        color, roughness: 0.38, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.55,
         emissive: color, emissiveIntensity: 0.08,
+        // Big flat faces mirror whole light panels of the studio reflections at some angles (a glare
+        // that blooms on phones): reflect it more gently than the small, curved objects do.
+        envMapIntensity: 0.35,
       }))
     }
     return materials.get(key)
@@ -50,12 +66,12 @@ function build(text, size) {
           depth, curveSegments: 18,
           bevelEnabled: true, bevelThickness: extent * 0.022, bevelSize: extent * 0.014, bevelSegments: 3,
         })
-        inner.add(new THREE.Mesh(geo, material(visible(path.color.clone()))))
+        inner.add(new THREE.Mesh(geo, material(override ? new THREE.Color(override) : visible(path.color.clone()))))
       }
     }
     // Outlines: round tubes along the line, as thick as the stroke.
     if (style.stroke && style.stroke !== 'none' && style.stroke !== 'transparent') {
-      const color = visible(new THREE.Color().setStyle(style.stroke, THREE.SRGBColorSpace))
+      const color = override ? new THREE.Color(override) : visible(new THREE.Color().setStyle(style.stroke, THREE.SRGBColorSpace))
       const radius = Math.max((style.strokeWidth || 1) / 2, extent * 0.006)
       for (const sub of path.subPaths) {
         const pts = sub.getPoints(96)
@@ -81,19 +97,19 @@ function build(text, size) {
   return holder
 }
 
-export function createSvgObject({ compact, src = null }) {
+export function createSvgObject({ compact, src = null, position = null, size: sizeOverride = null, color = null }) {
   const group = new THREE.Group()
   group.name = 'svgObject'
   // In the opening view, upper right and in front of the cluster, balancing the logo cube on the left.
-  group.position.set(...(compact ? [1.9, 6.0, -3] : [5.0, 5.4, -2]))
-  const size = compact ? 1.7 : 2.4
+  group.position.set(...(position || (compact ? [1.9, 6.0, -3] : [5.0, 5.4, -2])))
+  const size = sizeOverride || (compact ? 1.7 : 2.4)
   let model = null
   const place = (text) => {
     try {
-      model = build(text, size)
+      model = build(text, size, color)
     } catch (e) {
       console.warn('floatingSvg: could not turn this SVG into 3D; showing the default.', e)
-      model = build(FALLBACK_SVG, size)
+      model = build(FALLBACK_SVG, size, color)
     }
     group.add(model)
   }
@@ -111,7 +127,7 @@ export function createSvgObject({ compact, src = null }) {
 
   let hover = 0, spinVel = 0, extra = 0, bounce = 0, bounceVel = 0, flash = 0
   const base = group.position.clone()
-  return {
+  const api = {
     group,
     update(t, dt, { intro = 1, still = false }) {
       if (!model) return
@@ -132,7 +148,7 @@ export function createSvgObject({ compact, src = null }) {
       const hit = raycaster.intersectObject(group, true)[0]
       if (!hit) return null
       hover = Math.min(1, hover + 0.35)
-      return { kind: 'svg', distance: hit.distance }
+      return { kind: 'svg', distance: hit.distance, api } // so the click reaches this object, not another
     },
     click() {
       spinVel += 9
@@ -140,4 +156,5 @@ export function createSvgObject({ compact, src = null }) {
       flash = 1
     },
   }
+  return api
 }

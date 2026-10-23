@@ -10,17 +10,6 @@ import './intro.css'
 const SEEN_KEY = 'intro-seen'
 const MAX_WAIT_MS = 9000
 
-
-
-
-
-
-
-
-
-
-
-
 export default function Intro({ onReveal }) {
   const reduce = usePrefersReducedMotion()
   const [visible, setVisible] = useState(() => !readSession(SEEN_KEY))
@@ -47,9 +36,6 @@ export default function Intro({ onReveal }) {
     writeSession(SEEN_KEY, '1')
     setVisible(false)
   }, [reveal])
-
-
-
 
   const render = useCallback(() => {
     const v = Math.min(100, Math.floor(shown.current.value))

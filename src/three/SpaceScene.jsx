@@ -7,7 +7,7 @@ import './scene.css'
 
 
 
-export default function SpaceScene({ ready, reduce, interactive, compact, getAnchors, onHover, onReady, svg }) {
+export default function SpaceScene({ ready, reduce, interactive, compact, getAnchors, onHover, onReady, svg, skillsSvg }) {
   const host = useRef(null)
   const app = useRef(null)
   const [error, setError] = useState(null)
@@ -17,7 +17,7 @@ export default function SpaceScene({ ready, reduce, interactive, compact, getAnc
   useEffect(() => {
     let cancelled = false
     let created = null
-    createSpaceApp(host.current, { ...latest.current, compact, svg })
+    createSpaceApp(host.current, { ...latest.current, compact, svg, skillsSvg })
       .then((instance) => {
         if (cancelled) return instance.dispose()
         created = app.current = instance

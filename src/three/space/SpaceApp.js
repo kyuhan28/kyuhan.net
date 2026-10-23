@@ -76,9 +76,15 @@ export async function createSpaceApp(container, options) {
   const objects = createObjects({ compact })
   const gallery = createGallery({ compact })
   const svgObject = createSvgObject({ compact, src: state.svg })
+  // A second one beside the Technical Skills (in the quiet floor view's open upper right), if set.
+  const skillsSvg = state.skillsSvg?.src
+    ? createSvgObject({ compact, src: state.skillsSvg.src, color: state.skillsSvg.color || null,
+        position: compact ? [1.9, 5.9, -74] : [6.3, 4.8, -77], size: compact ? 1.6 : 2.6 })
+    : null
   grid.mesh.name = 'grid'; dust.points.name = 'dust'; objects.group.name = 'objects'; gallery.group.name = 'gallery'
   const mountains = createMountains({ compact })
   scene.add(grid.mesh, mountains.mesh, dust.points, objects.group, gallery.group, svgObject.group)
+  if (skillsSvg) scene.add(skillsSvg.group)
   phase('world')
   await breathe()
 
@@ -132,7 +138,7 @@ export async function createSpaceApp(container, options) {
   const onLeave = () => { ndc.set(9, 9); pointerFresh = true }
   const pickAt = () => {
     raycaster.setFromCamera(ndc, camera)
-    const hits = [objects.pick(raycaster), gallery.pick(raycaster), svgObject.pick(raycaster)].filter(Boolean)
+    const hits = [objects.pick(raycaster), gallery.pick(raycaster), svgObject.pick(raycaster), skillsSvg?.pick(raycaster)].filter(Boolean)
     hits.sort((a, b) => a.distance - b.distance)
     return hits[0] || null
   }
@@ -144,7 +150,7 @@ export async function createSpaceApp(container, options) {
     if (!hit) return
     if (hit.kind === 'object') objects.click(hit.item)
     else if (hit.kind === 'sculpture') gallery.click(hit.piece)
-    else if (hit.kind === 'svg') svgObject.click()
+    else if (hit.kind === 'svg') hit.api.click()
     clicks += 1
     lastClick = hit.kind
     if (!fine && hit.label) {
@@ -260,6 +266,7 @@ export async function createSpaceApp(container, options) {
     objects.update(t, dt, { ray, intro: opening, finale: weights[4], still })
     gallery.update(t, dt, { intro: opening, still })
     svgObject.update(t, dt, { intro: opening, still })
+    skillsSvg?.update(t, dt, { intro: opening, still })
     mountains.update(camera, { reveal: 8 + opening * opening * 420, time: t }) // t is frozen with reduced motion: still mist
     grid.update(camera, {
       reveal: 8 + opening * opening * 420,

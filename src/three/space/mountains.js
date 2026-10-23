@@ -136,11 +136,11 @@ export function createMountains({ compact = false } = {}) {
       uTallest: { value: TALLEST },
       uRock: { value: new THREE.Color('#2a2929') }, // steep faces: nearly black, a breath of blue
       uSlate: { value: new THREE.Color('#1f2131') }, // gentler slopes: dark slate
-      uFrost: { value: new THREE.Color('#636365') }, // the highest gentle slopes
-      uRim: { value: new THREE.Color('#ffffff') }, // backlight on the ridges: the site's violet, dimmed
+      uFrost: { value: new THREE.Color('#3b3b3b') }, // the highest gentle slopes
+      uRim: { value: new THREE.Color('#242424') }, // backlight on the ridges: the site's violet, dimmed
       uLine: { value: new THREE.Color('#2f2f36') }, // the floor's line gray
       uMist: { value: new THREE.Color('#020202') },
-      uHaze: { value: new THREE.Color('#393939') }, // what distance fades toward: almost black
+      uHaze: { value: new THREE.Color('#181818') }, // what distance fades toward: almost black
     },
     // Performance: faces are flat, so their lighting is constant across each face, and the mist
     // varies over tens of meters. All of that is computed once per vertex; only the grid lines (and

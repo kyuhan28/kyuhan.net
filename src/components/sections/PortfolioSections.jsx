@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { site } from '../../content/site'
 import { ease } from '../../motion/tokens'
 import { useFinePointer, usePrefersReducedMotion } from '../../hooks/useMediaQuery'
@@ -7,6 +7,7 @@ import SplitText from '../type/SplitText'
 import ScrollWords from '../type/ScrollWords'
 import SectionLabel from '../type/SectionLabel'
 import Magnetic from '../cursor/Magnetic'
+import TechStack from './TechStack'
 import './portfolio.css'
 
 const rise = (delay = 0) => ({
@@ -84,42 +85,12 @@ export function AboutSection() {
 }
 
 
-function ProjectPreview({ project, x, y }) {
-  return (
-    <motion.div className="pf-preview" style={{ x, y }} aria-hidden="true">
-      <AnimatePresence mode="popLayout">
-        {project && (
-          <motion.div
-            key={project.id}
-            className="pf-preview__frame"
-            initial={{ opacity: 0, scale: 0.92, rotate: -2 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            exit={{ opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.45, ease: ease.out }}
-          >
-            <ProjectArt kind={project.art} image={project.image} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  )
-}
-
-
+// Hovering a project (desktop) keeps its row bright and dims the others.
 export function ProjectsSection() {
   const fine = useFinePointer()
   const reduce = usePrefersReducedMotion()
   const [active, setActive] = useState(null)
-  const mx = useMotionValue(0), my = useMotionValue(0)
-  const x = useSpring(mx, { stiffness: 220, damping: 28, mass: 0.6 })
-  const y = useSpring(my, { stiffness: 220, damping: 28, mass: 0.6 })
   const follow = fine && !reduce
-  useEffect(() => {
-    if (!follow) return
-    const move = (e) => { mx.set(e.clientX + 28); my.set(e.clientY - 120) }
-    window.addEventListener('pointermove', move, { passive: true })
-    return () => window.removeEventListener('pointermove', move)
-  }, [follow, mx, my])
 
   return (
     <section id="projects" className="pf pf--projects pf--dim" aria-labelledby="projects-title">
@@ -178,16 +149,7 @@ export function SkillsSection() {
           </div>
           <div className="pf-skills__col">
             <h3 className="pf-subhead">Technical Skills</h3>
-            <ul className="pf-areas">
-              {site.skills.map((s, i) => (
-                <motion.li key={i} className="pf-area" {...rise(0.05 + i * 0.06)}>
-                  <h4 className="pf-area__name">{s.area}</h4>
-                  <p className="pf-area__summary">{s.summary}</p>
-                  <p className="pf-text pf-text--small">{s.detail}</p>
-                  {s.tools?.length > 0 && <p className="pf-project__stack">{s.tools.join(' · ')}</p>}
-                </motion.li>
-              ))}
-            </ul>
+            <TechStack areas={site.skills} />
           </div>
         </div>
       </div>
