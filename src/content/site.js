@@ -19,7 +19,7 @@ export const site = {
     facts: [
       { term: 'Based in', detail: 'Pittsburgh, PA' },
       { term: 'Studying', detail: 'Computer Science and Business minor' },
-      { term: 'Currently', detail: 'Working on student-focused projects related to visualizations and productivity.' },
+      { term: 'Currently', detail: 'Learning and developing database-driven web and mobile apps focused on improving student life.' },
     ],
   },
 
@@ -69,9 +69,9 @@ export const site = {
 
   skills: [
     { area: 'Languages', detail: 'Java, Python, TypeScript, JavaScript, C, C++, SQL, HTML, CSS' },
-    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, Angular, Vue.js, Flask, AWS, Hugging Face, OpenRouter, NVIDIA Nemotron API, REST APIs'},
-    { area: 'Developer Tools', detail: 'Git, GitHub, Visual Studio Code, Docker, Docker Compose, npm, ESLink, Jupyter Notebook, Anaconda' },
-    { area: 'Libraries', detail: ' React, Three.js, CodeMirror, Tailwind CSS, shadcn/ui, Radix UI, PyTorch, pandas, NumPy' },
+    { area: 'Frameworks & Platforms', detail: 'Next.js, Node.js, Angular, Vue.js, Flask, AWS, Hugging Face, OpenRouter, NVIDIA API, REST APIs, Supabase'},
+    { area: 'Developer Tools', detail: 'Git, GitHub, Docker, Docker Compose, SQLite, PostgreSQL' },
+    { area: 'Libraries', detail: 'React, Three.js, CodeMirror, Tailwind CSS, shadcn/ui, PyTorch, pandas, NumPy, SQLAlchemy' },
   ],
 
   contact: {
