@@ -4,7 +4,7 @@ export const site = {
 
   avatar: '/work/pfp.jpeg',
 
-  floatingSvg: '/space/react-svgrepo-com.svg',
+  floatingSvg: null,
 
   role: '3rd-year Computer Science student at the University of Pittsburgh',
 

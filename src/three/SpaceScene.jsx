@@ -17,7 +17,7 @@ export default function SpaceScene({ ready, reduce, interactive, compact, getAnc
   useEffect(() => {
     let cancelled = false
     let created = null
-    createSpaceApp(host.current, { ...latest.current, compact, svg, skillsSvg })
+    createSpaceApp(host.current, { ...latest.current, compact, night: document.documentElement.classList.contains('dark'), svg, skillsSvg })
       .then((instance) => {
         if (cancelled) return instance.dispose()
         created = app.current = instance
@@ -42,6 +42,15 @@ export default function SpaceScene({ ready, reduce, interactive, compact, getAnc
     const replay = () => app.current?.replay()
     window.addEventListener('space-replay', replay)
     return () => window.removeEventListener('space-replay', replay)
+  }, [])
+
+  // Day or night: follow the `dark` class the switch toggles on <html>.
+  useEffect(() => {
+    const root = document.documentElement
+    const read = () => app.current?.update({ night: root.classList.contains('dark') })
+    const observer = new MutationObserver(read)
+    observer.observe(root, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
   }, [])
 
   if (error) throw error

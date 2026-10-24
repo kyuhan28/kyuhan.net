@@ -46,44 +46,9 @@
   justify-items: center;
   gap: clamp(0.9rem, 2.2vh, 1.3rem);
 }
-.intro__count {
-  display: flex;
-  align-items: baseline;
-  font-size: clamp(4rem, 8vw + 1.5rem, 6.25rem);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: 0.01em;
-  font-variant-numeric: lining-nums tabular-nums;
-}
 
-.intro__num { display: inline-block; }
-.intro__pct {
-  font-size: 0.4em;
-  margin-left: 0.18em;
-  color: var(--hero-ink-2);
-}
 
-.intro__count { padding-left: 0.39em; }
 
-.intro__bar-track {
-  width: min(300px, 62vw);
-  height: 1px;
-  background: rgba(246, 238, 226, 0.16);
-  overflow: hidden;
-}
-.intro__bar {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, rgba(47, 216, 255, 0.6), #f1f2ff 55%, rgba(162, 77, 255, 0.75));
-  transform-origin: left;
-  transform: scaleX(0);
-}
-.intro__status {
-  min-height: 1.5em;
-  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
-  letter-spacing: 0.04em;
-  color: var(--hero-ink-2);
-}
 
 .intro__skip {
   position: relative;
@@ -100,3 +65,12 @@
   transition: border-color 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
 }
 .intro__skip:hover, .intro__skip:focus-visible { border-color: rgba(241, 242, 255, 0.85); background: rgba(241, 242, 255, 0.06); }
+
+/* The glitch text: big, tight and bright, with the dots counting up beside it. */
+.intro__glitch {
+  display: inline-flex; align-items: baseline;
+  font-size: clamp(2.6rem, 9vw, 6.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
+  text-transform: uppercase; color: #f4f4f7;
+}
+.intro__dots { display: inline-block; width: 1.2em; text-align: left; color: rgba(244, 244, 247, 0.7); } /* fixed width: the word doesn't shift */
+.intro__glitch.is-done .intro__dots { width: 0; }

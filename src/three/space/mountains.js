@@ -106,6 +106,9 @@ function heightAt(x, z) {
   return BASE + h * edge
 }
 
+/** The mountains' height at a point on the ground (used to rest the clouds on the peaks). */
+export const mountainHeightAt = (x, z) => heightAt(x, z)
+
 export function createMountains({ compact = false } = {}) {
   const cols = Math.round((HALF_WIDTH * 2) / CELL), rows = Math.round((FRONT - BACK) / CELL)
   const grid = new THREE.PlaneGeometry(HALF_WIDTH * 2, FRONT - BACK, cols, rows)
@@ -140,6 +143,7 @@ export function createMountains({ compact = false } = {}) {
       uRim: { value: new THREE.Color('#242424') }, // backlight on the ridges: the site's violet, dimmed
       uLine: { value: new THREE.Color('#2f2f36') }, // the floor's line gray
       uMist: { value: new THREE.Color('#020202') },
+      uDay: { value: 0 },
       uHaze: { value: new THREE.Color('#181818') }, // what distance fades toward: almost black
     },
     // Performance: faces are flat, so their lighting is constant across each face, and the mist
@@ -206,6 +210,8 @@ export function createMountains({ compact = false } = {}) {
       uniform vec3 uCamera;
       uniform float uReveal;
       uniform vec3 uLine;
+      uniform vec3 uHaze;
+      uniform float uDay;
       varying vec3 vWorld;
       varying vec3 vBase;
       varying float vLine;
@@ -222,9 +228,8 @@ export function createMountains({ compact = false } = {}) {
 
       void main() {
         vec3 col = vBase + uLine * gridLine(vWorld.xz, ${LINE.toFixed(1)}) * vLine;
-        col *= vFade;
         float d = length(vWorld.xz - uCamera.xz);
-        col *= smoothstep(uReveal, uReveal - 14.0, d); // the opening lights them last
+        col = mix(uHaze * uDay, col, vFade * smoothstep(uReveal, uReveal - 14.0, d)); // the opening lights them last; by day they rise from the haze
         gl_FragColor = vec4(col, 1.0);
       }
     `,

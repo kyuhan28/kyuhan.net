@@ -19,6 +19,10 @@ export function createGrid({ line = '#2e2e30', major = '#3c3c40' } = {}) {
       uReveal: { value: 1000 },
       uCursor: { value: new THREE.Vector2(0, 0) },
       uCursorOn: { value: 0 },
+      uDay: { value: 0 },
+      uBase: { value: new THREE.Color('#a9c8e8') }, // daytime floor
+      uInk: { value: new THREE.Color('#3f6290') }, // daytime lines
+      uHorizon: { value: new THREE.Color('#6fb0e6') }, // what the daytime floor fades into (the sky's horizon)
     },
     vertexShader:  `
       varying vec3 vWorld;
@@ -35,6 +39,8 @@ export function createGrid({ line = '#2e2e30', major = '#3c3c40' } = {}) {
       uniform float uReveal;
       uniform vec2 uCursor;
       uniform float uCursorOn;
+      uniform float uDay;
+      uniform vec3 uBase, uInk, uHorizon;
       varying vec3 vWorld;
 
 
@@ -61,13 +67,17 @@ export function createGrid({ line = '#2e2e30', major = '#3c3c40' } = {}) {
         float far = 1.0 - smoothstep(26.0, 110.0, d);
         far *= far;
 
-        vec3 col = max(uLine * minor, uMajor * major) * near * far;
+        vec3 nightCol = max(uLine * minor, uMajor * major) * near * far;
+        // Day: dark lines on a pale floor, fading into the horizon haze rather than into black.
+        float farDay = 1.0 - smoothstep(30.0, 170.0, d);
+        vec3 dayCol = mix(uHorizon, mix(uBase, uInk, max(minor * 0.55, major) * near), farDay);
+        vec3 col = mix(nightCol, dayCol, uDay);
 
 
         vec2 dc = p - uCursor;
-        col += uMajor * max(minor, major) * exp(-dot(dc, dc) / 6.0) * uCursorOn * 0.9 * far;
+        col += uMajor * max(minor, major) * exp(-dot(dc, dc) / 6.0) * uCursorOn * 0.9 * far * (1.0 - uDay);
 
-        col *= smoothstep(uReveal, uReveal - 14.0, d);
+        col = mix(uHorizon * uDay, col, smoothstep(uReveal, uReveal - 14.0, d));
         gl_FragColor = vec4(col, 1.0);
       }
     `,

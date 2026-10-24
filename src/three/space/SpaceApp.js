@@ -8,8 +8,10 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { createGrid } from './grid'
 import { createMountains } from './mountains'
 import { createDust } from './particles'
+import { createSky, DAY, SUN_DIR } from './sky'
+import { createFarField } from './farField'
+import { createFlameTrail } from './flameTrail'
 import { createObjects, PALETTE, RIM_LIGHTS, CONTACT_LIGHT } from './objects'
-import { createGallery } from './gallery'
 import { createSvgObject } from './svgObject'
 import { createCameraRig, scrollToStation } from './camera'
 import { GradeShader } from './grade'
@@ -74,22 +76,23 @@ export async function createSpaceApp(container, options) {
   const grid = createGrid({ line: LOOK.gridLine, major: LOOK.gridMajor })
   const dust = createDust({ count: compact ? 500 : 1200, colors: PALETTE, brightness: 0.55 })
   const objects = createObjects({ compact })
-  const gallery = createGallery({ compact })
-  const svgObject = createSvgObject({ compact, src: state.svg })
+  const svgObject = state.svg ? createSvgObject({ compact, src: state.svg }) : null // only when a file is set
   // A second one beside the Technical Skills (in the quiet floor view's open upper right), if set.
   const skillsSvg = state.skillsSvg?.src
     ? createSvgObject({ compact, src: state.skillsSvg.src, color: state.skillsSvg.color || null,
         position: compact ? [1.9, 5.9, -74] : [6.3, 4.8, -77], size: compact ? 1.6 : 2.6 })
     : null
-  grid.mesh.name = 'grid'; dust.points.name = 'dust'; objects.group.name = 'objects'; gallery.group.name = 'gallery'
+  grid.mesh.name = 'grid'; dust.points.name = 'dust'; objects.group.name = 'objects';
   const mountains = createMountains({ compact })
-  scene.add(grid.mesh, mountains.mesh, dust.points, objects.group, gallery.group, svgObject.group)
+  scene.add(grid.mesh, mountains.mesh, dust.points, objects.group)
+  if (svgObject) scene.add(svgObject.group)
   if (skillsSvg) scene.add(skillsSvg.group)
   phase('world')
   await breathe()
 
 
-  scene.add(new THREE.HemisphereLight('#6d5cff', '#0b0614', 0.55))
+  const hemi = new THREE.HemisphereLight('#6d5cff', '#0b0614', 0.55)
+  scene.add(hemi)
   const key = new THREE.DirectionalLight('#e9eaff', 1.5)
   key.position.set(4, 10, 8)
   scene.add(key)
@@ -138,7 +141,7 @@ export async function createSpaceApp(container, options) {
   const onLeave = () => { ndc.set(9, 9); pointerFresh = true }
   const pickAt = () => {
     raycaster.setFromCamera(ndc, camera)
-    const hits = [objects.pick(raycaster), gallery.pick(raycaster), svgObject.pick(raycaster), skillsSvg?.pick(raycaster)].filter(Boolean)
+    const hits = [objects.pick(raycaster), svgObject?.pick(raycaster), skillsSvg?.pick(raycaster)].filter(Boolean)
     hits.sort((a, b) => a.distance - b.distance)
     return hits[0] || null
   }
@@ -149,7 +152,6 @@ export async function createSpaceApp(container, options) {
     const hit = pickAt()
     if (!hit) return
     if (hit.kind === 'object') objects.click(hit.item)
-    else if (hit.kind === 'sculpture') gallery.click(hit.piece)
     else if (hit.kind === 'svg') hit.api.click()
     clicks += 1
     lastClick = hit.kind
@@ -206,6 +208,42 @@ export async function createSpaceApp(container, options) {
   let raf = 0
 
   let frames = 0
+  // Day and night: the sky, fog, floor, mountains, light and stars all switch together.
+  const sky = createSky({ compact })
+  scene.add(sky.group)
+  const farField = createFarField({ compact }) // big shapes out in the mountains and the sky
+  scene.add(farField.group)
+  const flameTrail = createFlameTrail({ compact }) // a little white flame on the grid, following the camera
+  scene.add(flameTrail.group)
+  const NIGHT_KEY = { color: key.color.clone(), intensity: key.intensity, position: key.position.clone() }
+  const NIGHT_HEMI = { sky: hemi.color.clone(), ground: hemi.groundColor.clone(), intensity: hemi.intensity }
+  const mu = mountains.mesh.material.uniforms
+  const MOUNTAIN_KEYS = ['uRock', 'uSlate', 'uFrost', 'uRim', 'uLine', 'uMist', 'uHaze']
+  const NIGHT_MOUNTAINS = Object.fromEntries(MOUNTAIN_KEYS.map((k) => [k, mu[k].value.clone()]))
+  const DAY_MOUNTAINS = { uRock: '#566c8c', uSlate: '#7890b0', uFrost: '#f3f8ff', uRim: '#ffffff', uLine: '#e6f0ff', uMist: '#a9c8e8', uHaze: DAY.horizon }
+  const rimLights = []
+  scene.traverse((o) => { if (o.isPointLight && o !== finaleLight) { o.userData.night = o.intensity; rimLights.push(o) } })
+  let appliedNight = null
+  function applyMode(night) {
+    appliedNight = night
+    sky.setNight(night)
+    scene.background = night ? new THREE.Color(LOOK.background) : new THREE.Color(DAY.horizon)
+    scene.fog.color.set(night ? LOOK.background : DAY.horizon)
+    scene.fog.density = night ? LOOK.fogDensity : 0.0075
+    grid.mesh.material.uniforms.uDay.value = night ? 0 : 1
+    mu.uDay.value = night ? 0 : 1
+    MOUNTAIN_KEYS.forEach((k) => mu[k].value.copy(night ? NIGHT_MOUNTAINS[k] : new THREE.Color(DAY_MOUNTAINS[k])))
+    hemi.color.copy(night ? NIGHT_HEMI.sky : new THREE.Color('#cfe6ff'))
+    hemi.groundColor.copy(night ? NIGHT_HEMI.ground : new THREE.Color('#8a96aa'))
+    hemi.intensity = night ? NIGHT_HEMI.intensity : 1.25
+    key.color.copy(night ? NIGHT_KEY.color : new THREE.Color('#fff0d8'))
+    key.intensity = night ? NIGHT_KEY.intensity : 2.4
+    key.position.copy(night ? NIGHT_KEY.position : SUN_DIR.clone().multiplyScalar(60)) // daylight comes from the sun
+    rimLights.forEach((l) => { l.intensity = l.userData.night * (night ? 1 : 0.3) })
+    dust.points.visible = night // the stars come out at night
+  }
+  applyMode(!!state.night)
+
   const draw = () => {
     frames += 1
     renderer.info.reset()
@@ -242,6 +280,9 @@ export async function createSpaceApp(container, options) {
     aim.y += view.y * 0.3 * calm
     camera.position.copy(pos)
     camera.lookAt(aim)
+    sky.update(t, camera, { still })
+    farField.update(t, { intro: opening, still })
+    flameTrail.update(t, dt, camera, { intro: opening, still, night: appliedNight })
     camera.updateMatrixWorld()
 
 
@@ -264,8 +305,7 @@ export async function createSpaceApp(container, options) {
 
 
     objects.update(t, dt, { ray, intro: opening, finale: weights[4], still })
-    gallery.update(t, dt, { intro: opening, still })
-    svgObject.update(t, dt, { intro: opening, still })
+    svgObject?.update(t, dt, { intro: opening, still })
     skillsSvg?.update(t, dt, { intro: opening, still })
     mountains.update(camera, { reveal: 8 + opening * opening * 420, time: t }) // t is frozen with reduced motion: still mist
     grid.update(camera, {
@@ -321,6 +361,7 @@ export async function createSpaceApp(container, options) {
     update(next) {
       const wasReady = state.ready
       state = { ...state, ...next }
+      if (!!state.night !== appliedNight) { applyMode(!!state.night); draw() } // switch now, so the reveal shows the new sky
       if (!wasReady && state.ready && state.reduce) intro = 1
       measure()
       requestRender()

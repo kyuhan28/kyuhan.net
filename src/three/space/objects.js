@@ -27,7 +27,7 @@ export const RIM_LIGHTS = [
 
 
 export const CONTACT_LIGHT = [0, 8, -66]
-const LIGHT_CLEARANCE = 7
+const LIGHT_CLEARANCE = 10 // keeps glossy objects from catching hot glare off the rim lights
 
 function seeded(seed) {
   let s = seed
@@ -36,7 +36,15 @@ function seeded(seed) {
 
 
 
+// Where the camera pauses for each section (desktop; phones sit 3.5m further back): objects keep a
+// little distance, so none hovers right in front of the lens, huge and cut off.
+const VIEWPOINTS = [[0, 3.1, 13], [1.6, 4, -6], [0, 3.3, -35], [-0.5, 1.25, -61], [0, 8.5, -44]]
+const LENS_CLEARANCE = 11
+
 function blocked(x, y, z) {
+  for (const [vx, vy, vz] of VIEWPOINTS) {
+    if (Math.hypot(x - vx, y - vy, z - vz) < LENS_CLEARANCE || Math.hypot(x - vx, y - vy, z - vz - 3.5) < LENS_CLEARANCE) return true
+  }
   for (const [lx, ly, lz] of [...RIM_LIGHTS.map((l) => l.position), CONTACT_LIGHT]) if (Math.hypot(x - lx, y - ly, z - lz) < LIGHT_CLEARANCE) return true
   const pathX = z > -6 ? 0 : z > -35 ? 1.2 : 0
   if (Math.abs(x - pathX) < 2.3 && y < 6 && z > -64) return true
@@ -49,29 +57,40 @@ export function createObjects({ compact }) {
   const group = new THREE.Group()
   const rand = seeded(42)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
+  // Spread out: wide and tall (both growing with distance), and every object keeps a minimum gap
+  // from those already placed (more, farther out), so nothing clumps together.
+  const placed = []
+  const widen = compact ? 0.75 : 1
   const spot = () => {
-    for (;;) {
-      const z = 8 - Math.pow(rand(), 0.95) * 100
-      const x = (rand() - 0.5) * (18 + Math.abs(z - 8) * 0.55)
-      const y = 0.8 + Math.pow(rand(), 0.8) * (6 + Math.abs(z) * 0.08)
-      if (!blocked(x, y, z)) return new THREE.Vector3(x, y, z)
+    for (let tries = 0; ; tries++) {
+      const z = 8 - Math.pow(rand(), 1.05) * 112
+      const x = (rand() - 0.5) * (28 + Math.abs(z - 8) * 0.95) * widen
+      const y = 0.8 + Math.pow(rand(), 0.9) * (5.5 + Math.abs(z) * 0.2) // near the camera, as before; taller farther out
+      if (blocked(x, y, z)) continue
+      const gap = (3.4 + Math.abs(z) * 0.035) * (tries > 80 ? 0.6 : 1) // after many tries, relax a little
+      if (placed.some((q) => (q.x - x) ** 2 + (q.y - y) ** 2 + (q.z - z) ** 2 < gap * gap)) continue
+      const v = new THREE.Vector3(x, y, z)
+      placed.push(v)
+      return v
     }
   }
 
   const glossy = (opts = {}) => new THREE.MeshPhysicalMaterial({ roughness: 0.24, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.2, ...opts })
   const n = (desktop, phone) => (compact ? phone : desktop)
   const kinds = [
-    { geo: new RoundedBoxGeometry(1, 1, 1, 4, 0.16), mat: glossy(), count: n(20, 10), size: [0.55, 1.3] },
-    { geo: new THREE.BoxGeometry(1, 1, 1), mat: glossy({ roughness: 0.3 }), count: n(10, 5), size: [0.5, 1.0] },
-    { geo: new RoundedBoxGeometry(0.6, 1.7, 0.6, 3, 0.1), mat: glossy(), count: n(9, 4), size: [0.7, 1.3] },
-    { geo: new THREE.SphereGeometry(0.5, 40, 24), mat: glossy({ roughness: 0.16 }), count: n(10, 5), size: [0.35, 0.9] },
-    { geo: new THREE.TorusGeometry(0.48, 0.17, 24, 64), mat: glossy(), count: n(8, 4), size: [0.6, 1.2] },
-    { geo: new THREE.IcosahedronGeometry(0.62, 0), mat: glossy({ flatShading: true, roughness: 0.12 }), count: n(8, 4), size: [0.5, 1.1] },
-    { geo: new THREE.CapsuleGeometry(0.26, 0.6, 8, 24), mat: glossy(), count: n(7, 3), size: [0.7, 1.2] },
+    { geo: new RoundedBoxGeometry(1, 1, 1, 4, 0.16), mat: glossy(), count: n(30, 13), size: [0.55, 1.3] },
+    { geo: new THREE.BoxGeometry(1, 1, 1), mat: glossy({ roughness: 0.3 }), count: n(15, 7), size: [0.5, 1.0] },
+    { geo: new RoundedBoxGeometry(0.6, 1.7, 0.6, 3, 0.1), mat: glossy(), count: n(13, 5), size: [0.7, 1.3] },
+    { geo: new THREE.SphereGeometry(0.5, 40, 24), mat: glossy({ roughness: 0.16 }), count: n(15, 7), size: [0.35, 0.9] },
+    { geo: new THREE.TorusGeometry(0.48, 0.17, 24, 64), mat: glossy(), count: n(12, 5), size: [0.6, 1.2] },
+    { geo: new THREE.IcosahedronGeometry(0.62, 0), mat: glossy({ flatShading: true, roughness: 0.12 }), count: n(12, 5), size: [0.5, 1.1] },
+    { geo: new THREE.ConeGeometry(0.55, 1.0, 4), mat: glossy({ flatShading: true }), count: n(9, 4), size: [0.6, 1.2] }, // pyramids
+    { geo: new THREE.OctahedronGeometry(0.6, 0), mat: glossy({ flatShading: true, roughness: 0.14 }), count: n(9, 4), size: [0.5, 1.1] }, // octahedra
+    { geo: new THREE.CapsuleGeometry(0.26, 0.6, 8, 24), mat: glossy(), count: n(10, 4), size: [0.7, 1.2] },
     {
       geo: new THREE.TorusGeometry(0.6, 0.06, 16, 96),
       mat: new THREE.MeshPhysicalMaterial({ metalness: 1, roughness: 0.3, iridescence: 1, iridescenceIOR: 1.4, iridescenceThicknessRange: [180, 700] }),
-      count: n(6, 3), size: [0.8, 1.6], plain: true,
+      count: n(8, 4), size: [0.8, 1.6], plain: true,
     },
   ]
 
@@ -108,7 +127,6 @@ export function createObjects({ compact }) {
 
 
   const heroGeo = new RoundedBoxGeometry(1, 1, 1, 4, 0.1)
-  const heroEdges = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.012, 1.012, 1.012))
   const heroSpots = compact
     ? [[-3.2, 3.6, -4], [3.4, 2.6, -14], [-3.5, 4.2, -28]]
     : [[-6.5, 3.6, -5], [6.2, 2.6, -12], [-4.2, 5.6, -22], [9, 4.6, -27], [-11, 2.8, -16], [7.5, 6.5, -58]]
@@ -116,7 +134,6 @@ export function createObjects({ compact }) {
     const c = PALETTE[(i * 3 + 1) % PALETTE.length]
     const mat = glossy({ color: new THREE.Color(c).multiplyScalar(0.55), roughness: 0.35, clearcoat: 0.6, clearcoatRoughness: 0.5, emissive: new THREE.Color(c), emissiveIntensity: 0 })
     const mesh = new THREE.Mesh(heroGeo, mat)
-    mesh.add(new THREE.LineSegments(heroEdges, new THREE.LineBasicMaterial({ color: new THREE.Color(c).multiplyScalar(3.2), toneMapped: false })))
     group.add(mesh)
     meshes.push(mesh)
     const item = newItem(mesh, -1, new THREE.Vector3(x, y, z), 1.5 + rand() * 0.9, c)
