@@ -51,15 +51,6 @@ export const site = {
       stack: ['Python', 'NumPy', 'PyTorch', 'Hugging Face'],
       links: [ { label: 'GitHub', href: 'https://github.com/manuragkhullar/uqforindiclanguages' }],
     },
-    {
-      id: 'parking-app',
-      title: 'Oakland Parking App',
-      year: 'Aug 2026 - Present',
-      role: 'Developer',
-      summary: 'Building a parking app that helps students, faculty, and visitors find parking spaces on and around campus. The app aims to make nearby parking options easier to discover and reduce the time users spend searching for a place to park.',
-      stack: ['In progress'],
-      links: [{ label: 'Live demo', href: '' }, { label: 'GitHub', href: '' }],
-    },
   ],
 
   experience: [
