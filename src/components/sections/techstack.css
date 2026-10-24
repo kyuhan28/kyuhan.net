@@ -21,6 +21,7 @@
 }
 .tech__logo { width: 14px; height: 14px; flex: none; fill: var(--soft); transition: fill 0.3s var(--ease-out); }
 .tech__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--soft); flex: none; }
+img.tech__logo { width: auto; max-width: 28px; } /* image logos keep their shape: wide ones (like AWS) stay wide */
 
 .tech__badge:hover {
   background: var(--brand);

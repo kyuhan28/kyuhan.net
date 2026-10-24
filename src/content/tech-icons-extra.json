@@ -1,0 +1,6 @@
+{
+  "Matplotlib": { "title": "Matplotlib", "hex": "11557C", "image": "/tech/matplotlib.svg" },
+  "SQL": { "title": "SQL", "hex": "0A6FA3", "image": "/tech/sql.svg" },
+  "AWS": { "title": "AWS", "hex": "232F3E", "image": "/tech/aws.svg" },
+  "REST APIs": { "title": "REST APIs", "hex": "6D28D9", "image": "/tech/rest-api.svg" }
+}

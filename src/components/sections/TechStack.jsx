@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
-import icons from '../../content/tech-icons.json'
+import fetched from '../../content/tech-icons.json'
+import extra from '../../content/tech-icons-extra.json'
 import { ease } from '../../motion/tokens'
 import './techstack.css'
 
@@ -13,6 +14,12 @@ import './techstack.css'
  */
 
 const NEUTRAL = '#8b8b96'
+
+// Logos from `npm run icons`, plus your own in tech-icons-extra.json. Yours take priority, and the
+// script never touches that file, so hand-added logos stay put. An entry there can give a full-color
+// image file instead of a one-color shape: { "title": "...", "hex": "...", "image": "/tech/logo.svg" }.
+const icons = { ...fetched, ...extra }
+const withBase = (src) => (src.startsWith('/') ? `${import.meta.env.BASE_URL}${src.slice(1)}` : src)
 
 const rgb = (hex) => { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255] }
 const toHex = (c) => '#' + c.map((v) => Math.round(v).toString(16).padStart(2, '0')).join('')
@@ -45,7 +52,9 @@ function Badge({ name, index }) {
       viewport={{ once: true, amount: 0.6 }}
       transition={{ duration: 0.5, ease: ease.out, delay: index * 0.03 }}
     >
-      {icon ? (
+      {icon?.image ? (
+        <img className="tech__logo" src={withBase(icon.image)} alt="" width="14" height="14" />
+      ) : icon?.path ? (
         <svg className="tech__logo" viewBox="0 0 24 24" aria-hidden="true"><path d={icon.path} /></svg>
       ) : (
         <span className="tech__dot" aria-hidden="true" />
