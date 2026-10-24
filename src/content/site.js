@@ -76,7 +76,7 @@ export const site = {
 
   contact: {
     email: 'hankyumin05@gmail.com',
-    availability: 'I am open to full-time roles such as internships, research opportunities, and other positions.',
+    availability: 'I am open to any opportunities, collaborations, or small coffee chats!',
     links: [
       { label: 'GitHub', href: 'https://github.com/kyuhan28' },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kyu-han-pitt2028/' },

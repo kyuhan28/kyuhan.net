@@ -192,7 +192,7 @@ export function ContactSection() {
     <section id="contact" className="pf pf--contact" aria-labelledby="contact-title">
       <div className="pf__inner container">
         <SectionLabel>04 / Contact</SectionLabel>
-        <SplitText as="h2" id="contact-title" className="pf-headline pf-headline--xl" text={['Let’s build', 'something']} mode="chars" />
+        <SplitText as="h2" id="contact-title" className="pf-headline pf-headline--xl" text={['Let’s keep', 'in touch']} mode="chars" />
         <motion.p className="pf-text pf-text--lead" {...rise(0.2)}>{availability}</motion.p>
         <motion.div className="pf-actions" {...rise(0.3)}>
           {email ? (
