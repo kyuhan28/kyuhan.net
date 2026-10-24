@@ -19,7 +19,7 @@ export const site = {
     facts: [
       { term: 'Based in', detail: 'Pittsburgh, PA' },
       { term: 'Studying', detail: 'Computer Science and Business minor' },
-      { term: 'Currently', detail: 'Learning and developing database-driven web and mobile apps focused on improving student life.' },
+      { term: 'Currently', detail: 'Learning and developing database-driven web applications focused on improving student life.' },
     ],
   },
 
