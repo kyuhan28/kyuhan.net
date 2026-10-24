@@ -12,7 +12,7 @@ export const site = {
 
   about: {
     statement:
-      'I am very passionate about technology and its application in solving real-world problems. I am most intereted in software development, engineering, and machine learning.',
+      'I’m interested in the whole journey of building software, from understanding a problem to shipping a solution. Software engineering, development, and machine learning are where I spend most of my time and curiosity.',
     bio: [
       'I also enjoy creating these websites and web applications with fun and interactive user interfaces.',
     ],
@@ -25,6 +25,15 @@ export const site = {
 
   projects: [
     {
+      id: 'code-viz',
+      title: 'CodeViz: AI-assisted Visualizer, Debugger, and Writer',
+      year: 'Aug 2026 - Oct 2026',
+      role: 'NebiusXNVIDIA Hackathon',
+      summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
+      stack: ['TypeScript', 'React', 'Next.js', 'Java', 'Python', 'C', 'C++', 'GCC/G++', 'Docker', 'Three.js', 'CodeMirror', 'Tailwind CSS', 'NVIDIA Nemotron API'],
+      links: [{ label: 'Live demo', href: 'https://www.youtube.com/watch?v=CKZsKpU3Ib4' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
+    },
+    {
       id: 'study-planner',
       title: '"@me", Personal Study Planner',
       year: 'Oct 2026',
@@ -34,13 +43,13 @@ export const site = {
       links: [{ label: 'Website', href: 'https://atme.tech/' },  { label: 'Live demo', href: 'https://youtu.be/6-lSCqXHf80' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/atme' }],
     },
     {
-      id: 'code-viz',
-      title: 'CodeViz: AI-assisted Visualizer, Debugger, and Writer',
-      year: 'Aug 2026 - Oct 2026',
-      role: 'NebiusXNVIDIA Hackathon',
-      summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
-      stack: ['TypeScript', 'React', 'Next.js', 'Java', 'Python', 'C', 'C++', 'GCC/G++', 'Docker', 'Three.js', 'CodeMirror', 'Tailwind CSS', 'NVIDIA Nemotron API'],
-      links: [{ label: 'Live demo', href: 'https://www.youtube.com/watch?v=CKZsKpU3Ib4' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
+      id: 'nemotron-gate',
+      title: 'Nemotron Safety Gate',
+      year: 'Sep 2026',
+      role: 'SteelHacks XIII',
+      summary: 'A safety gate for medical chatbots: NVIDIA Nemotron triages each symptom and audits another model’s draft advice, then deterministic Python rules decide whether it is safe to show, naming the rule behind every withheld answer.',
+      stack: ['Python', 'NVIDIA Nemotron API', 'OpenRouter', 'GPT-4o-mini', 'Gradio', 'pandas', 'Matplotlib', 'Jupyter'],
+      links: [{ label: 'GitHub', href: 'https://github.com/kyuhan28/nemotrontriagemodel' }],
     },
     {
       id: 'research-LLM',
