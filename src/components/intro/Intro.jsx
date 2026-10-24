@@ -8,6 +8,14 @@ import { getProgress, subscribe } from '../../lib/loading'
 import GlitchText from '../kokonutui/GlitchText'
 import './intro.css'
 
+/*
+ * The loading screen: a glitching "Loading" (its dots counting up, each change a glitch) until the
+ * site has loaded, then it glitches into "Complete", holds for a beat, and the shutters open.
+ * Shown once per session; scrolling doesn't skip it (the page stays put underneath); "Enter now" or
+ * Escape skip it, opening the shutters smoothly; never longer than MAX_WAIT_MS;
+ * not shown at all with reduced motion.
+ */
+
 const SEEN_KEY = 'intro-seen'
 const MAX_WAIT_MS = 9000
 const DOT_MS = 650 // how often the dots count up
@@ -87,24 +95,25 @@ export default function Intro({ onReveal }) {
     return () => clearTimeout(t)
   }, [visible, reduce])
 
-  // While it's up, the page doesn't scroll; scrolling or Escape skips it.
+  // While it's up, the page stays put: scrolling (mouse, trackpad or touch) doesn't move it or skip
+  // the screen. Escape skips it on purpose, opening the shutters smoothly.
   useEffect(() => {
     if (!visible || reduce) return
     const html = document.documentElement
     const previous = html.style.overflow
     html.style.overflow = 'hidden'
-    const skip = () => finish()
-    const onKey = (e) => { if (e.key === 'Escape') finish() }
-    window.addEventListener('wheel', skip, { passive: true })
-    window.addEventListener('touchmove', skip, { passive: true })
+    const hold = (e) => { if (e.cancelable) e.preventDefault() } // iPhones scroll on touch even with overflow hidden
+    const onKey = (e) => { if (e.key === 'Escape') exit() }
+    window.addEventListener('wheel', hold, { passive: false })
+    window.addEventListener('touchmove', hold, { passive: false })
     window.addEventListener('keydown', onKey)
     return () => {
       html.style.overflow = previous
-      window.removeEventListener('wheel', skip)
-      window.removeEventListener('touchmove', skip)
+      window.removeEventListener('wheel', hold)
+      window.removeEventListener('touchmove', hold)
       window.removeEventListener('keydown', onKey)
     }
-  }, [visible, reduce, finish])
+  }, [visible, reduce, exit])
 
   if (!visible || reduce) return null
 
@@ -120,13 +129,13 @@ export default function Intro({ onReveal }) {
         <div className="intro__center">
           {/* The dots are drawn outside the glitch text, so the word stays steady between glitches. */}
           <div className={`intro__glitch ${done ? 'is-done' : ''}`} aria-hidden="true">
-            <GlitchText text={done ? 'Welcome' : 'Loading'} trigger="idle" intensity="strong" />
+            <GlitchText text={done ? 'Complete' : 'Loading'} trigger="idle" intensity="strong" />
             <span className="intro__dots">{done ? '' : '.'.repeat(dots)}</span>
           </div>
-          <p className="sr-only" role="status">{done ? 'Welcome' : 'Loading'}</p>
+          <p className="sr-only" role="status">{done ? 'Loading complete' : 'Loading'}</p>
         </div>
 
-        <button type="button" className="intro__skip" onClick={finish}>Enter now</button>
+        <button type="button" className="intro__skip" onClick={exit}>Enter now</button>
       </div>
     </div>
   )
