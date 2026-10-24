@@ -29,7 +29,7 @@ export const site = {
       title: 'CodeViz: AI-assisted Visualizer, Debugger, and Writer',
       year: 'Aug 2026 - Oct 2026',
       role: 'NebiusXNVIDIA Hackathon',
-      summary: 'Developed a 3D code visualizer that turns Java and Python programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
+      summary: 'Developed a 3D code visualizer that turns Java, Python, C, and C++ programs into interactive, step-by-step animations across multiple data structure types and algorithms, by recording each program’s real execution and rendering it with Three.js.',
       stack: ['TypeScript', 'React', 'Next.js', 'Java', 'Python', 'C', 'C++', 'GCC/G++', 'Docker', 'Three.js', 'CodeMirror', 'Tailwind CSS', 'NVIDIA Nemotron API'],
       links: [{ label: 'Live demo', href: 'https://www.youtube.com/watch?v=CKZsKpU3Ib4' }, { label: 'GitHub', href: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W' }],
     },
