@@ -1,4 +1,3 @@
-
 export function readSession(key) {
   try { return window.sessionStorage.getItem(key) } catch { return null }
 }

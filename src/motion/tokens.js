@@ -1,6 +1,3 @@
-
-
-
 export const ease = {
   out: [0.16, 1, 0.3, 1],
   inOut: [0.65, 0, 0.35, 1],

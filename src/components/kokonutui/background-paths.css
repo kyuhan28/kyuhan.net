@@ -1,10 +1,9 @@
-/* Background Paths (Kokonut UI, MIT): its Tailwind classes as plain CSS. The lines take the text color. */
 .kbp {
   position: relative; display: flex; min-height: 560px; width: 100%;
   align-items: center; justify-content: center; overflow: hidden;
-  background: #fff; color: #18181b; /* bg-white text-zinc-900 */
+  background: #fff; color: #18181b;
 }
-html.dark .kbp { background: #09090b; color: #f4f4f5; } /* dark:bg-zinc-950 dark:text-zinc-100 */
+html.dark .kbp { background: #09090b; color: #f4f4f5; }
 .kbp__mask {
   position: absolute; inset: 0; pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent), radial-gradient(ellipse 40% 32% at 50% 50%, rgb(0 0 0 / 0.3), #000);

@@ -1,11 +1,6 @@
 import fetched from '../../content/tech-icons.json'
 import extra from '../../content/tech-icons-extra.json'
 
-/*
- * Technology logos and brand colors, shared by every app (and the legacy portfolio page).
- * From src/content/tech-icons.json (written by `npm run icons`) plus your own in tech-icons-extra.json,
- * which take priority. A technology without a logo still gets a badge, in neutral gray.
- */
 const NEUTRAL = '#8b8b96'
 const icons = { ...fetched, ...extra }
 export const withBase = (src) => (src.startsWith('/') ? `${import.meta.env.BASE_URL}${src.slice(1)}` : src)
@@ -18,7 +13,6 @@ function luminance(hex) {
 }
 const lighten = (hex, amount) => toHex(rgb(hex).map((v) => v + (255 - v) * amount))
 
-/** A technology's logo and colors: brand, a version readable on dark ("soft"), and text on the brand. */
 export function palette(name) {
   const icon = icons[name]
   const brand = icon ? `#${icon.hex}` : NEUTRAL

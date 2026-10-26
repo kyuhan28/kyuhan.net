@@ -1,6 +1,5 @@
-/* Typewriter (Kokonut UI, MIT): its Tailwind classes as plain CSS. */
 .ktw {
-  container-type: inline-size; /* @container: the wrapper's width sets the font size */
+  container-type: inline-size;
   display: flex; width: 100%; align-items: center; justify-content: center;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
   letter-spacing: -0.025em; color: #000;
@@ -18,8 +17,7 @@ html.dark .ktw { color: #fff; }
 html.dark .ktw__selected { background: rgba(56, 189, 248, 0.3); }
 .ktw__caret-box { position: relative; display: inline-block; width: 0; }
 .ktw__caret { position: absolute; bottom: -0.1em; left: 0.04em; height: 1.05em; width: 0.08em; min-width: 2px; background: currentColor; }
-/* The blink is a CSS animation so it runs off the main thread: solid for
-   the first third of the cycle, fades out, then stays hidden. */
+
 @keyframes kokonutui-typewriter-caret { 0%, 33.333% { opacity: 1; } 66.667%, 100% { opacity: 0; } }
 @media (prefers-reduced-motion: no-preference) {
   .ktw__caret[data-idle='true'] { animation: kokonutui-typewriter-caret 1s linear infinite; }

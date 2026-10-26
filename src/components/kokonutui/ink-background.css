@@ -1,7 +1,6 @@
-/* Ink Background (Kokonut UI, MIT): its Tailwind classes as plain CSS. */
-.kib { position: relative; min-height: 560px; width: 100%; touch-action: pan-y; overflow: hidden; background: #fff; color: #18181b; } /* bg-white text-zinc-900 */
-html.dark .kib { background: #09090b; color: #f4f4f5; }  /* dark:bg-zinc-950 dark:text-zinc-100 */
-/* theme colors for the shader: the paper (text-white / dark:text-zinc-950) and the ink (text-zinc-900 / dark:text-zinc-100) */
+.kib { position: relative; min-height: 560px; width: 100%; touch-action: pan-y; overflow: hidden; background: #fff; color: #18181b; }
+html.dark .kib { background: #09090b; color: #f4f4f5; }
+
 .kib__paper, .kib__ink { display: none; }
 .kib__paper { color: #fff; }
 html.dark .kib__paper { color: #09090b; }
@@ -9,7 +8,7 @@ html.dark .kib__paper { color: #09090b; }
 html.dark .kib__ink { color: #f4f4f5; }
 .kib__layer { position: absolute; inset: 0; pointer-events: none; }
 .kib__canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 500ms ease-out; }
-/* where WebGL2 half-float targets aren't available: the headline as type */
+
 .kib__fallback { position: absolute; left: 0; right: 0; top: 40%; transform: translateY(-50%); margin: 0; padding: 0 1.5rem; text-align: center; text-wrap: balance; font-weight: 600; font-size: 3rem; line-height: 1; letter-spacing: -0.025em; }
 @media (min-width: 640px) { .kib__fallback { font-size: 4.5rem; } }
 .kib__content { position: absolute; left: 0; right: 0; display: flex; justify-content: center; padding: 0 1.5rem; pointer-events: none; }

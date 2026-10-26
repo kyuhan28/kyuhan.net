@@ -1,21 +1,3 @@
-/*
- * Your projects, shown by the Projects app (and the classic portfolio page). To add one, copy an entry
- * and edit it; only `id`, `title` and `summary` are required, and any field you leave out is hidden.
- *
- *   id           a short unique name (letters, numbers, dashes)
- *   title        the project's name
- *   summary      one or two sentences, for its card
- *   description  optional: a longer description, for its detail view (the summary is used if absent)
- *   context      optional: where it was made (a hackathon, a course, a role)
- *   dates        optional: when (any text, e.g. 'Oct 2026' or 'Aug – Oct 2026')
- *   category     optional: for the filter at the top (e.g. 'Hackathon', 'Research')
- *   stack        optional: technologies used (logos come from src/content/tech-icons.json)
- *   github, demo, website   optional links (shown as buttons only when present)
- *   demoLabel    optional: the demo button's text (default 'Live demo')
- *   image        optional: a screenshot, e.g. '/work/codeviz.png' in public/work (a tidy placeholder if absent)
- *   status       optional: e.g. 'In progress' or 'Completed'
- *   featured     optional: true to show it first
- */
 export const projects = [
   {
     id: 'code-viz',

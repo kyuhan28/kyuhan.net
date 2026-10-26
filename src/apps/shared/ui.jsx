@@ -3,17 +3,6 @@ import './apps.css'
 import { palette } from './techIcons'
 import { backgroundVars } from './backgrounds'
 
-/*
- * The building blocks every app shares, so the five feel like one operating system: the scrolling
- * shell, a header, tags, link buttons and an empty state. (Window behaviour is the desktop's job.)
- */
-
-/**
- * An app's body: its background (backgrounds.js) behind its scrolling content. `accent` tints its details
- * (each app has its own, subtly); `bg` picks its background. The background is purely decorative and never
- * takes the pointer, except where an app passes an interactive `backdrop`, which wraps the content
- * itself (so it can follow the cursor over the content while the content keeps every click).
- */
 export function AppShell({ accent, bg, backdrop, className = '', children }) {
   const style = { ...(accent ? { '--app-accent': accent } : {}), ...(bg ? backgroundVars(bg) : {}) }
   const content = <div className={`app ${className}`}>{children}</div>
@@ -34,7 +23,6 @@ export function AppHeader({ eyebrow, title, children }) {
   )
 }
 
-/** A technology tag, with its logo and brand color. */
 export function TechTag({ name, detail, as: Item = 'li' }) {
   const { soft } = palette(name)
   return (
@@ -46,7 +34,6 @@ export function TechTag({ name, detail, as: Item = 'li' }) {
   )
 }
 
-/** Technology tags; `inline` renders plain spans (for inside a button, where lists aren't allowed). */
 export function TagList({ names, limit, className = '', inline = false }) {
   const shown = limit ? names.slice(0, limit) : names
   const List = inline ? 'span' : 'ul', Item = inline ? 'span' : 'li'
@@ -58,7 +45,6 @@ export function TagList({ names, limit, className = '', inline = false }) {
   )
 }
 
-/** A link styled as a button; external links open in a new tab, safely. */
 export function LinkButton({ href, children, primary = false, icon }) {
   if (!href) return null
   const external = /^https?:/i.test(href)

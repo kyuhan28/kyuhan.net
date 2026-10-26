@@ -3,7 +3,6 @@ import { APPS } from './apps'
 import { WINDOW, isShown } from './desktopState'
 import { AppIcon, Monogram } from './icons'
 
-/** The local time, updated on the minute. */
 function Clock() {
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
@@ -19,10 +18,6 @@ function Clock() {
   )
 }
 
-/*
- * The taskbar: the launcher, one button per app (showing whether its window is open, active or minimized;
- * clicking reopens, restores, brings it forward, or minimizes it), and the tray: back to the 3D desk and the clock.
- */
 const DesktopTaskbar = forwardRef(function DesktopTaskbar({ state, dispatch, onBackToDesk, buttonRefs }, startRef) {
   return (
     <nav className="os-taskbar" aria-label="Taskbar">

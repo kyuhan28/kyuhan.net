@@ -1,9 +1,3 @@
-/* The apps' shared design system: one type scale, spacing, borders and controls, so the five apps feel
-   like one operating system. Each app has its own accent (--app-accent), used only on small details.
-   Layouts follow the WINDOW's width (container queries), since windows can be any size. */
-
-/* The frame: fills the window body; it carries the accent and the background settings, so both reach the
-   background layer and the content alike. */
 .app-frame { --app-accent: #9fb4ff; position: relative; height: 100%; overflow: hidden; background: var(--bg-base, #101115); }
 .app-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .app-bg::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
@@ -21,16 +15,17 @@
   padding: 26px 30px 32px; box-sizing: border-box;
   background: var(--app-bg); color: var(--app-text);
   font-family: Inter, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.55;
-  user-select: text; -webkit-user-select: text; cursor: auto;
+  user-select: none; -webkit-user-select: none; cursor: auto;
   scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
 }
 .app *, .app *::before, .app *::after { box-sizing: border-box; }
 .app ::selection { background: color-mix(in srgb, var(--app-accent) 40%, transparent); }
+
+.app input, .app textarea { user-select: text; -webkit-user-select: text; }
 .app a { color: inherit; }
 .app :focus-visible { outline: 2px solid var(--app-accent); outline-offset: 2px; border-radius: 6px; }
 @container (max-width: 520px) { .app { padding: 20px 18px 26px; } }
 
-/* ---------- type ---------- */
 .app-header { margin-bottom: 20px; }
 .app-eyebrow { margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--app-accent); }
 .app-title { margin: 0; font-family: var(--app-head); font-size: clamp(22px, 5cqi, 32px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
@@ -38,7 +33,6 @@
 .app-subhead { margin: 22px 0 10px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--app-faint); }
 .app-text { margin: 0 0 12px; color: var(--app-dim); max-width: 68ch; }
 
-/* ---------- controls ---------- */
 .app-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 .app-button {
   display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px;
@@ -52,8 +46,6 @@
 .app-button--small { height: 26px; padding: 0 10px; font-size: 12px; }
 .app-button[disabled] { opacity: 0.6; cursor: default; }
 .app-button__ext { font-size: 11px; opacity: 0.7; }
-.app-back { display: inline-flex; gap: 6px; align-items: center; margin-bottom: 16px; padding: 4px 8px 4px 4px; border: 0; border-radius: 6px; background: none; font: inherit; font-size: 13px; color: var(--app-dim); cursor: pointer; }
-.app-back:hover { color: var(--app-text); background: rgba(255, 255, 255, 0.05); }
 
 .app-filters { display: flex; flex-wrap: wrap; gap: 6px; }
 .app-filter { height: 28px; padding: 0 12px; border: 1px solid var(--app-line); border-radius: 999px; background: none; font: inherit; font-size: 12.5px; color: var(--app-dim); cursor: pointer; }
@@ -64,35 +56,28 @@
 .app-input:focus { outline: none; border-color: var(--app-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-accent) 22%, transparent); }
 .app-input--area { resize: vertical; min-height: 110px; }
 .app-input--search { max-width: 280px; }
-.app-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.app-field label { font-size: 12.5px; font-weight: 500; color: var(--app-dim); }
-.app-field.has-error .app-input { border-color: #ff8f8f; }
-.app-field__error { margin: 0; font-size: 12.5px; color: #ffb0b0; }
 
 .app-empty { margin-top: 24px; padding: 28px; border: 1px dashed var(--app-line); border-radius: 12px; text-align: center; }
 .app-empty__title { margin: 0 0 4px; font-weight: 600; }
 .app-empty__text { margin: 0; color: var(--app-dim); }
 
-/* ---------- tags ---------- */
 .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .tag-list--roomy { gap: 8px; }
-.tech-tag { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border: 1px solid color-mix(in srgb, var(--tag) 30%, transparent); border-radius: 999px; background: color-mix(in srgb, var(--tag) 9%, transparent); font-size: 12px; color: var(--app-text); white-space: nowrap; }
+.tech-tag { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border: 1px solid color-mix(in srgb, var(--tag) 42%, #2a2e38); border-radius: 999px; background: color-mix(in srgb, var(--tag) 16%, #12151c); font-size: 12px; color: var(--app-text); white-space: nowrap; }
 .tag-list--roomy .tech-tag { height: 32px; padding: 0 12px; font-size: 13px; }
 .tech-tag__detail { color: var(--app-dim); font-size: 11.5px; }
 .tech-tag__detail::before { content: '·'; margin-right: 6px; }
 .tech-logo { width: 13px; height: 13px; flex: none; fill: var(--tag, currentColor); object-fit: contain; }
 .tech-logo--dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tag, #8b8b96); }
 .tag-more { display: inline-flex; align-items: center; height: 26px; padding: 0 8px; font-size: 12px; color: var(--app-faint); }
-.chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.chip { padding: 4px 11px; border-radius: 999px; background: color-mix(in srgb, var(--app-accent) 12%, transparent); color: color-mix(in srgb, var(--app-accent) 70%, white); font-size: 12.5px; }
 
-/* ---------- About Me ---------- */
 .about { padding-top: 0; }
-.about__hero { position: relative; margin: 0 -30px 22px; padding: 44px 30px 26px; overflow: hidden; border-bottom: 1px solid var(--app-line); }
+.about__hero { position: relative; margin: 0 -30px 22px; padding: 44px 30px 26px; border-bottom: 1px solid var(--app-line); }
 @container (max-width: 520px) { .about__hero { margin: 0 -18px 18px; padding: 34px 18px 20px; } }
-.about__backdrop { position: absolute; inset: 0; pointer-events: none; }
-.about__backdrop .about__paths.kbp { position: absolute; inset: 0; height: 100%; min-height: 0; background: #0b0c10; color: #dfe2ea; }
-.about__backdrop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11, 12, 16, 0.92) 0%, rgba(11, 12, 16, 0.55) 55%, rgba(11, 12, 16, 0.25) 100%); }
+
+.about__backdrop { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.about__backdrop .about__paths.kbp { position: absolute; inset: 0; height: 100%; min-height: 0; background: var(--bg-base); color: var(--bg-lines); }
+.about__backdrop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg-veil) 0%, var(--bg-veil) 30%, var(--bg-veil-far) 100%); }
 .about__profile { position: relative; display: flex; align-items: center; gap: 18px; }
 .about__avatar { flex: none; width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.14); }
 .about__name { font-size: clamp(26px, 6cqi, 38px); }
@@ -107,7 +92,10 @@
 .about__facts dd { margin: 0; color: var(--app-text); }
 .about__side .app-subhead { margin-top: 18px; }
 
-/* ---------- Projects: the original numbered list ---------- */
+.about__ps { margin-top: 18px; padding: 10px 14px; border-left: 2px solid color-mix(in srgb, var(--app-accent) 70%, transparent); border-radius: 0 8px 8px 0; background: rgba(255, 255, 255, 0.04); max-width: 64ch; }
+.about__ps p { margin: 0 0 6px; font-size: 13px; line-height: 1.55; color: var(--app-dim); }
+.about__ps p:last-child { margin-bottom: 0; }
+
 .proj-list { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid var(--app-line); }
 .proj-row { border-top: 1px solid var(--app-line); transition: opacity 0.3s ease; }
 .proj-list:hover .proj-row:not(:hover) { opacity: 0.5; }
@@ -125,11 +113,12 @@
 .app-link { color: var(--app-text); font-size: 13px; font-weight: 500; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--app-accent) 55%, transparent); text-underline-offset: 3px; }
 .app-link:hover { color: var(--app-accent); }
 
-/* ---------- Skills ---------- */
 .skills__tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 4px; }
 .skills__section .app-subhead { margin-top: 20px; }
 
-/* ---------- Experience ---------- */
+.skills .app-filter:not([aria-pressed='true']) { background: #12151c; border-color: rgba(255, 255, 255, 0.14); }
+.skills .app-input--search { background: #0d1017; }
+
 .xp-timeline { position: relative; margin: 0; padding: 0 0 0 22px; list-style: none; }
 .xp-timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--app-line); }
 .xp-entry { position: relative; padding: 0 0 22px; }
@@ -146,39 +135,34 @@
 .xp-list li { margin: 2px 0; }
 .xp-list li::marker { color: var(--xp); }
 
-/* ---------- Contact: the original format ---------- */
-.contact__elsewhere { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 26px 0 0; padding: 18px 0 0; list-style: none; border-top: 1px solid var(--app-line); }
-.contact__link { font-family: var(--app-head); font-size: clamp(17px, 3.2cqi, 22px); font-weight: 600; color: var(--app-text); text-decoration: none; }
+.contact { display: flex; }
+.contact__center { margin: auto; padding: 24px 0; width: 100%; max-width: 760px; text-align: center; }
+.contact__eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px; font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--app-dim); }
+.contact__rule { width: 28px; height: 1px; background: currentColor; opacity: 0.6; }
+.contact__title { margin: 0; font-family: var(--app-head); font-size: clamp(38px, 12cqi, 128px); font-weight: 800; line-height: 0.92; letter-spacing: -0.045em; text-transform: uppercase; color: #f3f3f6; text-wrap: balance; }
+.contact__lede { margin: 22px auto 0; max-width: 30em; font-size: clamp(14px, 2.2cqi, 18px); line-height: 1.5; color: var(--app-dim); }
+.contact__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 30px; }
+.contact__pill { display: inline-flex; align-items: center; justify-content: center; height: 46px; padding: 0 24px; border-radius: 999px; font: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.contact .contact__pill--solid { background: #f3f3f6; color: #0b0c10; border: 1px solid #f3f3f6; }
+.contact .contact__pill--solid:hover { background: #ffffff; }
+.contact__pill--ghost { background: transparent; color: #f3f3f6; border: 1px solid rgba(255, 255, 255, 0.28); }
+.contact__pill--ghost:hover { border-color: rgba(255, 255, 255, 0.6); }
+.contact__elsewhere { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 34px; margin: 34px 0 0; padding: 0; list-style: none; }
+.contact__link { font-family: var(--app-head); font-size: clamp(15px, 2.4cqi, 18px); font-weight: 600; color: #f3f3f6; text-decoration: none; }
 .contact__link:hover { color: var(--app-accent); }
+@container (max-width: 520px) { .contact__pill { height: 42px; padding: 0 18px; font-size: 11px; } }
 
-/* ---------- the five backgrounds (their settings: backgrounds.js) ---------- */
-/* About Me: warm charcoal, a soft warm light, a whisper of paper grain */
-.app-frame--about .app-bg { background: radial-gradient(120% 90% at var(--bg-glow-at), var(--bg-glow), transparent 62%); }
-.app-frame--about .app-bg::after {
-  opacity: var(--bg-grain, 0.05);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
-/* Projects: the Topo Background (Kokonut UI) fills the frame; the content scrolls inside it */
 .app-frame--projects .projects-topo.ktb { position: absolute; inset: 0; display: block; min-height: 0; background: var(--bg-base); color: var(--bg-lines); }
 .app-frame--projects .projects-topo > .app { position: absolute; inset: 0; }
-/* Skills: a faint technical grid, fading out toward the edges, and a soft accent in one corner */
-.app-frame--skills .app-bg {
-  background:
-    linear-gradient(var(--bg-grid) 1px, transparent 1px) 0 0 / var(--bg-grid-size) var(--bg-grid-size),
-    linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px) 0 0 / var(--bg-grid-size) var(--bg-grid-size);
-  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 35%, transparent 100%);
-  mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 35%, transparent 100%);
-}
-.app-frame--skills::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(60% 55% at var(--bg-accent-at), var(--bg-accent), transparent 70%); }
-/* Experience: a gentle vertical gradient, a soft light behind the timeline */
-.app-frame--experience { background: linear-gradient(180deg, var(--bg-top), var(--bg-bottom)); }
-.app-frame--experience .app-bg { background: radial-gradient(45% 55% at var(--bg-glow-at), var(--bg-glow), transparent 72%); }
-/* Contact: a soft cyan light in one corner, a fainter blue across from it */
-.app-frame--contact .app-bg {
-  background:
-    radial-gradient(60% 50% at var(--bg-glow-at), var(--bg-glow), transparent 70%),
-    radial-gradient(55% 45% at var(--bg-glow2-at), var(--bg-glow2), transparent 70%);
-}
+
+.app-frame--skills .skills-dots.kdf { position: absolute; inset: 0; display: block; min-height: 0; background: var(--bg-base); color: var(--bg-dots); }
+.app-frame--skills .skills-dots > .app { position: absolute; inset: 0; }
+
+.app-frame--experience .xp-rain.krg { position: absolute; inset: 0; min-height: 0; background: #101216; color: inherit; }
+.app-frame--experience .xp-rain > .app { position: absolute; inset: 0; }
+.app-frame--experience .xp-rain .krg__layer::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg-veil) 0%, var(--bg-veil) 35%, var(--bg-veil-far) 100%); }
+
+.app-frame--contact .contact-flow.kff { color: var(--bg-lines); }
 
 @media (prefers-reduced-motion: reduce) {
   .proj-row { transition: none; }

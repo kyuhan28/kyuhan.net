@@ -1,9 +1,9 @@
 import { AppShell, AppHeader, LinkButton, EmptyState } from '../shared/ui'
 import { withBase } from '../shared/techIcons'
 import { experience, datesOf } from './experienceData'
+import RainGlassBackground from '../../components/kokonutui/RainGlassBackground'
+import { backgrounds } from '../shared/backgrounds'
 
-/* Experience: a compact timeline, newest first, its entry types marked subtly. Fields that aren't set are
-   left out. Content: experienceData.js. */
 const TYPES = {
   employment: { label: 'Employment', color: '#9fb4ff' },
   internship: { label: 'Internship', color: '#c4a7ff' },
@@ -35,9 +35,15 @@ function Entry({ e }) {
   )
 }
 
-export default function ExperienceApp() {
+export default function ExperienceApp({ visible = true }) {
+
+  const glass = backgrounds.experience
+  const backdrop = (content) => (
+    <RainGlassBackground className="xp-rain" title={null} src={`${import.meta.env.BASE_URL}${glass.image.replace(/^\//, '')}`}
+      rain={glass.rain} interactive={glass.interactive} paused={!visible}>{content}</RainGlassBackground>
+  )
   return (
-    <AppShell accent="#ffc98a" bg="experience" className="experience">
+    <AppShell accent="#ffc98a" bg="experience" backdrop={backdrop} className="experience">
       <AppHeader eyebrow="Experience" title="Where I've been" />
       {experience.length ? <ol className="xp-timeline">{experience.map((e, i) => <Entry key={`${e.org}-${e.title}-${i}`} e={e} />)}</ol>
         : <EmptyState title="No experience yet">Add entries to src/apps/experience/experienceData.js.</EmptyState>}

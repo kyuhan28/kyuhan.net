@@ -6,11 +6,6 @@ import './cursor.css'
 
 const INTERACTIVE = 'a, button, [role="button"], summary, label, [data-cursor]'
 
-
-
-
-
-
 export default function Cursor() {
   const fine = useFinePointer()
   if (!fine) return null

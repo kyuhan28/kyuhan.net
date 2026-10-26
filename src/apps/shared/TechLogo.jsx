@@ -1,6 +1,5 @@
 import { palette, withBase } from './techIcons'
 
-/** A technology's logo (or a neutral dot if there's none), sized by the caller's CSS. */
 export default function TechLogo({ name, className = 'tech-logo' }) {
   const { icon } = palette(name)
   if (icon?.image) return <img className={className} src={withBase(icon.image)} alt="" />

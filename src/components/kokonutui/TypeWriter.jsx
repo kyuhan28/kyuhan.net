@@ -6,15 +6,6 @@
  * @license: MIT
  * @website: https://kokonutui.com
  * @github: https://github.com/kokonut-labs/kokonutui
- *
- * Ported for this project: the same typing logic, caret, props and accessibility as the Kokonut UI
- * registry version (https://kokonutui.com/r/type-writer.json), written in JavaScript, with its Tailwind
- * classes as plain CSS (type-writer.css). Uses Motion, already in the project.
- *
- * Props: sequences [{ text, deleteAfter?, pauseAfter? }], typingSpeed (ms per character, default 50),
- * startDelay (200), autoLoop (true), loopDelay (1000), deleteSpeed (30), pauseBeforeDelete (1000),
- * naturalVariance (true), deleteMode ('backspace' | 'select'), typos (false | true | rate), seed (7),
- * paused (false), as ('div' | 'p' | 'span' | 'h1' | 'h2' | 'h3'), className, textClassName.
  */
 import { motion, useInView, useReducedMotion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
@@ -29,20 +20,17 @@ const DEFAULT_SEQUENCES = [
 ]
 
 const NEXT_SEQUENCE_DELAY = 100
-// The caret stays solid while keys are being hit and only starts blinking
-// once typing has stopped for this long, as in a text editor.
+
 const CARET_IDLE_MS = 500
-// A wrong key: noticed after this pause, then backspaced and retyped.
+
 const TYPO_NOTICE_MS = 250
 const DEFAULT_TYPO_RATE = 0.04
-// Select-to-delete: the highlight sweeps the phrase in this long, holds
-// for a moment, then the text is cut.
+
 const SELECT_SWEEP_MS = 120
 const SELECT_HOLD_MS = 220
 
 const KEY_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm']
 
-/** The keys around a letter on a QWERTY keyboard, in the same case. */
 function neighbours(char) {
   const lower = char.toLowerCase()
   const row = KEY_ROWS.findIndex((keys) => keys.includes(lower))
@@ -52,7 +40,6 @@ function neighbours(char) {
   return char === lower ? around : around.toUpperCase()
 }
 
-/** Small seeded generator (Park-Miller), 0 to 1. */
 function createRandom(seed) {
   let state = (Math.abs(Math.floor(seed)) % 2_147_483_646) + 1
   return () => {
@@ -64,10 +51,10 @@ function createRandom(seed) {
 function getTypingDelay(typingSpeed, naturalVariance, random) {
   if (!naturalVariance) return typingSpeed
   const roll = random()
-  // 10% chance of a hesitation, 10% chance of a burst.
+
   if (roll < 0.1) return typingSpeed * 2
   if (roll > 0.9) return typingSpeed * 0.5
-  // Otherwise +/- 40%.
+
   return typingSpeed * (0.6 + random() * 0.8)
 }
 
@@ -103,8 +90,6 @@ export default function TypewriterTitle({
   useEffect(() => { sequencesRef.current = sequences }, [sequences])
   useEffect(() => { random.current = createRandom(seed) }, [seed])
 
-  // Reduced motion: show the final phrase, no typing loop. Keyed on the
-  // phrase itself so new `sequences` still update the text.
   const finalText = sequences.at(-1)?.text ?? ''
   useEffect(() => {
     if (shouldReduceMotion) setScreen({ text: finalText, selected: 0 })
@@ -112,8 +97,7 @@ export default function TypewriterTitle({
 
   useEffect(() => {
     if (shouldReduceMotion) return
-    // Paused or off screen: keep the current text. `position` remembers
-    // where it was, so typing resumes there.
+
     if (!isRunning) return
 
     let typoRate = 0
@@ -134,7 +118,6 @@ export default function TypewriterTitle({
       timers.add(timer)
     })
 
-    // Every keystroke holds the caret solid; it blinks again once idle.
     const keystroke = () => {
       const caret = caretRef.current
       if (!caret) return
@@ -184,11 +167,10 @@ export default function TypewriterTitle({
       }
     }
 
-    /** Move on to the next phrase. False when the run is over. */
     const advance = async (delay) => {
       const isLast = pos.sequence >= sequencesRef.current.length - 1
       if (isLast && !autoLoop) return false
-      // Advance first, so pausing during the wait can't retype this one.
+
       pos.sequence = isLast ? 0 : pos.sequence + 1
       pos.char = 0
       pos.deleting = false
@@ -199,20 +181,20 @@ export default function TypewriterTitle({
 
     const phrase = async () => {
       const list = sequencesRef.current
-      // `sequences` may have shrunk past the current phrase: start over.
+
       if (pos.sequence >= list.length) { pos.sequence = 0; pos.char = 0; pos.deleting = false }
       const sequence = list[pos.sequence]
       if (!sequence) return false
       const { text } = sequence
       pos.char = Math.min(pos.char, text.length)
-      // Resuming after a pause: put the screen back in step.
+
       show(text.slice(0, pos.char))
 
       if (!pos.deleting) {
         while (pos.char < text.length) await typeChar(text)
         const pause = sequence.pauseAfter ?? pauseBeforeDelete
         const isLast = pos.sequence === list.length - 1
-        // Looping deletes the last phrase too, instead of it vanishing.
+
         if (!(sequence.deleteAfter || (isLast && autoLoop))) return advance(pause)
         await wait(pause)
         pos.deleting = true
@@ -225,7 +207,7 @@ export default function TypewriterTitle({
       try {
         await wait(startDelay)
         while (await phrase()) {
-          // On to the next phrase.
+
         }
       } catch (error) {
         if (!(error instanceof Stopped)) throw error
@@ -241,8 +223,7 @@ export default function TypewriterTitle({
       if (caret) caret.dataset.idle = 'true'
     }
   }, [
-    // Content comes through sequencesRef, so a new array with the same
-    // phrases doesn't restart the effect.
+
     typingSpeed, deleteSpeed, pauseBeforeDelete, autoLoop, loopDelay, startDelay, naturalVariance, deleteMode, typos, shouldReduceMotion, isRunning,
   ])
 
@@ -251,15 +232,11 @@ export default function TypewriterTitle({
 
   return (
     <Component className={cn('ktw', className)}>
-      {/* Screen readers get every phrase once instead of whatever partial
-          string is on screen. */}
       <span className="sr-only">{sequences.map((sequence) => sequence.text).join(', ')}</span>
       <motion.span
         animate={{ opacity: 1 }}
         aria-hidden="true"
-        // Every phrase sits invisibly in the same grid cell, so the box is
-        // as wide as the widest one as rendered (proportional fonts, CJK)
-        // and the text grows from a fixed left edge.
+
         className={cn('ktw__text', textClassName)}
         initial={{ opacity: 0 }}
         ref={ref}
@@ -278,10 +255,6 @@ export default function TypewriterTitle({
   )
 }
 
-/**
- * Takes no room, so the text never shifts when the caret moves to the start
- * of a selection. Solid while typing; blinks once idle.
- */
 function Caret({ caretRef }) {
   return (
     <span className="ktw__caret-box">

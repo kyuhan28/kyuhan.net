@@ -1,4 +1,3 @@
-/* Glitch Text (Kokonut UI, MIT): its Tailwind classes, as plain CSS. The text takes its parent's color. */
 .gt { position: relative; display: inline-block; }
 .gt__layers { position: relative; display: inline-grid; }
 .gt__layer, .gt__text { grid-column: 1; grid-row: 1; }

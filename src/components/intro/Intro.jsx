@@ -8,19 +8,10 @@ import { getProgress, subscribe } from '../../lib/loading'
 import GlitchText from '../kokonutui/GlitchText'
 import './intro.css'
 
-/*
- * The loading screen: a glitching "Loading" (its dots counting up) with the name beneath it. When
- * everything has loaded (the shared loading tracker), the word glitches into "Complete", holds for a
- * beat, and the shutters open.
- * Shown once per session; scrolling doesn't skip it (the page stays put underneath); "Enter now" or
- * Escape skip it, opening the shutters smoothly; never longer than MAX_WAIT_MS;
- * not shown at all with reduced motion.
- */
-
 const SEEN_KEY = 'intro-seen'
 const MAX_WAIT_MS = 9000
-const DOT_MS = 650 // how often the dots count up
-const HOLD_MS = 1100 // how long "Complete" stays before the shutters open
+const DOT_MS = 650
+const HOLD_MS = 1100
 
 export default function Intro({ onReveal }) {
   const reduce = usePrefersReducedMotion()
@@ -62,12 +53,10 @@ export default function Intro({ onReveal }) {
     }
   }, [finish, reveal])
 
-  // Not shown (seen this session, or reduced motion): reveal the site straight away.
   useEffect(() => {
     if (!visible || reduce) finish()
   }, [visible, reduce, finish])
 
-  // Everything loaded: say so.
   useEffect(() => {
     if (!visible || reduce) return
     const update = () => { if (getProgress() >= 1) setDone(true) }
@@ -75,35 +64,30 @@ export default function Intro({ onReveal }) {
     return subscribe(update)
   }, [visible, reduce])
 
-  // While loading, the dots count up; every change is a glitch.
   useEffect(() => {
     if (!visible || reduce || done) return
     const t = setInterval(() => setDots((d) => (d + 1) % 4), DOT_MS)
     return () => clearInterval(t)
   }, [visible, reduce, done])
 
-  // "Complete" holds for a beat, then the shutters open.
   useEffect(() => {
     if (!visible || reduce || !done) return
     const t = setTimeout(exit, HOLD_MS)
     return () => clearTimeout(t)
   }, [visible, reduce, done, exit])
 
-  // Never wait forever: after MAX_WAIT_MS, call it complete.
   useEffect(() => {
     if (!visible || reduce) return
     const t = setTimeout(() => setDone(true), MAX_WAIT_MS)
     return () => clearTimeout(t)
   }, [visible, reduce])
 
-  // While it's up, the page stays put: scrolling (mouse, trackpad or touch) doesn't move it or skip
-  // the screen. Escape skips it on purpose, opening the shutters smoothly.
   useEffect(() => {
     if (!visible || reduce) return
     const html = document.documentElement
     const previous = html.style.overflow
     html.style.overflow = 'hidden'
-    const hold = (e) => { if (e.cancelable) e.preventDefault() } // iPhones scroll on touch even with overflow hidden
+    const hold = (e) => { if (e.cancelable) e.preventDefault() }
     const onKey = (e) => { if (e.key === 'Escape') exit() }
     window.addEventListener('wheel', hold, { passive: false })
     window.addEventListener('touchmove', hold, { passive: false })
@@ -127,12 +111,11 @@ export default function Intro({ onReveal }) {
         <div className="intro__glow" aria-hidden="true" />
 
         <div className="intro__center">
-          {/* The dots are drawn outside the glitch text, so the word stays steady between glitches. */}
           <div className={`intro__glitch ${done ? 'is-done' : ''}`} aria-hidden="true">
             <GlitchText text={done ? 'Complete' : 'Loading'} trigger="idle" intensity="strong" />
             <span className="intro__dots">{done ? '' : '.'.repeat(dots)}</span>
           </div>
-          <p className="intro__name">{'KYU HAN’S PORTFOLIO'}</p>
+          <p className="intro__name">{`${site.name}’s Portfolio`}</p>
           <p className="sr-only" role="status">{done ? 'Loading complete' : 'Loading'}</p>
         </div>
       </div>

@@ -2,10 +2,6 @@ import { useEffect, useRef } from 'react'
 import { APPS } from './apps'
 import { AppIcon } from './icons'
 
-/*
- * A simple launcher (a placeholder for later: more apps, folders, settings). Opens above the Start button;
- * closes on a choice, Escape, or a press outside. Arrow keys move between items.
- */
 export default function StartMenu({ open, dispatch, onBackToDesk, startRef }) {
   const menu = useRef(null)
   useEffect(() => {

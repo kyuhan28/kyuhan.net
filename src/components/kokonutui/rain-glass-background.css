@@ -1,0 +1,20 @@
+.krg { position: relative; min-height: 560px; width: 100%; touch-action: pan-y; user-select: none; -webkit-user-select: none; overflow: hidden; background: #e4e4e7; color: #18181b; }
+html.dark .krg { background: #18181b; color: #fafafa; }
+.krg__fog { display: none; color: #e9edef; }
+html.dark .krg__fog { color: #14181b; }
+.krg__layer { pointer-events: none; position: absolute; inset: 0; }
+.krg__canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 700ms ease-out; }
+.krg__content { position: relative; display: flex; min-height: 560px; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 4rem 1.5rem; text-align: center; }
+.krg__title { margin: 0; max-width: 48rem; text-wrap: balance; font-weight: 600; font-size: 3rem; letter-spacing: -0.045em; }
+@media (min-width: 640px) { .krg__title { font-size: 4.5rem; } }
+.krg__text { margin: 0; max-width: 28rem; text-wrap: balance; font-size: 1rem; line-height: 1.625; color: #3f3f46; }
+html.dark .krg__text { color: #d4d4d8; }
+.krg__actions { display: flex; align-items: center; gap: 0.5rem; }
+.krg__button { display: inline-flex; height: 2.5rem; align-items: center; border-radius: 999px; padding: 0 1rem; font-weight: 500; font-size: 0.875rem; color: #3f3f46; text-decoration: none; transition: background-color 150ms, color 150ms; }
+.krg__button:hover { background: rgba(24, 24, 27, 0.05); color: #18181b; }
+html.dark .krg__button { color: #d4d4d8; }
+html.dark .krg__button:hover { background: rgba(255, 255, 255, 0.1); color: #fafafa; }
+.krg__button--solid { padding: 0 1.25rem; background: #18181b; color: #fff; }
+.krg__button--solid:hover { background: #3f3f46; color: #fff; }
+html.dark .krg__button--solid { background: #fafafa; color: #18181b; }
+html.dark .krg__button--solid:hover { background: #e4e4e7; color: #18181b; }

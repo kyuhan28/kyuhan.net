@@ -3,11 +3,6 @@ import { projects } from './projectsData'
 import TopoBackground from '../../components/kokonutui/TopoBackground'
 import { backgrounds } from '../shared/backgrounds'
 
-/*
- * Projects: every project at once, in the portfolio's original format: a numbered list, each with its title,
- * when and where, the summary, what it's built with, and its links. Content: projectsData.js. Behind it,
- * the Topo Background (Kokonut UI), which holds still while the window is hidden (backgrounds.js).
- */
 const linksOf = (p) => [['Website', p.website], [p.demoLabel || 'Live demo', p.demo], ['GitHub', p.github]].filter(([, href]) => href)
 
 export default function ProjectsApp({ visible = true }) {

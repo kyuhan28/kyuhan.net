@@ -1,7 +1,3 @@
-
-
-
-
 export const TASK_LABELS = {
   fonts: 'typography',
   page: 'images and assets',
@@ -31,7 +27,6 @@ export function subscribe(fn) {
   listeners.add(fn)
   return () => listeners.delete(fn)
 }
-
 
 if (typeof window !== 'undefined') {
   ;(document.fonts?.ready ?? Promise.resolve()).then(() => complete('fonts'), () => complete('fonts'))

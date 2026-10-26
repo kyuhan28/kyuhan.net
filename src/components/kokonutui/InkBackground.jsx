@@ -6,38 +6,24 @@
  * @license: MIT
  * @website: https://kokonutui.com
  * @github: https://github.com/kokonut-labs/kokonutui
- *
- * Ported for this project from the Kokonut UI registry (https://kokonutui.com/r/ink-background.json): the
- * same stable-fluids solver, headline mask, bloom, stirring, gathering and sleep, in JavaScript, with its
- * Tailwind classes as plain CSS (ink-background.css).
- *
- * One adaptation: it's sized from its layout size (clientWidth / clientHeight), not getBoundingClientRect(),
- * which reports the *transformed* size: this site shows the desktop on a 3D monitor through a CSS transform.
- * (Pointer positions still use the on-screen rectangle: the desktop is only interactive once it's the page.)
- *
- * Props: text (the headline, written in ink; it bleeds when stirred and gathers again), accent (the color of
- * the ink a click drops; the headline's by default), children (content over the ink, under the headline),
- * headlineColor (optional headline ink color), rainbow (clicked/dragged pigment travels in color),
- * interactive (false: a still backdrop), className.
  */
 import { useEffect, useRef, useState } from 'react'
 import './ink-background.css'
 
 const cn = (...c) => c.filter(Boolean).join(' ')
 
-// The velocity field is solved on a grid this many cells on its short side; the ink is drawn on a finer one.
 const SIM = 128
 const DYE = 512
 const PRESSURE_ITERATIONS = 20
-// How fast stirred ink fades away, and how fast velocity calms down.
+
 const DYE_FADE = 0.35
 const VELOCITY_FADE = 1.2
-// Swirl kept in the flow, so stirring curls instead of smearing.
+
 const CURL = 22
-// The headline pulls its ink back at this rate per frame once left alone, after this long.
+
 const GATHER = 0.06
 const GATHER_AFTER = 1200
-// The loop stops after this long with nothing moving it.
+
 const SLEEP_AFTER = 5000
 const STIR_FORCE = 5200
 const STIR_RADIUS = 0.0018
@@ -71,26 +57,17 @@ in vec2 vB;
 out vec4 o;
 `
 
-function rainbowColor(hue) {
-  return [0, 2 / 3, 1 / 3].map((offset) => {
-    const h = ((hue + offset) % 1 + 1) % 1
-    const channel = Math.max(0, Math.min(1, Math.abs(h * 6 - 3) - 1))
-    return (0.18 + 0.82 * channel) * 0.95
-  })
-}
-
 const SHADERS = {
   splat: `${HEAD}
 uniform sampler2D uTarget;
 uniform float aspect;
-uniform vec3 color;
+uniform vec4 color;
 uniform vec2 point;
 uniform float radius;
 void main() {
   vec2 p = vUv - point;
   p.x *= aspect;
-  vec3 s = exp(-dot(p, p) / radius) * color;
-  o = vec4(texture(uTarget, vUv).xyz + s, 1.0);
+  o = texture(uTarget, vUv) + exp(-dot(p, p) / radius) * color;
 }`,
   advect: `${HEAD}
 uniform sampler2D uVelocity;
@@ -171,7 +148,7 @@ uniform float value;
 void main() {
   o = value * texture(uTarget, vUv);
 }`,
-  // Pulls the headline's ink (red channel) back toward the letters. Dropped ink (green) is left to drift and fade.
+
   gather: `${HEAD}
 uniform sampler2D uDye;
 uniform sampler2D uMask;
@@ -179,44 +156,31 @@ uniform float rate;
 void main() {
   vec4 d = texture(uDye, vUv);
   float m = texture(uMask, vUv).r;
-  o = vec4(mix(d.r, m, rate), d.g, 0.0, 1.0);
-}`,
-  // Restore the headline's own color; leave dropped rainbow pigment to drift.
-  gatherPigment: `${HEAD}
-uniform sampler2D uDye;
-uniform sampler2D uPigment;
-uniform sampler2D uMask;
-uniform vec3 ink;
-uniform float rate;
-void main() {
-  vec2 density = texture(uDye, vUv).rg;
-  vec3 pigment = texture(uPigment, vUv).rgb;
-  float keep = 1.0 - rate * density.r / max(density.r + density.g, 0.0001);
-  float mask = texture(uMask, vUv).r;
-  o = vec4(pigment * keep + ink * mask * rate, 1.0);
+  o = vec4(mix(d.r, m, rate), d.g, d.b, d.a);
 }`,
   display: `${HEAD}
 uniform sampler2D uDye;
-uniform sampler2D uPigment;
-uniform bool rainbow;
 uniform vec3 paper;
 uniform vec3 ink;
 uniform vec3 accent;
+uniform float rainbow;
+vec3 hsv(float h, float s, float v) {
+  vec3 k = clamp(abs(mod(h * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+  return v * mix(vec3(1.0), k, s);
+}
 void main() {
   vec4 d = texture(uDye, vUv);
-  if (rainbow) {
-    // Pigment is density-weighted RGB. Advection carries both the color and its concentration.
-    float density = d.r + d.g;
-    vec3 pigment = texture(uPigment, vUv).rgb / max(density, 0.0001);
-    float coverage = smoothstep(0.02, 0.85, density);
-    o = vec4(mix(paper, clamp(pigment, 0.0, 1.0), coverage), 1.0);
-    return;
-  }
-  // A soft knee, so thin washes stay pale and dense ink goes solid.
   float a = smoothstep(0.02, 0.85, d.r);
   float b = smoothstep(0.02, 0.85, d.g);
   vec3 c = mix(paper, ink, a);
-  c = mix(c, accent, b * 0.92);
+  vec3 tint = accent;
+  if (rainbow > 0.5) {
+    vec2 dir = 2.0 * d.ba / max(d.g, 0.0001) - 1.0;
+    float h = fract(atan(dir.y, dir.x) / 6.2831853);
+    float pure = clamp(length(dir), 0.0, 1.0);
+    tint = hsv(h, 0.78 * pure, 1.0);
+  }
+  c = mix(c, tint, b * 0.92);
   o = vec4(c, 1.0);
 }`,
 }
@@ -248,7 +212,6 @@ function link(gl, vertex, source) {
   return { program, uniforms }
 }
 
-/** Parses any CSS color, oklch included, by painting it into one pixel. */
 function toRgb(color, probe) {
   probe.clearRect(0, 0, 1, 1)
   probe.fillStyle = color
@@ -257,12 +220,7 @@ function toRgb(color, probe) {
   return [r / 255, g / 255, b / 255]
 }
 
-/**
- * A small stable-fluids solver (semi-Lagrangian advection, vorticity confinement, Jacobi pressure), in the
- * spirit of Jos Stam's paper and Pavel Dobryakov's WebGL port. Returns null where half-float render targets
- * aren't available.
- */
-function createFluid(gl, rainbow = false) {
+function createFluid(gl) {
   if (!gl.getExtension('EXT_color_buffer_float')) return null
   gl.getExtension('OES_texture_float_linear')
   const vertex = compile(gl, gl.VERTEX_SHADER, VERTEX)
@@ -311,7 +269,7 @@ function createFluid(gl, rainbow = false) {
     return pair
   }
 
-  let velocity, dye, pigment, pressure, divergence, curl
+  let velocity, dye, pressure, divergence, curl
   let aspect = 1
   const mask = gl.createTexture()
   gl.bindTexture(gl.TEXTURE_2D, mask)
@@ -330,7 +288,6 @@ function createFluid(gl, rainbow = false) {
 
   const sizeFor = (short) => (aspect >= 1 ? [Math.round(short * aspect), short] : [short, Math.round(short / aspect)])
 
-  // Binds a program, its textures and its output, and draws the quad.
   let unit = 0
   const run = (name, texel) => {
     const p = programs[name]
@@ -354,6 +311,7 @@ function createFluid(gl, rainbow = false) {
   let paper = [1, 1, 1]
   let inkColor = [0, 0, 0]
   let accentColor = [0, 0, 0]
+  let rainbowInk = false
   let canvasW = 1
   let canvasH = 1
 
@@ -370,7 +328,6 @@ function createFluid(gl, rainbow = false) {
       divergence = target(sw, sh, gl.R16F, gl.RED)
       curl = target(sw, sh, gl.R16F, gl.RED)
       dye = double(dw, dh, gl.RGBA16F, gl.RGBA)
-      if (rainbow) pigment = double(dw, dh, gl.RGBA16F, gl.RGBA)
     },
     setMask(source) {
       gl.bindTexture(gl.TEXTURE_2D, mask)
@@ -378,6 +335,7 @@ function createFluid(gl, rainbow = false) {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8, gl.RED, gl.UNSIGNED_BYTE, source)
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false)
     },
+    setRainbow(on) { rainbowInk = on },
     setColors(p, i, a) {
       paper = p
       inkColor = i
@@ -389,7 +347,7 @@ function createFluid(gl, rainbow = false) {
       bind(p, 'uTarget', velocity.read.tex)
       gl.uniform1f(p.uniforms.aspect, aspect)
       gl.uniform2f(p.uniforms.point, x, y)
-      gl.uniform3f(p.uniforms.color, vx, vy, 0)
+      gl.uniform4f(p.uniforms.color, vx, vy, 0, 0)
       gl.uniform1f(p.uniforms.radius, r)
       blit(velocity.write)
       velocity.swap()
@@ -398,23 +356,10 @@ function createFluid(gl, rainbow = false) {
         bind(p, 'uTarget', dye.read.tex)
         gl.uniform1f(p.uniforms.aspect, aspect)
         gl.uniform2f(p.uniforms.point, x, y)
-        gl.uniform3f(p.uniforms.color, ink[0], ink[1], 0)
+        gl.uniform4f(p.uniforms.color, ink[0], ink[1], ink[2] || 0, ink[3] || 0)
         gl.uniform1f(p.uniforms.radius, r)
         blit(dye.write)
         dye.swap()
-        if (rainbow) {
-          // The headline blooms in its own color; clicks and drags introduce rainbow hues.
-          const rgb = ink[0] ? inkColor : rainbowColor(x * 0.8 + performance.now() / 16000)
-          const amount = ink[0] + ink[1]
-          p = run('splat', [1 / pigment.read.w, 1 / pigment.read.h])
-          bind(p, 'uTarget', pigment.read.tex)
-          gl.uniform1f(p.uniforms.aspect, aspect)
-          gl.uniform2f(p.uniforms.point, x, y)
-          gl.uniform3f(p.uniforms.color, rgb[0] * amount, rgb[1] * amount, rgb[2] * amount)
-          gl.uniform1f(p.uniforms.radius, r)
-          blit(pigment.write)
-          pigment.swap()
-        }
       }
     },
     step(dt, gather) {
@@ -473,35 +418,13 @@ function createFluid(gl, rainbow = false) {
       blit(dye.write)
       dye.swap()
 
-      if (rainbow) {
-        p = run('advect', [1 / pigment.read.w, 1 / pigment.read.h])
-        bind(p, 'uVelocity', velocity.read.tex)
-        bind(p, 'uSource', pigment.read.tex)
-        gl.uniform2f(p.uniforms.simTexel, sim[0], sim[1])
-        gl.uniform1f(p.uniforms.dt, dt)
-        gl.uniform1f(p.uniforms.fade, DYE_FADE)
-        blit(pigment.write)
-        pigment.swap()
-      }
-
       if (gather > 0) {
-        // Calm the water as the letters gather, so they settle crisp.
+
         p = run('scale', sim)
         bind(p, 'uTarget', velocity.read.tex)
         gl.uniform1f(p.uniforms.value, 1 - gather)
         blit(velocity.write)
         velocity.swap()
-
-        if (rainbow) {
-          p = run('gatherPigment', [1 / pigment.read.w, 1 / pigment.read.h])
-          bind(p, 'uDye', dye.read.tex)
-          bind(p, 'uPigment', pigment.read.tex)
-          bind(p, 'uMask', mask)
-          gl.uniform3fv(p.uniforms.ink, inkColor)
-          gl.uniform1f(p.uniforms.rate, gather)
-          blit(pigment.write)
-          pigment.swap()
-        }
 
         p = run('gather', [1 / dye.read.w, 1 / dye.read.h])
         bind(p, 'uDye', dye.read.tex)
@@ -514,11 +437,10 @@ function createFluid(gl, rainbow = false) {
     draw() {
       const p = run('display', [1 / dye.read.w, 1 / dye.read.h])
       bind(p, 'uDye', dye.read.tex)
-      bind(p, 'uPigment', rainbow ? pigment.read.tex : dye.read.tex)
-      gl.uniform1i(p.uniforms.rainbow, rainbow ? 1 : 0)
       gl.uniform3fv(p.uniforms.paper, paper)
       gl.uniform3fv(p.uniforms.ink, inkColor)
       gl.uniform3fv(p.uniforms.accent, accentColor)
+      gl.uniform1f(p.uniforms.rainbow, rainbowInk ? 1 : 0)
       blit(null, canvasW, canvasH)
     },
     destroy() {
@@ -531,13 +453,11 @@ function createFluid(gl, rainbow = false) {
   }
 }
 
-/** Where the headline sits: centre line as a share of the height, and size. */
 function headline(width, height) {
   const size = Math.max(44, Math.min(width * 0.13, height * 0.24, 140))
   return { size, center: height * 0.4 }
 }
 
-/** Writes the headline into a canvas as soft white letters on black. */
 function drawMask(canvas, text, width, height, font) {
   const scale = DYE / Math.min(width, height)
   canvas.width = Math.round(width * scale)
@@ -550,22 +470,15 @@ function drawMask(canvas, text, width, height, font) {
   ctx.fillRect(0, 0, width, height)
   ctx.font = `650 ${size}px ${font}`
   ctx.letterSpacing = `${-size * 0.045}px`
-  // Fit longer headlines by reducing font size, keeping the letters' natural proportions.
-  const measuredWidth = ctx.measureText(text).width
-  if (measuredWidth > width - 32) {
-    const fittedSize = size * (width - 32) / measuredWidth
-    ctx.font = `650 ${fittedSize}px ${font}`
-    ctx.letterSpacing = `${-fittedSize * 0.045}px`
-  }
   ctx.textAlign = 'center'
   ctx.textBaseline = 'middle'
-  // A little blur gives the letters a wet, feathered edge to bleed from.
+
   ctx.filter = `blur(${Math.max(1, size * 0.012)}px)`
   ctx.fillStyle = 'white'
   ctx.fillText(text, width / 2, center, width - 32)
 }
 
-export default function InkBackground({ text = 'Write freely.', accent, headlineColor, rainbow = false, children, interactive = true, className }) {
+export default function InkBackground({ text = 'Write freely.', accent, children, interactive = true, rainbow = false, className }) {
   const rootRef = useRef(null)
   const canvasRef = useRef(null)
   const paperRef = useRef(null)
@@ -579,7 +492,7 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
     const gl = canvas?.getContext('webgl2', { alpha: false, antialias: false, depth: false, preserveDrawingBuffer: false })
     const probe = document.createElement('canvas').getContext('2d', { willReadFrequently: true })
     if (!(root && canvas && probe)) return
-    const fluid = gl ? createFluid(gl, rainbow) : null
+    const fluid = gl ? createFluid(gl) : null
     if (!fluid) { setFailed(true); return }
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const maskCanvas = document.createElement('canvas')
@@ -590,7 +503,7 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
     let last = 0
     let visible = true
     let colorKey = ''
-    // Time of the last stir, and of the last thing that moved the fluid.
+
     let touched = -Number.POSITIVE_INFINITY
     let active = performance.now()
     const born = performance.now()
@@ -598,7 +511,7 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
 
     const readColors = () => {
       const paper = getComputedStyle(paperRef.current).color
-      const ink = headlineColor || getComputedStyle(inkRef.current).color
+      const ink = getComputedStyle(inkRef.current).color
       const key = `${paper}|${ink}|${accent}`
       if (key === colorKey) return false
       colorKey = key
@@ -608,7 +521,7 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
     }
 
     const build = () => {
-      // Layout size, not getBoundingClientRect(): that one includes CSS transforms (see the note above).
+
       width = root.clientWidth
       height = root.clientHeight
       if (width < 2 || height < 2) return
@@ -620,12 +533,11 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
       fluid.setMask(maskCanvas)
       const { size, center } = headline(width, height)
       setContentTop(center + size * 0.62)
-      // Reduced motion: the letters, already gathered, and no flow.
+
       fluid.step(1 / 60, reduceMotion ? 1 : 0)
       fluid.draw()
     }
 
-    // Ink drops land around the letters and the headline pulls them in.
     const bloom = () => {
       const { size, center } = headline(width, height)
       const y = 1 - center / height
@@ -642,11 +554,11 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
       const dt = Math.min((now - (last || now - 16)) / 1000, 1 / 30)
       last = now
       if (hand.down || hand.moved > now - 100) active = now
-      // Hold off while someone is stirring, then ease the letters back.
+
       const idle = now - touched
       let gather = 0
       if (idle > GATHER_AFTER) gather = GATHER * Math.min(1, (idle - GATHER_AFTER) / 1500)
-      // The first second and a half is the bloom: the letters fill in fast.
+
       const age = now - born
       if (age < 1500) gather = Math.max(gather, 0.012 + (age / 1500) * GATHER)
       fluid.step(dt, gather)
@@ -679,7 +591,6 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
     })
     resizeObserver.observe(root)
 
-    // A tab coming back must not wake a background that's scrolled away.
     let onScreen = true
     const intersection = new IntersectionObserver(([entry]) => {
       onScreen = entry.isIntersecting
@@ -693,7 +604,6 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
     }
     document.addEventListener('visibilitychange', onVisibility)
 
-    // Follow light and dark mode without asking the app for a theme. Only checked while the background is on screen.
     const colorTimer = window.setInterval(() => {
       if (!visible) return
       if (readColors() && !raf) fluid.draw()
@@ -704,14 +614,19 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
       return { x: (event.clientX - rect.left) / rect.width, y: 1 - (event.clientY - rect.top) / rect.height }
     }
 
+    let hue = Math.random() * Math.PI * 2
+    const inkOf = (amount) => (rainbow ? [0, amount, amount * (0.5 + 0.5 * Math.cos(hue)), amount * (0.5 + 0.5 * Math.sin(hue))] : [0, amount])
+    fluid.setRainbow?.(rainbow)
     const onMove = (event) => {
       const p = local(event)
       if (hand.on) {
         const dx = p.x - hand.x
         const dy = p.y - hand.y
         if (dx || dy) {
-          // Hovering stirs the water; dragging also lays down ink.
-          fluid.splat(p.x, p.y, dx * STIR_FORCE, dy * STIR_FORCE, hand.down ? [0, 0.08] : [0, 0], STIR_RADIUS)
+
+          if (hand.down) hue += Math.hypot(dx, dy) * 9.4
+
+          fluid.splat(p.x, p.y, dx * STIR_FORCE, dy * STIR_FORCE, hand.down ? inkOf(rainbow ? 0.2 : 0.08) : [0, 0], STIR_RADIUS)
           touched = performance.now()
           hand.moved = touched
         }
@@ -729,8 +644,9 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
       hand.on = true
       hand.x = p.x
       hand.y = p.y
-      // A drop: a dab of ink pushed out in a ring.
-      fluid.splat(p.x, p.y, 0, 0, [0, 0.65], DROP_RADIUS)
+
+      hue += 0.7
+      fluid.splat(p.x, p.y, 0, 0, inkOf(rainbow ? 0.35 : 0.65), DROP_RADIUS)
       for (let i = 0; i < 8; i++) {
         const a = (i / 8) * Math.PI * 2
         const r = 0.012
@@ -762,17 +678,16 @@ export default function InkBackground({ text = 'Write freely.', accent, headline
       root.removeEventListener('pointercancel', onUp)
       fluid.destroy()
     }
-  }, [text, accent, headlineColor, rainbow, interactive])
+  }, [text, accent, interactive, rainbow])
 
   return (
-    <div className={cn('kib', rainbow && 'kib--rainbow', className)} ref={rootRef}>
-      {/* Theme colors for the shader: the paper and the ink. */}
+    <div className={cn('kib', className)} ref={rootRef}>
       <span className="kib__paper" ref={paperRef} />
       <span className="kib__ink" ref={inkRef} />
       <div aria-hidden="true" className="kib__layer">
         <canvas className="kib__canvas" ref={canvasRef} />
       </div>
-      <h2 className={failed ? 'kib__fallback' : 'sr-only'} style={{ color: headlineColor }}>{text}</h2>
+      <h2 className={failed ? 'kib__fallback' : 'sr-only'}>{text}</h2>
       <div className="kib__content" style={{ top: contentTop ?? '62%' }}>
         {children === undefined ? <DefaultContent /> : children}
       </div>

@@ -3,17 +3,6 @@ import WindowControls from './WindowControls'
 import { AppIcon } from './icons'
 import { WINDOW } from './desktopState'
 
-/*
- * One application window: a frame, a title bar (icon, title, controls) and its contents, which it can move,
- * resize, maximize, minimize and close.
- *
- *   move    drag the title bar (not its controls); double-click it to maximize or restore
- *   resize  drag any edge or corner (eight handles); never smaller than the app's minimum, never past the desktop
- * While a gesture runs, the window's element is moved directly (no React renders per pointer move), its
- * contents ignore the pointer (an embedded page would otherwise swallow it), and pointer capture keeps the
- * gesture until the pointer is released anywhere. The result is committed once, as fractions of the desktop.
- * It stays mounted when minimized or closed (hidden and inert), so what's inside keeps its state.
- */
 const HANDLES = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw']
 const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi))
 const pct = (f) => `${(f * 100).toFixed(4)}%`
@@ -32,7 +21,7 @@ export default function DesktopWindow({ app, win, rect, focused, z, minimizeTo, 
     const box = workspace.current.getBoundingClientRect()
     const W = box.width, H = box.height
     const minW = Math.min(app.minWidth / W, 1), minH = Math.min(app.minHeight / H, 1)
-    const from = { px: e.clientX, py: e.clientY } // where the pointer started (kept apart from the rect's own x / y)
+    const from = { px: e.clientX, py: e.clientY }
     const start = { ...rect }
     let cur = { ...rect }
     el.classList.add('is-gesturing', kind === 'move' ? 'is-moving' : 'is-resizing')

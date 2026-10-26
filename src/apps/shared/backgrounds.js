@@ -1,57 +1,50 @@
-/*
- * Each app's background, in one place: change a color, a glow or an intensity here, and the app follows.
- * (Content lives in each app's data file; this is only how the apps look behind their content.)
- * Colors can be any CSS color. These become CSS variables on each app (apps.css draws them).
- */
 export const backgrounds = {
-  // About Me: warm charcoal, a soft warm light from the upper left, a whisper of paper grain.
+
   about: {
-    base: '#141213',
-    glow: 'rgba(255, 214, 176, 0.07)', // the warm light
-    glowAt: '15% 0%', //                   where it falls
-    grain: 0.05, //                        paper texture strength (0 for none)
+    base: '#0b0c10',
+    lines: '#dfe2ea',
+    count: 42,
+    speed: 0.6,
+    angle: -8,
+    veil: 'rgba(11, 12, 16, 0.72)',
+    veilFar: 'rgba(11, 12, 16, 0.12)',
   },
 
-  // Projects: Kokonut UI's Topo Background, a living contour map. The first five are the component's own
-  // props; `base` and `lines` are its background and line colors.
   projects: {
     base: '#0b0d10',
-    lines: '#7f8a9a', //   muted cool gray (the component draws it at 16% for minor lines, 34% for index lines)
-    interval: 0.075, //    height between contour lines: lower draws more lines
-    speed: 0.55, //        how fast the terrain drifts (0 holds it still)
-    interactive: true, //  a hill rises under the cursor; a click on the background sends a ripple
-    seed: 26, //           which terrain (any whole number)
-    labels: false, //      elevation numbers on the index contours (they'd sit under the content here)
+    lines: '#7f8a9a',
+    interval: 0.075,
+    speed: 0.55,
+    interactive: true,
+    seed: 26,
+    labels: false,
   },
 
-  // Skills: deep midnight, a faint technical grid, a soft mint accent in one corner.
   skills: {
     base: '#0b0f19',
-    grid: 'rgba(140, 170, 230, 0.07)', // grid line color and opacity
-    gridSize: 28, //                     px between grid lines
-    accent: 'rgba(127, 224, 200, 0.07)', // the corner accent
-    accentAt: '100% 0%',
+    dots: '#8fb3d9',
+    spacing: 16,
+    interactive: true,
+    seed: 7,
   },
 
-  // Experience: dark neutral, a gentle vertical gradient, a soft light behind the timeline.
   experience: {
-    top: '#16171b',
-    bottom: '#0e0f12',
-    glow: 'rgba(255, 201, 138, 0.06)', // the light behind the timeline
-    glowAt: '8% 28%',
+    image: '/work/experience-night.jpg',
+    rain: 0.55,
+    interactive: true,
+    veil: 'rgba(10, 11, 16, 0.62)',
+    veilFar: 'rgba(10, 11, 16, 0.18)',
   },
 
-  // Contact: near-black, a soft cyan light in the upper right, a fainter blue below.
   contact: {
-    base: '#0a0b0e',
-    glow: 'rgba(92, 207, 255, 0.11)',
-    glowAt: '88% 4%',
-    glow2: 'rgba(110, 140, 255, 0.05)',
-    glow2At: '10% 100%',
+    base: '#060709',
+    lines: '#8a93c8',
+    density: 1,
+    speed: 1,
+    interactive: true,
   },
 }
 
-/** An app's background settings as CSS variables, for its root element. */
 export function backgroundVars(app) {
   const b = backgrounds[app] || {}
   const vars = {}

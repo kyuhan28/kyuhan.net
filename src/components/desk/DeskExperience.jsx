@@ -2,36 +2,26 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { complete } from '../../lib/loading'
 import { usePrefersReducedMotion } from '../../hooks/useMediaQuery'
 import TypewriterTitle from '../kokonutui/TypeWriter'
-import './desk.css'
+import SwitchButton from '../kokonutui/SwitchButton'
 
-/*
- * The opening experience: a 3D workspace whose monitor shows the real portfolio, and the way into it.
- *
- *   intro            the loading screen is up; the desk is built and drawn underneath it
- *   desktop          the full desk is in view; the monitor shows the portfolio; the first click, tap or
- *                    key press starts the move
- *   cameraTransition the camera moves to the monitor (one move: later input is ignored)
- *   entering         at the screen, the desktop grows from the monitor to fill the window
- *   portfolio        the simulated desktop is the page (the portfolio open in its window). The desk is paused.
- *   returning        "Back to the desk" (the taskbar or Start menu, or Escape): the desktop shrinks back
- *                    onto the screen, and the camera pulls back to the desk
- *
- * The screen shows siteRef: the simulated desktop (components/desktop), whose portfolio window holds the real
- * portfolio in its own document. While it's on the monitor, a perspective transform (matrix3d) maps it onto
- * the screen's four corners, which the 3D scene reports every frame it draws. `controls` receives { back }.
- */
+const TIME_KEY = 'kh.room.time'
+function initialTime() {
+  try { const saved = localStorage.getItem(TIME_KEY); if (saved === 'day' || saved === 'night') return saved } catch {  }
+  const h = new Date().getHours()
+  return h >= 7 && h < 19 ? 'day' : 'night'
+}
+import './desk.css'
 
 const IGNORED_KEYS = new Set(['Tab', 'Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Escape'])
 const isTyping = (el) => !!el && (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName))
 const hasWebGL = () => {
   try { return !!document.createElement('canvas').getContext('webgl2') } catch { return false }
 }
-const FALLBACK_ASPECT = 0.724 / 0.394 // the desk model's display, until the model has loaded
-const MIN_SCREEN_LAYOUT = 960 // on the monitor, the desktop is never laid out narrower than this, so a phone's
-// monitor shows the portfolio with room for its hero below the nav (measured: it needs a ~420 px viewport)
+const FALLBACK_ASPECT = 0.724 / 0.394
+const MIN_SCREEN_LAYOUT = 960
+
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-/** The projective map from the unit square onto the quad q (TL, TR, BR, BL): (u, v) -> point. */
 function squareToQuad(q) {
   const [[x0, y0], [x1, y1], [x2, y2], [x3, y3]] = q
   const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3
@@ -44,10 +34,10 @@ function squareToQuad(q) {
   }
   return { a: x1 - x0 + g * x1, b: x3 - x0 + h * x3, c: x0, d: y1 - y0 + g * y1, e: y3 - y0 + h * y3, f: y0, g, h }
 }
-/** The CSS matrix3d that maps the rectangle (sx, sy)-(sx + sw, sy + sh) onto the quad q (TL, TR, BR, BL). */
+
 function rectToQuad(sx, sy, sw, sh, q) {
   const { a, b, c, d, e, f, g, h } = squareToQuad(q)
-  // the rectangle onto the unit square: u = (x - sx) / sw, v = (y - sy) / sh
+
   const A = a / sw, B = b / sh, D = d / sw, E = e / sh, G = g / sw, H = h / sh
   const C = c - A * sx - B * sy, F = f - D * sx - E * sy, W = 1 - G * sx - H * sy
   return `matrix3d(${A}, ${D}, 0, ${G}, ${B}, ${E}, 0, ${H}, 0, 0, 1, 0, ${C}, ${F}, 0, ${W})`
@@ -57,14 +47,18 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
   const root = useRef(null)
   const host = useRef(null)
   const app = useRef(null)
-  const started = useRef(false) // locks out a second transition
+  const started = useRef(false)
   const [phase, setPhase] = useState('intro')
   const [ready, setReady] = useState(false)
+  const [time, setTime] = useState(initialTime)
+  useEffect(() => {
+    if (ready) app.current?.setTimeOfDay?.(time)
+    try { localStorage.setItem(TIME_KEY, time) } catch {  }
+  }, [time, ready])
   const reduce = usePrefersReducedMotion()
-  // where the page sits: on the screen's corners, blended toward its natural place (1 = full page)
+
   const map = useRef({ on: true, corners: null, blend: 0 })
 
-  /** Put the portfolio where it belongs right now: on the monitor's screen, or (blend 1) the whole page. */
   const place = useCallback(() => {
     const el = siteRef.current
     if (!el) return
@@ -78,12 +72,9 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     el.classList.add('is-on-screen')
     const vw = window.innerWidth, vh = window.innerHeight
     const target = m.corners
-    const g = app.current?.screen?.geometry?.parameters // the display's real proportions
+    const g = app.current?.screen?.geometry?.parameters
     const SCREEN_ASPECT = g ? g.width / g.height : FALLBACK_ASPECT
-    // On the screen, the desktop is laid out at the display's own proportions, so it fills the monitor
-    // edge to edge like a real computer's: the window's size where it fits (shorter on most screens,
-    // narrower on very wide ones), and never narrower than MIN_SCREEN_LAYOUT, so a phone's monitor still
-    // shows a properly laid-out desktop. As it enters, it grows to the window: a real layout, it reflows.
+
     let sw = vw, sh = vh
     if (vw / vh < SCREEN_ASPECT) sh = vw / SCREEN_ASPECT
     else sw = vh * SCREEN_ASPECT
@@ -93,16 +84,15 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     const q = target.map(([x, y], i) => [x + (natural[i][0] - x) * k, y + (natural[i][1] - y) * k])
     Object.assign(el.style, {
       position: 'fixed', zIndex: '870', pointerEvents: 'none', transformOrigin: '0 0', willChange: 'transform',
-      width: `${sw + (vw - sw) * k}px`, height: `${sh + (vh - sh) * k}px`, // the desktop's size, growing to the window
+      width: `${sw + (vw - sw) * k}px`, height: `${sh + (vh - sh) * k}px`,
       transform: rectToQuad(0, 0, sw, sh, q),
     })
-    el.setAttribute('aria-hidden', 'true') // on the monitor it's a picture of the desktop, not the desktop
+    el.setAttribute('aria-hidden', 'true')
   }, [siteRef])
 
-  // Build the scene (loaded on its own, so it never holds up the page) and report it to the loader.
   useEffect(() => {
     let gone = false
-    map.current.on = true // (again: React's development mode mounts twice, and the cleanup turns it off)
+    map.current.on = true
     if (!hasWebGL()) { complete('desk'); onExit?.(); return }
     import('../../three/desk/DeskApp')
       .then(({ createDeskApp }) => {
@@ -113,10 +103,10 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
           onFocused: () => setPhase('screenFocused'),
           onFrame: (corners) => { map.current.corners = corners; place() },
         })
-        host.current.deskApp = app.current // for debugging, like the space world's host
+        host.current.deskApp = app.current
         const settled = Promise.race([app.current.ready, new Promise((r) => setTimeout(r, 8000))])
         settled.then(() => { if (gone) return; setReady(true); complete('desk') })
-          .catch((error) => { // the desk model couldn't be loaded: straight to the site, as without WebGL
+          .catch((error) => {
             if (gone) return
             console.warn('[desk] the desk model could not be loaded; showing the site instead.', error)
             complete('desk')
@@ -133,18 +123,16 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
       app.current?.dispose()
       app.current = null
       map.current.on = false
-      place() // never leave the portfolio transformed
+      place()
     }
   }, [onExit, place])
 
-  // The loading screen has finished: reveal the desk.
   useEffect(() => {
     if (!revealed || !ready || phase !== 'intro') return
     app.current.reveal()
     setPhase('desktop')
   }, [revealed, ready, phase])
 
-  // While the desk is up: the page doesn't scroll, and wheel, touch and pinch can't move or zoom it.
   useEffect(() => {
     if (phase === 'portfolio') return
     const html = document.documentElement
@@ -162,7 +150,6 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     }
   }, [phase])
 
-  // The first click, tap or key press: one move to the monitor.
   useEffect(() => {
     if (phase !== 'desktop') return
     const go = () => {
@@ -171,14 +158,14 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     }
     const onPointer = (e) => {
       if (e.button > 0) return
-      if (app.current?.poke(e.clientX, e.clientY)) return // a sticky note: flick it, and stay at the desk
+      if (app.current?.poke(e.clientX, e.clientY)) return
       go()
     }
-    // a pointer over a sticky note shows it can be flicked
+
     const onHover = (e) => { if (e.pointerType === 'mouse') root.current.style.cursor = app.current?.noteAt(e.clientX, e.clientY) ? 'pointer' : '' }
     const onKey = (e) => {
       if (e.repeat || IGNORED_KEYS.has(e.key) || isTyping(e.target)) return
-      if (e.key === ' ') e.preventDefault() // don't let the space bar scroll anything
+      if (e.key === ' ') e.preventDefault()
       go()
     }
     const el = root.current
@@ -193,7 +180,6 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     }
   }, [phase])
 
-  /** Animate the page between the screen (0) and the full window (1). */
   const tween = useCallback((from, to, ms, done) => {
     const start = performance.now()
     const stepFn = (now) => {
@@ -207,7 +193,6 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     requestAnimationFrame(stepFn)
   }, [place])
 
-  /** Become the portfolio: the page is itself again, and the desk rests. */
   const finishEntering = useCallback(() => {
     map.current.on = false
     map.current.blend = 1
@@ -215,17 +200,15 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     app.current?.setActive(false)
     setPhase('portfolio')
     onView?.('portfolio')
-    requestAnimationFrame(() => siteRef.current?.querySelector('.os-icon')?.focus()) // the desktop: Enter opens the portfolio
+    requestAnimationFrame(() => siteRef.current?.querySelector('.os-icon')?.focus())
   }, [place, onView, siteRef])
 
-  // At the screen: the portfolio grows from the monitor to fill the window.
   useEffect(() => {
     if (phase !== 'screenFocused') return
     setPhase('entering')
     tween(0, 1, reduce ? 200 : 750, finishEntering)
   }, [phase, reduce, tween, finishEntering])
 
-  /** Back to the desk: the portfolio shrinks onto the screen, then the camera pulls back. */
   const back = useCallback(() => {
     if (phase !== 'portfolio') return
     onView?.('desk')
@@ -241,16 +224,12 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     })
   }, [phase, onView, place, tween, reduce])
 
-  // The desktop's way back to the 3D desk (its Start menu and taskbar).
   useEffect(() => {
     if (!controls) return
     controls.current = { back }
     return () => { controls.current = null }
   }, [controls, back])
 
-  // On the desktop, Escape goes back to the desk (unless something else is using it, like the Start menu).
-  // A key pressed inside the portfolio's window never reaches this page, so the portfolio sends it as a
-  // message: accepted only from that window, on this origin.
   useEffect(() => {
     if (phase !== 'portfolio') return
     const onKey = (e) => {
@@ -268,7 +247,6 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
     return () => { window.removeEventListener('keydown', onKey); window.removeEventListener('message', onMessage) }
   }, [phase, back, siteRef])
 
-  // Resizing while the page is on the screen: re-place it (the scene re-frames and reports new corners).
   useEffect(() => {
     const onResize = () => place()
     window.addEventListener('resize', onResize)
@@ -281,11 +259,14 @@ export default function DeskExperience({ revealed, siteRef, controls, onView, on
       <div className="desk" ref={root} data-phase={phase} data-reduce={reduce || undefined} aria-hidden={inPortfolio || undefined}>
         <div className="desk__canvas" ref={host} aria-hidden="true" />
         <p className={`desk__hint ${phase === 'desktop' ? '' : 'is-hidden'}`} role="status" aria-live="polite">
-          {/* The prompt types in (Kokonut UI Typewriter): once, then stays. Input starts the move at any point. */}
           {phase === 'desktop' ? (
             <TypewriterTitle as="span" sequences={[{ text: 'Click, tap, or press any key', deleteAfter: false }]} autoLoop={false} typingSpeed={55} startDelay={650} />
           ) : ''}
         </p>
+      </div>
+      <div className={`desk__time ${phase === 'desktop' ? '' : 'is-hidden'}`} onKeyDown={(e) => e.stopPropagation()}>
+        <SwitchButton size="sm" labels={['Day', 'Night']} theme={time === 'night' ? 'dark' : 'light'}
+          onThemeChange={(t) => setTime(t === 'dark' ? 'night' : 'day')} tabIndex={phase === 'desktop' ? 0 : -1} />
       </div>
     </>
   )

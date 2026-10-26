@@ -15,10 +15,9 @@ export default function DesktopEnvironment({ onBackToDesk }) {
   const startRef = useRef(null)
   const buttonRefs = useRef({})
   const windowRefs = useRef({})
-  const [size, setSize] = useState({ w: 1280, h: 720 }) // the desktop's layout size: default placements follow its shape
+  const [size, setSize] = useState({ w: 1280, h: 720 })
   const [origins, setOrigins] = useState({})
-  // an app's contents mount the first time it's opened, then stay, so minimizing or closing keeps its state
-  // (a project you were reading, a half-written message)
+
   const [launched, setLaunched] = useState(() => new Set(APPS.filter((a) => a.openAtStart).map((a) => a.id)))
   useEffect(() => {
     const open = APPS.filter((a) => state.windows[a.id].state !== 'closed' && !launched.has(a.id))
@@ -34,7 +33,6 @@ export default function DesktopEnvironment({ onBackToDesk }) {
     return () => ro.disconnect()
   }, [])
 
-  // Each window shrinks toward its own taskbar button: measured when the windows change.
   useLayoutEffect(() => {
     const next = {}
     for (const app of APPS) {
@@ -46,13 +44,10 @@ export default function DesktopEnvironment({ onBackToDesk }) {
     setOrigins(next)
   }, [state.windows])
 
-  // windows reopen where they were left (only their positions and sizes are remembered: windowMemory.js)
   useEffect(() => {
     saveRects(Object.fromEntries(Object.entries(state.windows).filter(([, w]) => w.rect).map(([id, w]) => [id, w.rect])))
   }, [state.windows])
 
-  // (An app that embeds its own document, like an iframe, never passes presses to this one: the page losing
-  // focus to that frame is how its window learns it was chosen.)
   useEffect(() => {
     const onBlur = () => setTimeout(() => {
       const id = document.activeElement?.dataset?.appId
@@ -85,7 +80,6 @@ export default function DesktopEnvironment({ onBackToDesk }) {
             <div key={app.id} ref={(el) => { windowRefs.current[app.id] = el }} className="os-window-layer">
               <DesktopWindow app={app} win={win} rect={rect} focused={topId === app.id && state.focused === app.id}
                 z={10 + state.order.indexOf(app.id)} minimizeTo={origins[app.id]} workspace={workspace} dispatch={dispatch}>
-                {/* `visible`: animated backgrounds rest while the window is minimized or closed */}
                 {launched.has(app.id) && <Content title={app.title} visible={isShown(win)} />}
               </DesktopWindow>
             </div>

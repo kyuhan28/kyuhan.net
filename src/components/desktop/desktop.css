@@ -1,7 +1,3 @@
-/* The simulated desktop: a modern, dark interface (rounded windows, a translucent taskbar), around an ink
-   wallpaper. Layers, back to front: wallpaper (with WELCOME), icons, windows (by stacking order), taskbar. */
-
-/* The desktop fills the page (on the monitor, the 3D desk sizes it and maps it onto the screen). */
 .site { position: fixed; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; }
 
 .os {
@@ -15,23 +11,21 @@
   --os-hover: rgba(255, 255, 255, 0.08);
   position: absolute; inset: 0; display: flex; flex-direction: column;
   font-family: Inter, 'SF Pro Text', 'Segoe UI', system-ui, -apple-system, sans-serif; font-size: 12.5px; color: var(--os-text);
-  background: #09090b; /* the ink's paper, before it draws */
+  background: #09090b;
   user-select: none; -webkit-user-select: none;
 }
 .os button { font: inherit; color: inherit; }
 
-/* ---------- the desktop: wallpaper, icons and windows ---------- */
 .os-desktop { position: relative; flex: 1; min-height: 0; overflow: hidden; isolation: isolate; }
 .os-wallpaper { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-/* Taller than the desktop, reaching below it (clipped): the component sets its headline at 40% of its own
-   height, and 40% of 125% is 50%, so WELCOME sits in the middle of the desktop. The ink fills all of it. */
+
 .os-wallpaper .os-ink.kib {
   position: absolute; left: 0; width: 100%; top: 0; height: 125%; min-height: 0;
   font-family: Inter, 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 .os-icons { position: absolute; z-index: 2; top: 16px; left: 14px; bottom: 16px; margin: 0; padding: 0; list-style: none; display: grid; gap: 8px;
-  grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 90px); align-content: start; } /* a second column when the first is full */
+  grid-auto-flow: column; grid-template-rows: repeat(auto-fill, 90px); align-content: start; }
 .os-icon {
   width: 84px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px 6px;
   border: 1px solid transparent; border-radius: 10px; background: none; cursor: default;
@@ -41,10 +35,8 @@
 .os-icon:focus-visible { outline: 2px solid var(--os-accent); outline-offset: 1px; }
 .os-icon__label { font-size: 12px; font-weight: 500; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
 
-/* each window's layer covers the desktop but lets the pointer through to the wallpaper and icons */
 .os-window-layer { position: absolute; inset: 0; pointer-events: none; }
 
-/* ---------- windows ---------- */
 .os-window {
   position: absolute; display: flex; flex-direction: column; pointer-events: auto;
   background: var(--os-surface); border: 1px solid var(--os-line); border-radius: 10px; overflow: hidden;
@@ -55,7 +47,7 @@
 .os-window.is-focused { border-color: var(--os-line-strong); box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 2px 12px rgba(0, 0, 0, 0.4); }
 .os-window.is-maximized { left: 0; top: 0; width: 100%; height: 100%; border-radius: 0; border-color: transparent; }
 .os-window.is-gesturing { transition: none; }
-/* minimized: it shrinks toward its taskbar button; closed: it fades away. Hidden and inert, not unmounted. */
+
 .os-window.is-minimized {
   transform: scale(0.06); opacity: 0; visibility: hidden; pointer-events: none;
   transition: transform 0.26s cubic-bezier(0.4, 0, 0.8, 0.3), opacity 0.22s ease 0.04s, visibility 0s linear 0.26s;
@@ -74,10 +66,9 @@
 .os-window__title { flex: 1; min-width: 0; margin: 0; font-size: 12.5px; font-weight: 600; letter-spacing: 0.005em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .os-window__body { position: relative; flex: 1; min-height: 0; background: #050507; }
 .os-frame { display: block; width: 100%; height: 100%; border: 0; background: #050507; }
-/* during a move or resize the embedded page ignores the pointer (it would otherwise take it) */
+
 .os-window.is-gesturing .os-frame { pointer-events: none; }
 
-/* ---------- window controls ---------- */
 .os-controls { flex: none; display: flex; gap: 2px; }
 .os-control { width: 32px; height: 26px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 6px; background: none; cursor: pointer; color: var(--os-dim); }
 .os-control:hover { background: var(--os-hover); color: var(--os-text); }
@@ -85,7 +76,6 @@
 .os-control--close:hover { background: #e5484d; color: #fff; }
 .os-control:focus-visible { outline: 2px solid var(--os-accent); outline-offset: -2px; }
 
-/* ---------- resize handles: invisible until hovered ---------- */
 .os-rz { position: absolute; z-index: 3; }
 .os-rz--n, .os-rz--s { left: 10px; right: 10px; height: 7px; cursor: ns-resize; }
 .os-rz--e, .os-rz--w { top: 10px; bottom: 10px; width: 7px; cursor: ew-resize; }
@@ -97,11 +87,10 @@
 .os-rz--n::after, .os-rz--s::after { left: 0; right: 0; height: 2px; top: 2.5px; }
 .os-rz--e::after, .os-rz--w::after { top: 0; bottom: 0; width: 2px; left: 2.5px; }
 .os-rz:hover::after, .os-window.is-resizing .os-rz:active::after { opacity: 0.45; }
-/* a subtle grip in the bottom-right corner, on hover */
+
 .os-rz--se::after { width: 8px; height: 8px; right: 5px; bottom: 5px; background: none; border-right: 2px solid var(--os-accent); border-bottom: 2px solid var(--os-accent); border-radius: 0 0 3px 0; }
 .os-window:hover .os-rz--se::after { opacity: 0.35; }
 
-/* ---------- the taskbar ---------- */
 .os-taskbar {
   position: relative; z-index: 50; flex: none; height: 44px; display: flex; align-items: center; gap: 6px; padding: 0 8px;
   background: rgba(14, 15, 19, 0.78); border-top: 1px solid rgba(255, 255, 255, 0.07);
@@ -113,7 +102,7 @@
 .os-taskbar__apps { flex: 1; min-width: 0; display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .os-task { height: 34px; padding: 0 12px 0 10px; }
 .os-task__label { white-space: nowrap; }
-/* the running indicator: a bar under the active app, a dot when it's open behind or minimized */
+
 .os-task::after { content: ''; position: absolute; left: 50%; bottom: 2px; height: 3px; width: 6px; translate: -50% 0; border-radius: 2px; background: var(--os-dim); opacity: 0; transition: width 0.18s ease, opacity 0.18s ease, background 0.18s ease; }
 .os-task.is-normal::after, .os-task.is-maximized::after, .os-task.is-minimized::after { opacity: 1; }
 .os-task.is-active { background: rgba(255, 255, 255, 0.1); }
@@ -125,7 +114,6 @@
 .os-clock { min-width: 4.4em; padding: 0 6px; text-align: right; font-variant-numeric: tabular-nums; color: var(--os-text); }
 .os-start:focus-visible, .os-task:focus-visible, .os-tray__desk:focus-visible { outline: 2px solid var(--os-accent); outline-offset: -2px; }
 
-/* ---------- the launcher ---------- */
 .os-start-menu {
   position: absolute; z-index: 60; left: 8px; bottom: 52px; min-width: 230px; padding: 8px;
   display: flex; flex-direction: column; gap: 2px;
@@ -139,7 +127,6 @@
 .os-start-menu__soon { margin: 4px 10px; color: var(--os-dim); font-style: italic; }
 .os-start-menu__rule { height: 1px; margin: 4px 6px; background: var(--os-line); }
 
-/* ---------- small and touch screens ---------- */
 @media (max-width: 720px) {
   .os-task__label { display: none; }
   .os-icons { top: 10px; left: 8px; }

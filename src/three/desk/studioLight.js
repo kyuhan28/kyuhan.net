@@ -1,20 +1,26 @@
-/*
- * The studio's light: one look for the desk, the developer studio around it (studioRoom.js, which adds its
- * own soft area lights) and the far backdrop (studioBackdrop.js). A neutral key and fill (so the walnut stays
- * walnut), a cool rim like spill from the wall's light strips, a soft pool on the floor, and the desk lamp
- * warm over the whole desk. Blue is the accent, not the room.
- *
- * Backdrop colors are display-space RGB triples (its shader writes them as-is); the room's light and
- * floor colors are hex strings for three.js.
- */
 const norm = (v) => { const l = Math.hypot(...v) || 1; return v.map((x) => x / l) }
 
 export const STUDIO = {
-    backdrop: [[0.06, 0.075, 0.12], [0.03, 0.04, 0.07], [0.012, 0.014, 0.02]],
-    glow: [0.18, 0.3, 0.55], glowStrength: 0.55, vignette: 0.6, floorHex: '#101216',
-    sunColor: '#e9e7f2', sunIntensity: 1.0, lightDir: [-0.55, 0.9, 0.55], // neutral, so the walnut stays walnut
-    hemiSky: '#3b3f48', hemiGround: '#121214', hemi: 0.6,
-    fillColor: '#d3d5db', fill: 0.9, rimColor: '#9fc6f0', rim: 0.8, poolColor: '#dde1ea', pool: 0.9,
-    lamp: 6.0, env: 0.25, exposure: 1.1,
+
+    backdrop: [[0.94, 0.8, 0.74], [0.86, 0.8, 0.9], [0.7, 0.7, 0.9]],
+    glow: [1.0, 0.93, 0.86], glowStrength: 0.12, vignette: 0.15, floorHex: '#c9a888',
+
+    sunColor: '#ffd6a8', sunIntensity: 5.8, lightDir: [0.5, 0.62, -0.6],
+
+    hemiSky: '#aea3e6', hemiGround: '#efc1a2', hemi: 0.42,
+
+    fillColor: '#ddd4ff', fill: 0.26, rimColor: '#ffe0c0', rim: 0.25, poolColor: '#fff1e2', pool: 0.15,
+    lamp: 2.0, env: 0.3, exposure: 0.88,
 }
 STUDIO.lightDir = norm(STUDIO.lightDir)
+
+export const NIGHT = {
+  backdrop: [[0.07, 0.08, 0.16], [0.05, 0.06, 0.13], [0.03, 0.035, 0.09]],
+  glow: [0.35, 0.42, 0.75], glowStrength: 0.08, vignette: 0.5, floorHex: '#5a4a44',
+  sunColor: '#9fb3ff', sunIntensity: 0.7, lightDir: [0.5, 0.62, -0.6],
+  hemiSky: '#2b3466', hemiGround: '#3a2a2c', hemi: 0.3,
+  fillColor: '#5e6cc4', fill: 0.1, rimColor: '#8fa2ff', rim: 0.15, poolColor: '#ffd2a0', pool: 0.05,
+  lamp: 9.0, env: 0.15, exposure: 1.0,
+}
+
+export const LOOKS = { day: STUDIO, night: NIGHT }

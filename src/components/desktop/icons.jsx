@@ -1,4 +1,3 @@
-/* Original icons for the desktop's apps (no operating system's marks). */
 const GLYPHS = {
   about: <><circle cx="8" cy="6" r="2.6" /><path d="M3.2 13.4c.7-2.4 2.6-3.6 4.8-3.6s4.1 1.2 4.8 3.6" /></>,
   projects: <><path d="M2 4.6c0-.6.4-1 1-1h3.4l1.4 1.6H13c.6 0 1 .4 1 1v6.6c0 .6-.4 1-1 1H3c-.6 0-1-.4-1-1z" /></>,
@@ -9,7 +8,6 @@ const GLYPHS = {
 }
 const ACCENT = { about: '#9fb4ff', projects: '#c4a7ff', skills: '#7fe0c8', experience: '#ffc98a', contact: '#8fe39a' }
 
-/** An app's small icon (title bars, taskbar, Start menu): its glyph in its accent. */
 export function AppIcon({ name, size = 16 }) {
   const glyph = GLYPHS[name]
   if (!glyph) return null
@@ -19,7 +17,6 @@ export function AppIcon({ name, size = 16 }) {
   )
 }
 
-/** An app's desktop tile: its glyph on a dark rounded tile with a soft tint of its accent. */
 export function AppTile({ name }) {
   const accent = ACCENT[name] || '#9fb4ff'
   return (
@@ -35,7 +32,6 @@ export function AppTile({ name }) {
   )
 }
 
-/** The launcher's mark: Kyu Han's monogram. */
 export function Monogram({ size = 18 }) {
   return (
     <svg viewBox="0 0 18 18" width={size} height={size} aria-hidden="true">

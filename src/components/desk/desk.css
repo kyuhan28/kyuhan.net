@@ -1,9 +1,7 @@
-/* The desk experience: above the page and the nav, below the loading screen (900), so the
-   loading screen's shutters open onto it. */
 html.desk-active { overflow: hidden; }
 .desk {
   position: fixed; inset: 0; z-index: 860;
-  background: #e7e3dd; /* the wall's color, behind the first frame */
+  background: #e7e3dd;
   touch-action: none; overscroll-behavior: none; user-select: none; -webkit-user-select: none;
   cursor: pointer;
 }
@@ -13,7 +11,7 @@ html.desk-active { overflow: hidden; }
 
 .desk__hint {
   position: absolute; left: 50%; bottom: clamp(1rem, 4.5vh, 2.4rem); translate: -50% 0;
-  /* Stark and minimal: white type on a plain black rectangle (no pill, border, shadow or blur). */
+
   margin: 0; padding: 0.45rem 0.75rem; border-radius: 0; border: 0; box-shadow: none;
   background: #000000; color: #ffffff; text-align: center;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -21,14 +19,14 @@ html.desk-active { overflow: hidden; }
   pointer-events: none; transition: opacity 0.6s ease, translate 0.6s ease;
 }
 .desk__hint.is-hidden { opacity: 0; translate: -50% 8px; }
-/* The prompt types in with the Kokonut UI Typewriter, in the pill's own typography and color (not the
-   component's monospace), and without its container sizing, which would collapse the pill. Its hidden
-   copy of the text keeps the pill at full size while it types. */
+
 .desk .desk__hint .ktw { display: inline-flex; width: auto; container-type: normal; font-family: inherit; letter-spacing: inherit; color: inherit; }
 .desk .desk__hint .ktw__text { font-size: inherit; line-height: inherit; padding-right: 0; }
 
 @media (prefers-reduced-motion: reduce) { .desk__hint { transition: none; } }
 
-/* In the portfolio, the desk rests out of sight (still mounted, paused, ready for the way back). */
 .desk[data-phase='portfolio'] { visibility: hidden; pointer-events: none; }
 
+.desk__time { position: fixed; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); z-index: 1000;  transition: opacity 0.4s ease; }
+.desk__time.is-hidden { opacity: 0; pointer-events: none; }
+.desk__time .ksb { box-shadow: 0 6px 18px rgba(20, 16, 30, 0.22); }

@@ -6,47 +6,32 @@
  * @license: MIT
  * @website: https://kokonutui.com
  * @github: https://github.com/kokonut-labs/kokonutui
- *
- * Ported for this project from the Kokonut UI registry (https://kokonutui.com/r/topo-background.json): the
- * same seeded terrain, marching-squares contours, index lines, elevation labels, cursor hill, click ripples
- * and idle throttling, in JavaScript, with its Tailwind classes as plain CSS (topo-background.css).
- *
- * One adaptation: the canvas is sized from its layout size (clientWidth / clientHeight), not
- * getBoundingClientRect(), which reports the *transformed* size: this site shows the desktop on a 3D monitor
- * through a CSS transform, so measured that way the canvas would stay low-resolution after entering.
- * (Pointer positions still use the on-screen rectangle: the desktop is only interactive once it's the page.)
- *
- * Props: className, children (content over the map; null for a bare background), interval (0.07: the height
- * between contour lines, lower draws more), speed (1; 0 holds it still), interactive (true: a hill under the
- * cursor and a ripple on click), seed (26: the terrain), labels (true: elevations on the index contours).
- * The lines take the root's text color; the map is transparent over the root's background.
  */
 import { useEffect, useRef } from 'react'
 import './topo-background.css'
 
 const cn = (...c) => c.filter(Boolean).join(' ')
 
-// Distance between field samples, in CSS px. Contours are traced through this grid.
 const CELL = 12
-// Width of a hill in the terrain, in px.
+
 const TERRAIN_SCALE = 360
-// Every fifth line is an index contour, drawn heavier, as on a real map.
+
 const INDEX_EVERY = 5
-// The hill that follows the cursor: height in field units, and spread (px).
+
 const HILL_HEIGHT = 0.5
 const HILL_SPREAD = 120
-// How quickly the hill catches up with the cursor (per second) and how quickly it rises or sinks.
+
 const HILL_FOLLOW = 9
 const HILL_RISE = 5
-// A click sends a ring outwards through the terrain.
+
 const RIPPLE_MS = 1800
-const RIPPLE_SPEED = 0.24 // px per ms
+const RIPPLE_SPEED = 0.24
 const RIPPLE_WIDTH = 42
 const RIPPLE_HEIGHT = 0.2
 const RIPPLE_WAVELENGTH = 96
-// When nothing is moving but the drift, a frame every 33ms is plenty.
+
 const IDLE_FRAME_MS = 33
-// Elevation labels: one per slot of this size at most (px), riding along with the terrain.
+
 const LABEL_SPACING = 210
 const LABEL_BASE = 500
 const LABEL_STEP = 20
@@ -54,7 +39,6 @@ const LABEL_MARGIN = 0.16
 const MAX_LABEL_ANGLE = Math.PI / 3
 const LABEL_FONT = '500 10px ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'
 
-/** Seeded 3D gradient noise (Ken Perlin's improved noise), about -1 to 1. */
 function createNoise(seed) {
   const p = Array.from({ length: 256 }, (_, i) => i)
   let state = seed >>> 0 || 1
@@ -87,7 +71,6 @@ function createNoise(seed) {
   }
 }
 
-/** The segment a contour draws through one grid cell (marching-squares case index, edge crossings). */
 function cellSegments(path, index, box, cross) {
   const { x0, y0, x1, y1 } = box
   const { top, right, bottom, left } = cross
@@ -99,14 +82,13 @@ function cellSegments(path, index, box, cross) {
     case 4: case 11: line(top, y0, x1, right); break
     case 6: case 9: line(top, y0, bottom, y1); break
     case 7: case 8: line(x0, left, top, y0); break
-    // The two saddles: opposite corners are high, so the level crosses the cell twice.
+
     case 5: line(x0, left, top, y0); line(bottom, y1, x1, right); break
     case 10: line(top, y0, x1, right); line(x0, left, bottom, y1); break
     default: break
   }
 }
 
-/** Offer a point on an index contour as a label spot (slots drift with the map; rows staggered). */
 function offerLabel(slots, label) {
   const { x, y } = label
   if (y < slots.height * LABEL_MARGIN || y > slots.height * (1 - LABEL_MARGIN) || x < 24 || x > slots.width - 24 ||
@@ -122,7 +104,6 @@ function offerLabel(slots, label) {
   if (!current || score < current.score) slots.best.set(key, { ...label, score })
 }
 
-/** Offer the middle of a cell an index contour passes through. */
 function offerCellLabel(slots, [a, b, c, d], x0, y0, level, t) {
   const gx = b - a + c - d, gy = d - a + c - b
   const px = gx / (2 * CELL), py = gy / (2 * CELL)
@@ -138,7 +119,6 @@ function offerCellLabel(slots, [a, b, c, d], x0, y0, level, t) {
   offerLabel(slots, { x: x0 + half + ox, y: y0 + half + oy, angle, level })
 }
 
-/** Every contour level that passes through one cell, usually none or one. */
 function traceCell(field, cols, i, j, interval, paths) {
   const a = field[j * cols + i], b = field[j * cols + i + 1], c = field[(j + 1) * cols + i + 1], d = field[(j + 1) * cols + i]
   const x0 = i * CELL, y0 = j * CELL
@@ -161,13 +141,11 @@ function traceCell(field, cols, i, j, interval, paths) {
   }
 }
 
-/** Marching squares over the whole field; index contours go into their own path. */
 function traceContours(field, cols, rows, interval, minor, major, slots) {
   const paths = { minor, major, slots }
   for (let j = 0; j < rows - 1; j++) for (let i = 0; i < cols - 1; i++) traceCell(field, cols, i, j, interval, paths)
 }
 
-/** Ease the hill towards the cursor and up or down. True while it moves. */
 function stepHill(hill, dt) {
   const follow = 1 - Math.exp(-HILL_FOLLOW * dt)
   hill.x += (hill.targetX - hill.x) * follow
@@ -197,7 +175,7 @@ export default function TopoBackground({ className, children, interval = 0.07, s
     let time = 0, last = 0, lastPaint = 0, raf = 0, visible = true
 
     const slots = { drift: 0, width: 0, height: 0, best: new Map(), avoid: [] }
-    // Keep labels out from under the content laid over the map.
+
     const measureContent = () => {
       const origin = canvas.getBoundingClientRect()
       slots.avoid = []
@@ -209,7 +187,7 @@ export default function TopoBackground({ className, children, interval = 0.07, s
     }
 
     const resize = () => {
-      // Layout size, not getBoundingClientRect(): that one includes CSS transforms (see the note above).
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       width = canvas.clientWidth
       height = canvas.clientHeight
@@ -238,7 +216,7 @@ export default function TopoBackground({ className, children, interval = 0.07, s
             const age = now - ripple.start, reach = age * RIPPLE_SPEED
             const d = Math.hypot(x - ripple.x, y - ripple.y) - reach
             const fadeOut = 1 - age / RIPPLE_MS
-            // A short train of crests and troughs, like a stone dropped in water.
+
             v += RIPPLE_HEIGHT * fadeOut * fadeOut * Math.exp(-(d * d) / ringWidth) * Math.cos((d / RIPPLE_WAVELENGTH) * Math.PI * 2)
           }
           field[j * cols + i] = v
@@ -246,7 +224,6 @@ export default function TopoBackground({ className, children, interval = 0.07, s
       }
     }
 
-    /** Knock the lines out under each label, then print the elevation, as on a survey map. */
     const drawLabels = () => {
       ctx.font = LABEL_FONT
       ctx.textAlign = 'center'
@@ -298,13 +275,12 @@ export default function TopoBackground({ className, children, interval = 0.07, s
       while (ripples.length > 0 && now - ripples[0].start > RIPPLE_MS) ripples.shift()
       const settling = hillMoving || ripples.length > 0
       time += dt * speed
-      // The drift alone is slow; half the frame rate looks the same. Anything following the hand gets every frame.
+
       if (settling || now - lastPaint >= IDLE_FRAME_MS) { paint(now); lastPaint = now }
       if (speed > 0 || settling) raf = requestAnimationFrame(frame)
     }
     const start = () => { if (!raf && visible && !reduceMotion) { last = 0; raf = requestAnimationFrame(frame) } }
 
-    // Follow light and dark mode without asking the app for a theme; only while the map is on screen.
     let colorTimer = 0
     const checkColor = () => {
       const next = getComputedStyle(canvas).color
@@ -322,7 +298,7 @@ export default function TopoBackground({ className, children, interval = 0.07, s
 
     const resizeObserver = new ResizeObserver(() => { resize(); paint(performance.now()) })
     resizeObserver.observe(canvas)
-    // Stop drawing entirely while the map is scrolled away or the tab is in the background.
+
     let onScreen = true
     const updateVisible = () => { visible = onScreen && document.visibilityState === 'visible'; watchColor(); if (visible) start() }
     const intersection = new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; updateVisible() })
@@ -332,9 +308,9 @@ export default function TopoBackground({ className, children, interval = 0.07, s
 
     const local = (event) => { const rect = canvas.getBoundingClientRect(); return { x: event.clientX - rect.left, y: event.clientY - rect.top } }
     const onMove = (event) => {
-      if (event.pointerType !== 'mouse') return // touch has no hover
+      if (event.pointerType !== 'mouse') return
       const point = local(event)
-      if (!hill.on) { hill.x = point.x; hill.y = point.y } // rise where the cursor came in
+      if (!hill.on) { hill.x = point.x; hill.y = point.y }
       hill.targetX = point.x
       hill.targetY = point.y
       hill.on = true
@@ -342,7 +318,7 @@ export default function TopoBackground({ className, children, interval = 0.07, s
     }
     const onLeave = () => { hill.on = false; start() }
     const onDown = (event) => {
-      // Clicks on the content (links, buttons) are not meant for the map.
+
       if (event.target.closest('a, button, input, textarea')) return
       const point = local(event)
       ripples.push({ ...point, start: performance.now() })
@@ -368,7 +344,6 @@ export default function TopoBackground({ className, children, interval = 0.07, s
 
   return (
     <div className={cn('ktb', className)} ref={rootRef}>
-      {/* Faded out top and bottom so the map sits into the page around it. */}
       <div aria-hidden="true" className="ktb__layer">
         <canvas className="ktb__canvas" ref={canvasRef}
           style={{ maskImage: 'linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent)', WebkitMaskImage: 'linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent)' }} />

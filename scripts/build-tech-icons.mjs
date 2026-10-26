@@ -16,16 +16,15 @@ const ALIASES = {
   'Visual Studio Code': ['visualstudiocode', 'vscode'],
 }
 
-// Simple Icons' own naming: "Next.js" -> "nextdotjs", "C++" -> "cplusplus", "Radix UI" -> "radixui".
 const slugify = (name) =>
   name.toLowerCase().replace(/\+/g, 'plus').replace(/\./g, 'dot').replace(/&/g, 'and').replace(/[^a-z0-9]/g, '')
 
 const bySlug = new Map(Object.values(simpleIcons).filter((i) => i && i.slug && i.path).map((i) => [i.slug, i]))
-// every skill (src/apps/skills/skillsData.js) and every technology in a project's stack (projectsData.js)
+
 const skillNames = skillCategories.flatMap((c) => c.skills.map((s) => (typeof s === 'string' ? s : s.name)))
 const names = [...new Set([...skillNames, ...projects.flatMap((p) => p.stack || [])])]
 const OUT = new URL('../src/content/tech-icons.json', import.meta.url)
-// Logos found by an earlier run are kept when this Simple Icons version doesn't have them (versions differ)
+
 let previous = {}
 try { previous = JSON.parse(readFileSync(OUT, 'utf8')) } catch {}
 const found = {}

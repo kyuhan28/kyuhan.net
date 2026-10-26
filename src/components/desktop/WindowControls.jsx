@@ -1,6 +1,5 @@
-/* A window's controls: minimize, maximize / restore, close. Real buttons, labelled for assistive tech. */
 export default function WindowControls({ title, maximized, onMinimize, onToggleMaximize, onClose }) {
-  // pointerdown stops here, so a press on a control never starts a drag or reaches the window behind it
+
   const stop = (e) => e.stopPropagation()
   return (
     <div className="os-controls" onPointerDown={stop} onDoubleClick={stop}>

@@ -1,4 +1,3 @@
-
 .intro { position: fixed; inset: 0; z-index: 900; }
 .intro__shutter {
   position: absolute;
@@ -14,7 +13,7 @@
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-rows: 1fr; /* one row: the word and the name, centered */
+  grid-template-rows: 1fr;
   justify-items: center;
   align-items: center;
   padding: clamp(1.6rem, 4.5vh, 2.75rem) var(--margin) calc(clamp(1.6rem, 4.5vh, 2.75rem) + env(safe-area-inset-bottom));
@@ -48,20 +47,14 @@
   gap: clamp(0.9rem, 2.2vh, 1.3rem);
 }
 
-
-
-
-
-/* The glitch text: big, tight and bright, with the dots counting up beside it. */
 .intro__glitch {
   display: inline-flex; align-items: baseline;
   font-size: clamp(2.6rem, 9vw, 6.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1;
   text-transform: uppercase; color: #f4f4f7;
 }
-.intro__dots { display: inline-block; width: 1.2em; text-align: left; color: rgba(244, 244, 247, 0.7); } /* fixed width: the word doesn't shift */
+.intro__dots { display: inline-block; width: 1.2em; text-align: left; color: rgba(244, 244, 247, 0.7); }
 .intro__glitch.is-done .intro__dots { width: 0; }
 
-/* The composition: the glitch word, with the name beneath it. They arrive in sequence. */
 .intro__center { display: flex; flex-direction: column; align-items: center; gap: clamp(0.4rem, 1.6vh, 1rem); }
 .intro__glitch { animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes intro-rise { from { opacity: 0; transform: translateY(10px); } }
