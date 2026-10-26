@@ -9,8 +9,9 @@ import GlitchText from '../kokonutui/GlitchText'
 import './intro.css'
 
 /*
- * The loading screen: a glitching "Loading" (its dots counting up, each change a glitch) until the
- * site has loaded, then it glitches into "Complete", holds for a beat, and the shutters open.
+ * The loading screen: a glitching "Loading" (its dots counting up) with the name beneath it. When
+ * everything has loaded (the shared loading tracker), the word glitches into "Complete", holds for a
+ * beat, and the shutters open.
  * Shown once per session; scrolling doesn't skip it (the page stays put underneath); "Enter now" or
  * Escape skip it, opening the shutters smoothly; never longer than MAX_WAIT_MS;
  * not shown at all with reduced motion.
@@ -51,7 +52,7 @@ export default function Intro({ onReveal }) {
       animations.current.push(
         createTimeline({ onComplete: finish })
           .add('.intro__center', { translateY: [0, -18], opacity: [1, 0], duration: 600, ease: 'inQuart' }, 0)
-          .add('.intro__name, .intro__skip, .intro__glow', { opacity: [1, 0], duration: 450, ease: 'inQuad' }, 0)
+          .add('.intro__glow', { opacity: [1, 0], duration: 450, ease: 'inQuad' }, 0)
           .add('.intro__shutter--top', { translateY: ['0%', '-101%'], duration: 950, ease: animeEase.inOut, onBegin: reveal }, 450)
           .add('.intro__shutter--bottom', { translateY: ['0%', '101%'], duration: 950, ease: animeEase.inOut }, 450),
       )
@@ -124,7 +125,6 @@ export default function Intro({ onReveal }) {
 
       <div className="intro__frame">
         <div className="intro__glow" aria-hidden="true" />
-        <p className="intro__name">{site.name}</p>
 
         <div className="intro__center">
           {/* The dots are drawn outside the glitch text, so the word stays steady between glitches. */}
@@ -132,10 +132,9 @@ export default function Intro({ onReveal }) {
             <GlitchText text={done ? 'Complete' : 'Loading'} trigger="idle" intensity="strong" />
             <span className="intro__dots">{done ? '' : '.'.repeat(dots)}</span>
           </div>
+          <p className="intro__name">{'KYU HAN’S PORTFOLIO'}</p>
           <p className="sr-only" role="status">{done ? 'Loading complete' : 'Loading'}</p>
         </div>
-
-        <button type="button" className="intro__skip" onClick={exit}>Enter now</button>
       </div>
     </div>
   )

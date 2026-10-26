@@ -1,0 +1,26 @@
+/* Typewriter (Kokonut UI, MIT): its Tailwind classes as plain CSS. */
+.ktw {
+  container-type: inline-size; /* @container: the wrapper's width sets the font size */
+  display: flex; width: 100%; align-items: center; justify-content: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  letter-spacing: -0.025em; color: #000;
+}
+html.dark .ktw { color: #fff; }
+.ktw__text {
+  display: inline-grid; justify-items: start; white-space: pre; padding-right: 0.25em;
+  font-size: 2.25rem; line-height: 1.2;
+}
+@container (min-width: 32rem) { .ktw__text { font-size: 3rem; } }
+@container (min-width: 42rem) { .ktw__text { font-size: 3.75rem; } }
+.ktw__ghost { visibility: hidden; grid-column-start: 1; grid-row-start: 1; }
+.ktw__live { grid-column-start: 1; grid-row-start: 1; min-height: 1.2em; }
+.ktw__selected { border-radius: 0.08em; background: rgba(14, 165, 233, 0.25); }
+html.dark .ktw__selected { background: rgba(56, 189, 248, 0.3); }
+.ktw__caret-box { position: relative; display: inline-block; width: 0; }
+.ktw__caret { position: absolute; bottom: -0.1em; left: 0.04em; height: 1.05em; width: 0.08em; min-width: 2px; background: currentColor; }
+/* The blink is a CSS animation so it runs off the main thread: solid for
+   the first third of the cycle, fades out, then stays hidden. */
+@keyframes kokonutui-typewriter-caret { 0%, 33.333% { opacity: 1; } 66.667%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .ktw__caret[data-idle='true'] { animation: kokonutui-typewriter-caret 1s linear infinite; }
+}

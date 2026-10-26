@@ -45,13 +45,10 @@ function CursorLens() {
       update({ kind: label ? 'label' : 'link', label })
     }
     const onLeave = () => setVisible(false)
-    const onWorld = (e) => update(e.detail ? { kind: 'link', label: '' } : { kind: 'idle', label: '' })
     window.addEventListener('pointermove', onMove, { passive: true })
     document.addEventListener('pointerover', onOver, { passive: true })
     document.documentElement.addEventListener('pointerleave', onLeave)
-    window.addEventListener('space-hover', onWorld)
     return () => {
-      window.removeEventListener('space-hover', onWorld)
       window.removeEventListener('pointermove', onMove)
       document.removeEventListener('pointerover', onOver)
       document.documentElement.removeEventListener('pointerleave', onLeave)

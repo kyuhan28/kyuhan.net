@@ -1,0 +1,4 @@
+/* Fixed behind the portfolio's content, filling the window; it never takes the pointer. */
+.pf-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+/* A near-black field and soft white lines (the lines take the text color). */
+.pf-bg .pf-bg__paths.kbp { height: 100%; min-height: 0; background: #050507; color: #e9e9ef; }

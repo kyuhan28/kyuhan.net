@@ -5,7 +5,6 @@ import { pageTop } from '../../lib/dom'
 import Avatar from './Avatar'
 import { ease } from '../../motion/tokens'
 import './nav.css'
-import SwitchButton from '../kokonutui/SwitchButton'
 
 export const SECTIONS = [
   { id: 'about', label: 'About' },
@@ -125,7 +124,6 @@ export default function Nav({ ready }) {
             </ul>
           </nav>
 
-          <SwitchButton size="sm" className="nav__theme" />
 
           <span className="nav__current" aria-hidden="true">
             <AnimatePresence mode="wait" initial={false}>

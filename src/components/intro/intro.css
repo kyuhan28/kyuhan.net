@@ -14,8 +14,9 @@
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr; /* one row: the word and the name, centered */
   justify-items: center;
+  align-items: center;
   padding: clamp(1.6rem, 4.5vh, 2.75rem) var(--margin) calc(clamp(1.6rem, 4.5vh, 2.75rem) + env(safe-area-inset-bottom));
   color: var(--hero-ink);
   font-family: var(--serif);
@@ -50,21 +51,6 @@
 
 
 
-.intro__skip {
-  position: relative;
-  min-height: 46px;
-  padding: 0 1.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(201, 203, 234, 0.4);
-  font-family: var(--serif);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--hero-ink);
-  transition: border-color 0.4s var(--ease-out), background-color 0.4s var(--ease-out);
-}
-.intro__skip:hover, .intro__skip:focus-visible { border-color: rgba(241, 242, 255, 0.85); background: rgba(241, 242, 255, 0.06); }
 
 /* The glitch text: big, tight and bright, with the dots counting up beside it. */
 .intro__glitch {
@@ -74,3 +60,10 @@
 }
 .intro__dots { display: inline-block; width: 1.2em; text-align: left; color: rgba(244, 244, 247, 0.7); } /* fixed width: the word doesn't shift */
 .intro__glitch.is-done .intro__dots { width: 0; }
+
+/* The composition: the glitch word, with the name beneath it. They arrive in sequence. */
+.intro__center { display: flex; flex-direction: column; align-items: center; gap: clamp(0.4rem, 1.6vh, 1rem); }
+.intro__glitch { animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes intro-rise { from { opacity: 0; transform: translateY(10px); } }
+.intro__name { animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
+@media (prefers-reduced-motion: reduce) { .intro__glitch, .intro__name { animation: none; } }

@@ -11,7 +11,7 @@ import InkBackground from '../kokonutui/InkBackground'
 export default function DesktopWallpaper() {
   return (
     <div className="os-wallpaper" aria-hidden="true">
-      <InkBackground text="SUPER SECRET PORTFOLIO" headlineColor="#ffffff" rainbow className="os-ink">{null}</InkBackground>
+      <InkBackground text="SUPER SECRET" headlineColor="#ffffff" rainbow className="os-ink">{null}</InkBackground>
     </div>
   )
 }

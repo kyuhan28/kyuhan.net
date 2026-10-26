@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { site } from '../../content/site'
+import { projects } from '../../apps/projects/projectsData'
+import { experience, datesOf } from '../../apps/experience/experienceData'
+import { skillCategories, skillsOf } from '../../apps/skills/skillsData'
 import { ease } from '../../motion/tokens'
 import { useFinePointer, usePrefersReducedMotion } from '../../hooks/useMediaQuery'
 import SplitText from '../type/SplitText'
@@ -98,14 +101,17 @@ export function ProjectsSection() {
         <SectionLabel>02 / Highlighted projects</SectionLabel>
         <SplitText as="h2" id="projects-title" className="pf-headline" text={['Projects']} mode="chars" />
         <ol className="pf-projects" onPointerLeave={() => setActive(null)}>
-          {site.projects.map((p, i) => (
+          {projects.map((p0, i) => {
+            // links in the order they read best: the site, the demo, the code
+            const p = { ...p0, links: [['Website', p0.website], [p0.demoLabel || 'Live demo', p0.demo], ['GitHub', p0.github]].filter(([, href]) => href).map(([label, href]) => ({ label, href })) }
+            return (
             <motion.li key={p.id} className={`pf-project ${active?.id === p.id ? 'is-active' : ''}`} {...rise(0.05)}
               onPointerEnter={() => follow && setActive(p)}>
               <article className="pf-project__row" aria-labelledby={`project-${p.id}`}>
                 <span className="pf-project__index" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
                 <div className="pf-project__head">
                   <h3 id={`project-${p.id}`} className="pf-project__title">{p.title}</h3>
-                  <p className="pf-project__meta">{[p.year, p.role].filter(Boolean).join(' · ')}</p>
+                  <p className="pf-project__meta">{[p.dates, p.context].filter(Boolean).join(' · ')}</p>
                 </div>
                 <div className="pf-project__body">
                   <p className="pf-text">{p.summary}</p>
@@ -118,7 +124,7 @@ export function ProjectsSection() {
                 </div>
               </article>
             </motion.li>
-          ))}
+          )})}
         </ol>
       </div>
     </section>
@@ -136,12 +142,12 @@ export function SkillsSection() {
           <div className="pf-skills__col">
             <h3 className="pf-subhead">Experience</h3>
             <ol className="pf-timeline">
-              {site.experience.map((e, i) => (
+              {experience.map((e, i) => (
                 <motion.li key={i} className="pf-timeline__item" {...rise(0.05 + i * 0.08)}>
-                  <p className="pf-timeline__period">{e.period}</p>
+                  <p className="pf-timeline__period">{datesOf(e)}</p>
                   <div>
                     <p className="pf-timeline__title">{e.title}<span> · {e.org}</span></p>
-                    <p className="pf-text pf-text--small">{e.summary}</p>
+                    <p className="pf-text pf-text--small">{e.description || (e.responsibilities || []).join(' · ')}</p>
                   </div>
                 </motion.li>
               ))}
@@ -149,7 +155,7 @@ export function SkillsSection() {
           </div>
           <div className="pf-skills__col">
             <h3 className="pf-subhead">Technical Skills</h3>
-            <TechStack areas={site.skills} />
+            <TechStack areas={skillCategories.map((c) => ({ area: c.name, tech: skillsOf(c).map((s) => s.name) }))} />
           </div>
         </div>
       </div>
@@ -192,7 +198,7 @@ export function ContactSection() {
     <section id="contact" className="pf pf--contact" aria-labelledby="contact-title">
       <div className="pf__inner container">
         <SectionLabel>04 / Contact</SectionLabel>
-        <SplitText as="h2" id="contact-title" className="pf-headline pf-headline--xl" text={['Let’s keep', 'in touch']} mode="chars" />
+        <SplitText as="h2" id="contact-title" className="pf-headline pf-headline--xl" text={['Let’s build', 'something']} mode="chars" />
         <motion.p className="pf-text pf-text--lead" {...rise(0.2)}>{availability}</motion.p>
         <motion.div className="pf-actions" {...rise(0.3)}>
           {email ? (

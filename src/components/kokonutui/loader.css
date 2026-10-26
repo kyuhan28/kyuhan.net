@@ -1,0 +1,25 @@
+/* Loader (Kokonut UI, MIT): its Tailwind styles, as plain CSS. Colors follow `color` (currentColor). */
+.kl { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; padding: 2rem; }
+.kl__rings { position: relative; color: #000; }
+html.dark .kl__rings { color: #fff; }
+.kl__ring { position: absolute; inset: 0; border-radius: 9999px; animation: kl-spin linear infinite; }
+@keyframes kl-spin { to { transform: rotate(360deg); } }
+@keyframes kl-pulse { 50% { opacity: 0.5; } }
+@media (prefers-reduced-motion: reduce) { .kl__ring { animation: kl-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; } }
+
+.kl__text { display: block; text-align: center; transition: opacity 200ms ease-out; }
+@starting-style { .kl__text { opacity: 0; } }
+.kl__title { display: block; line-height: 1.15; letter-spacing: -0.02em; color: rgba(0, 0, 0, 0.9); -webkit-font-smoothing: antialiased; }
+.kl__subtitle { display: block; font-weight: 400; line-height: 1.45; letter-spacing: -0.01em; color: rgba(0, 0, 0, 0.6); -webkit-font-smoothing: antialiased; }
+html.dark .kl__title { color: rgba(255, 255, 255, 0.9); }
+html.dark .kl__subtitle { color: rgba(255, 255, 255, 0.6); }
+
+.kl--sm .kl__rings { width: 5rem; height: 5rem; }
+.kl--sm .kl__text { max-width: 12rem; } .kl--sm .kl__text > * + * { margin-top: 0.5rem; }
+.kl--sm .kl__title { font-size: 0.875rem; font-weight: 500; } .kl--sm .kl__subtitle { font-size: 0.75rem; }
+.kl--md .kl__rings { width: 8rem; height: 8rem; }
+.kl--md .kl__text { max-width: 14rem; } .kl--md .kl__text > * + * { margin-top: 0.75rem; }
+.kl--md .kl__title { font-size: 1rem; font-weight: 500; } .kl--md .kl__subtitle { font-size: 0.875rem; }
+.kl--lg .kl__rings { width: 10rem; height: 10rem; }
+.kl--lg .kl__text { max-width: 16rem; } .kl--lg .kl__text > * + * { margin-top: 1rem; }
+.kl--lg .kl__title { font-size: 1.125rem; font-weight: 600; } .kl--lg .kl__subtitle { font-size: 1rem; }

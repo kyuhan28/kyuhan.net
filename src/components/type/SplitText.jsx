@@ -11,14 +11,6 @@ const unitVariants = {
   }),
 }
 
-
-
-
-
-
-
-
-
 export default function SplitText({
   as = 'h2',
   text,

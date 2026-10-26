@@ -186,27 +186,11 @@
 }
 .nav:not(.is-scrolled) .nav__link:not([aria-current]) { color: rgba(246, 238, 226, 0.82); }
 
-/* The day / night switch. */
-/* Desktop: pinned to the header's top-right corner, a fixed distance from the window's edge at
-   any width. The header row keeps clear of it, so the links never slide underneath. */
-@media (min-width: 900px) {
-  .nav .nav__theme { position: absolute; top: 50%; right: var(--theme-edge); translate: 0 -50%; } /* .nav: wins over the switch's own position: relative */
-  .nav { --theme-edge: clamp(14px, 1.6vw, 26px); --theme-room: 7.25rem; }
-  .nav__inner { padding-right: max(var(--margin), calc(var(--theme-room) - (100vw - min(100vw, var(--max) + var(--margin) * 2)) / 2)); }
-}
-/* Phones: beside the Menu button, which keeps the corner. */
+/* Phones: the current-section label and the Menu button share the header. */
 @media (max-width: 899px) {
-  /* Phones: up in the corner, right beside the Menu button (after the current-section label). */
-  .nav .nav__theme { order: 2; margin-left: auto; margin-right: 0.25rem; }
   /* The section label gives way (shrinks, then ends in …) rather than pushing Menu to the edge. */
   .nav .nav__current { min-width: 0; flex-shrink: 1; }
   .nav .nav__current-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .nav .nav__toggle { order: 3; }
-  /* Icon only, so name + section label + switch + Menu fit on narrow phones. */
-  .nav .nav__theme { width: 2rem; padding: 0; }
-  .nav .nav__theme .ks__label { display: none; }
 }
 
-/* Phones up to 419px: the switch shares the corner with Menu, so the section label steps aside
-   (rather than showing cut off). Wider phones still show it in full. */
-@media (max-width: 419px) { .nav .nav__current { display: none; } }

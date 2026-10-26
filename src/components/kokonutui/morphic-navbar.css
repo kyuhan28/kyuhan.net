@@ -1,0 +1,49 @@
+/* Morphic Navbar / Split Nav (Kokonut UI, MIT): its Tailwind styles, as plain CSS.
+   Dark segments by day; light segments at night (html.dark), as in the original. */
+.mn { display: flex; justify-content: center; padding: 0.5rem 1rem; }
+.mn__row { position: relative; display: flex; align-items: center; touch-action: pan-y; user-select: none; }
+.mn__seg { position: relative; z-index: 10; }
+.mn__seg.is-pinned { z-index: 20; }
+.mn__seg.is-hidden { pointer-events: none; }
+
+.mn__link {
+  position: relative; display: flex; height: 2.25rem; align-items: center; padding: 0 1rem;
+  border-radius: 0.75rem; font-size: 0.875rem; font-weight: 500; text-decoration: none;
+  background: #18181b; color: #a1a1aa; transition: color 150ms;
+  outline: none;
+}
+.mn__link:hover { color: #f4f4f5; }
+.mn__link.is-highlighted { color: #ffffff; }
+.mn__link:focus-visible { box-shadow: inset 0 0 0 2px #f97316; }
+html.dark .mn__link { background: #f4f4f5; color: #71717a; }
+html.dark .mn__link:hover { color: #27272a; }
+html.dark .mn__link.is-highlighted { color: #09090b; }
+
+/* Square patches that hide the rounded corners while neighbours touch. */
+.mn__cap { position: absolute; top: 0; bottom: 0; width: 0.75rem; background: #18181b; }
+html.dark .mn__cap { background: #f4f4f5; }
+.mn__cap--left { left: -1px; transform-origin: left; }
+.mn__cap--right { right: -1px; transform-origin: right; }
+.mn__label { position: relative; }
+
+/* The orange underline on the active (or previewed) link. */
+.mn__dot {
+  position: absolute; bottom: 0.375rem; left: 50%; height: 2px; width: 0.75rem; translate: -50% 0;
+  border-radius: 999px; background: #f97316; transform: scaleX(0);
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.mn__link.is-highlighted .mn__dot { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .mn__dot { transition: none; } }
+
+/* The chevron that reopens a folded (compact) bar. */
+.mn__chevron {
+  position: absolute; top: 0; left: 0; z-index: 0; display: flex; width: 2.25rem; height: 2.25rem;
+  align-items: center; justify-content: center; border: 0; border-radius: 0.75rem; cursor: pointer;
+  background: #18181b; color: #a1a1aa; pointer-events: none; transition: color 150ms; outline: none;
+}
+.mn__chevron.is-on { z-index: 30; pointer-events: auto; }
+.mn__chevron:hover { color: #f4f4f5; }
+.mn__chevron:focus-visible { box-shadow: inset 0 0 0 2px #f97316; }
+html.dark .mn__chevron { background: #f4f4f5; color: #71717a; }
+html.dark .mn__chevron:hover { color: #27272a; }
+.mn__chevron-icon { width: 1rem; height: 1rem; }

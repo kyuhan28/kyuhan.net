@@ -4,8 +4,8 @@
 
 export const TASK_LABELS = {
   fonts: 'typography',
-  scene: '3D scene',
   page: 'images and assets',
+  desk: '3D workspace',
 }
 
 const tasks = new Map(Object.keys(TASK_LABELS).map((name) => [name, false]))

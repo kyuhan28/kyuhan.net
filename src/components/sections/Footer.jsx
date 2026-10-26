@@ -22,8 +22,7 @@ export default function Footer() {
       <div className="container footer__inner">
         <p>© {new Date().getFullYear()} {site.name}</p>
         {time && <p className="footer__time">My local time is {time}</p>}
-        <p className="footer__credit">Built with React, Three.js, Anime.js and Kokonutui</p>
-        <p className="footer__version">Version 1.4</p>
+        <p className="footer__credit">Built with React, Three.js, Motion and Anime.js</p>
         <a href="#top" className="footer__top" onClick={() => window.dispatchEvent(new Event('space-replay'))}>Back to the beginning</a>
       </div>
     </footer>

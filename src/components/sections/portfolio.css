@@ -145,9 +145,3 @@
 /* Sections over the bright day sky: the navy shading reaches across the whole content area (it used
    to fade out right where the summaries sit), the secondary text brightens to near-white, and a soft
    shadow defines the type against bright spots like the sun. */
-html:not(.dark) .pf--dim::before { background: linear-gradient(90deg, rgba(6, 22, 52, 0.86) 0%, rgba(6, 22, 52, 0.8) 50%, rgba(6, 22, 52, 0.74) 80%, rgba(6, 22, 52, 0.52) 100%); }
-@media (max-width: 899px) { html:not(.dark) .pf--dim::before { background: rgba(6, 22, 52, 0.8); } }
-html:not(.dark) .pf--dim { --ink-2: rgba(255, 255, 255, 0.93); --ink-3: rgba(255, 255, 255, 0.8); }
-html:not(.dark) .pf--dim .pf__inner { text-shadow: 0 1px 2px rgba(4, 16, 40, 0.55), 0 0 18px rgba(4, 16, 40, 0.35); }
-html:not(.dark) .pf--hero, html:not(.dark) .pf--contact { --ink-2: rgba(255, 255, 255, 0.94); --ink-3: rgba(255, 255, 255, 0.8); }
-html:not(.dark) .pf--hero .pf__inner, html:not(.dark) .pf--contact .pf__inner { text-shadow: 0 2px 26px rgba(4, 20, 50, 0.5), 0 1px 3px rgba(4, 20, 50, 0.4); }
