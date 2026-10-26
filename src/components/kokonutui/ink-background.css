@@ -1,0 +1,23 @@
+/* Ink Background (Kokonut UI, MIT): its Tailwind classes as plain CSS. */
+.kib { position: relative; min-height: 560px; width: 100%; touch-action: pan-y; overflow: hidden; background: #fff; color: #18181b; } /* bg-white text-zinc-900 */
+html.dark .kib { background: #09090b; color: #f4f4f5; }  /* dark:bg-zinc-950 dark:text-zinc-100 */
+/* theme colors for the shader: the paper (text-white / dark:text-zinc-950) and the ink (text-zinc-900 / dark:text-zinc-100) */
+.kib__paper, .kib__ink { display: none; }
+.kib__paper { color: #fff; }
+html.dark .kib__paper { color: #09090b; }
+.kib__ink { color: #18181b; }
+html.dark .kib__ink { color: #f4f4f5; }
+.kib__layer { position: absolute; inset: 0; pointer-events: none; }
+.kib__canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity 500ms ease-out; }
+/* where WebGL2 half-float targets aren't available: the headline as type */
+.kib__fallback { position: absolute; left: 0; right: 0; top: 40%; transform: translateY(-50%); margin: 0; padding: 0 1.5rem; text-align: center; text-wrap: balance; font-weight: 600; font-size: 3rem; line-height: 1; letter-spacing: -0.025em; }
+@media (min-width: 640px) { .kib__fallback { font-size: 4.5rem; } }
+.kib__content { position: absolute; left: 0; right: 0; display: flex; justify-content: center; padding: 0 1.5rem; pointer-events: none; }
+.kib__default { display: flex; max-width: 28rem; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+.kib__default-text { margin: 0; text-wrap: balance; font-size: 1rem; line-height: 1.625; color: #71717a; }
+html.dark .kib__default-text { color: #a1a1aa; }
+.kib__default-actions { pointer-events: auto; display: flex; align-items: center; gap: 0.5rem; }
+.kib__default-primary { display: inline-flex; height: 2.5rem; align-items: center; border-radius: 999px; padding: 0 1.25rem; font-weight: 500; font-size: 0.875rem; background: #18181b; color: #fff; text-decoration: none; }
+html.dark .kib__default-primary { background: #f4f4f5; color: #18181b; }
+.kib__default-secondary { display: inline-flex; height: 2.5rem; align-items: center; border-radius: 999px; padding: 0 1rem; font-weight: 500; font-size: 0.875rem; color: #52525b; text-decoration: none; }
+html.dark .kib__default-secondary { color: #a1a1aa; }
