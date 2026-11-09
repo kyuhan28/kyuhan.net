@@ -1,4 +1,14 @@
 export const projects = [
+    {
+    id: 'packright',
+    title: 'PackRight: AI-Assisted Packing Station for Restaurants',
+    context: 'NOVA 2026 Hackathon (ScottyLabs, Carnegie Mellon)',
+    dates: 'Nov 2026',
+    category: 'Hackathon',
+    summary: 'Built an AI packing station that catches missing items, swapped orders, and wrong driver handoffs, by checking each packed tray from a single overhead camera photo with a zero-shot vision model and having a tool-calling agent handle fixes, with every action verified by code.',
+    stack: ['JavaScript', 'React', 'Vite', 'Python', 'Flask', 'SQLite', 'OpenRouter API', 'NVIDIA Nemotron API'],
+    github: 'https://github.com/kyuhan28/PackRight',
+  },
   {
     id: 'code-viz',
     title: 'CodeViz: AI-assisted Visualizer, Debugger, and Writer',
