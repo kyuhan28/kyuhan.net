@@ -21,18 +21,6 @@ export const projects = [
     github: 'https://github.com/kyuhan28/nebiusAIcode-V-D-W',
   },
   {
-    id: 'study-planner',
-    title: '"@me", Personal Study Planner',
-    context: 'Rutgers Hackathon',
-    dates: 'Oct 2026',
-    category: 'Hackathon',
-    summary: 'Built a chrome extension that can help with various tasks such as scheduling, reminders, and information retrieval.',
-    stack: ['JavaScript', 'HTML', 'CSS', 'Chrome Extensions API', 'Gemini API', 'Google Calendar API', 'Canvas LMS API', 'OAuth 2.0'],
-    website: 'https://atme.tech/',
-    demo: 'https://youtu.be/6-lSCqXHf80',
-    github: 'https://github.com/kyuhan28/atme',
-  },
-  {
     id: 'nemotron-gate',
     title: 'Nemotron Safety Gate',
     context: 'SteelHacks XIII',

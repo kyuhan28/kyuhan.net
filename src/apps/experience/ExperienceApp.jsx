@@ -44,7 +44,7 @@ export default function ExperienceApp({ visible = true }) {
   )
   return (
     <AppShell accent="#ffc98a" bg="experience" backdrop={backdrop} className="experience">
-      <AppHeader eyebrow="Experience" title="Where I've been" />
+      <AppHeader eyebrow="Experience" title="Professional Experience" />
       {experience.length ? <ol className="xp-timeline">{experience.map((e, i) => <Entry key={`${e.org}-${e.title}-${i}`} e={e} />)}</ol>
         : <EmptyState title="No experience yet">Add entries to src/apps/experience/experienceData.js.</EmptyState>}
     </AppShell>

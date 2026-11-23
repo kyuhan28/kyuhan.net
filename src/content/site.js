@@ -4,7 +4,7 @@ export const site = {
 
   avatar: '/work/pfp-avatar.jpg',
 
-  role: '3rd-year Computer Science student at the University of Pittsburgh',
+  role: '3rd-year Computer Science student at New York University',
 
   tagline: 'Hi! I’m Kyu Han, and welcome to my Portfolio.',
 
@@ -21,8 +21,8 @@ export const site = {
       'Credits given to KokonutUI for the ink effect, sticky notes, and immersive wallpapers!',
     ],
     facts: [
-      { term: 'Based in', detail: 'Pittsburgh, PA' },
-      { term: 'Studying', detail: 'Computer Science and Business minor' },
+      { term: 'Based in', detail: 'Manhattan, NY' },
+      { term: 'Studying', detail: 'Computer Science' },
       { term: 'Currently', detail: 'Learning and developing database-driven web applications focused on improving student life.' },
     ],
   },

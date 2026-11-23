@@ -15,6 +15,5 @@ export const about = {
     github: linkTo('github'),
     linkedin: linkTo('linkedin'),
     resume: linkTo('resume'),
-    website: '',
   },
 }

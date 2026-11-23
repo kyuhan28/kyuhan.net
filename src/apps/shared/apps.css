@@ -81,7 +81,7 @@
 .about__profile { position: relative; display: flex; align-items: center; gap: 18px; }
 .about__avatar { flex: none; width: 76px; height: 76px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255, 255, 255, 0.14); }
 .about__name { font-size: clamp(26px, 6cqi, 38px); }
-.about__role { margin: 6px 0 0; color: var(--app-accent); font-weight: 500; }
+.about__role { margin: 6px 0 0; color: #8e48ff; font-weight: 500; }
 .about__tagline { margin: 6px 0 0; color: var(--app-dim); }
 .about__body { display: grid; gap: 8px 32px; }
 @container (min-width: 640px) { .about__body { grid-template-columns: 1.5fr 1fr; } }
